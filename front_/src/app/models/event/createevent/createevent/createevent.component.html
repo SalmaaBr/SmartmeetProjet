@@ -1,0 +1,92 @@
+<div class="container mt-5">
+  <div class="card shadow-lg border-primary">
+    <div class="card-header bg-primary text-white text-center">
+      <h2>Créer un événement</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        
+        <!-- Nom de l'événement -->
+        <div class="mb-3">
+          <label class="form-label">Nom de l'événement :</label>
+          <input type="text" class="form-control border-primary" id="title" formControlName="title">
+          <span *ngIf="form.controls['title'].errors?.['required']" class="text-danger">Le nom est requis.</span>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label class="form-label">Description :</label>
+          <textarea class="form-control border-primary" id="description" formControlName="description"></textarea>
+          <span *ngIf="form.controls['description'].errors?.['required']" class="text-danger">La description est requise.</span>
+        </div>
+
+        <!-- Localisation -->
+        <div class="mb-3">
+          <label class="form-label">Localisation :</label>
+          <input type="text" class="form-control border-primary" id="location" formControlName="location">
+          <span *ngIf="form.controls['location'].errors?.['required']" class="text-danger">La localisation est requise.</span>
+        </div>
+
+        <div class="row">
+          <!-- Type d'événement -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Type d'événement :</label>
+            <select class="form-select border-primary" id="typeevent" formControlName="typeevent">
+              <option *ngFor="let type of typeevent" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <!-- Thème -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Thème :</label>
+            <select class="form-select border-primary" id="typetheme" formControlName="typetheme">
+              <option *ngFor="let theme of typetheme" [value]="theme">{{ theme }}</option>
+            </select>
+          </div>
+
+          <!-- Météo -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Météo :</label>
+            <select class="form-select border-primary" id="typeweather" formControlName="typeweather">
+              <option *ngFor="let weather of typeweather" [value]="weather">{{ weather }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Date et heure de début -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Date et heure de début :</label>
+            <input type="datetime-local" class="form-control border-primary" id="startTime" formControlName="startTime">
+            <div *ngIf="form.controls['startTime'].touched && form.controls['startTime'].errors?.['required']" class="text-danger">
+              La date de début est requise.
+            </div>
+          </div>
+
+          <!-- Date et heure de fin -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Date et heure de fin :</label>
+            <input type="datetime-local" class="form-control border-primary" id="endTime" formControlName="endTime">
+            <div *ngIf="dateError" class="text-danger">
+              La date de fin doit être après la date de début.
+            </div>
+          </div>
+        </div>
+
+        <!-- Nombre maximal de participants -->
+        <div class="mb-3">
+          <label class="form-label">Nombre maximal de participants :</label>
+          <input type="number" class="form-control border-primary" id="maxParticipants" formControlName="maxParticipants">
+          <span *ngIf="form.controls['maxParticipants'].errors?.['required']" class="text-danger">Le nombre de participants est requis.</span>
+          <span *ngIf="form.controls['maxParticipants'].errors?.['min']" class="text-danger">Le nombre doit être au moins 1.</span>
+        </div>
+
+        <!-- Boutons -->
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary btn-sm w-45" [disabled]="form.invalid || dateError">Créer l'événement</button>
+          <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

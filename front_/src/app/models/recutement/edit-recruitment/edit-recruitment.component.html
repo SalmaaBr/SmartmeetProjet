@@ -1,0 +1,30 @@
+<div class="container mt-5">
+    <div class="card shadow-lg border-primary">
+      <div class="card-header bg-primary text-white text-center">
+        <h2>Édition du recrutement</h2>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="updateRecruitment()" #recruitmentForm="ngForm">
+          <!-- Titre -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Titre</label>
+            <input type="text" class="form-control border-primary" id="title" [(ngModel)]="recrutement.title" name="title" required>
+          </div>
+  
+          <!-- Description -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control border-primary" id="description" [(ngModel)]="recrutement.description" name="description" required></textarea>
+          </div>
+  
+          <div class="d-flex justify-content-between">
+            <!-- Bouton Mettre à jour -->
+            <button type="submit" class="btn btn-primary btn-sm w-45">Mettre à jour</button>
+            <!-- Bouton Annuler -->
+            <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
