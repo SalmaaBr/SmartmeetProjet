@@ -24,5 +24,12 @@
     padding-left: 10mm;
     padding-right: 10mm;
   }
+
+  .pagination .page-item.active .page-link {
+    background-color: #0056b3; /* Bleu */
+    border-color: #0056b3;
+    color: white;
+  }
+  
   
   

@@ -1,0 +1,8 @@
+/* styles.css */
+.toast-top-full-width {
+    top: 10px !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999; /* Ensure the toast is on top of other elements */
+  }
+  

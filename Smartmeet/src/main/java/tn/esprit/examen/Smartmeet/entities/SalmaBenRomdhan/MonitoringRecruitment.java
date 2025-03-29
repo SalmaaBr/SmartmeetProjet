@@ -26,6 +26,9 @@ public class MonitoringRecruitment {
     @Enumerated(EnumType.STRING)
     private TypeFollowUpStatus status;
 
+    private String title;
+    private String description;
+
     private int quizId;
     private String quizResultsLink;
     private String alGeneratedReportLink;

@@ -1,5 +1,6 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -46,6 +47,9 @@ public class Event implements Serializable {
     private LocalDateTime endTime;
 
     private int maxParticipants;
+
+    private String imagePath;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Users> users;
 
@@ -64,10 +68,5 @@ public class Event implements Serializable {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EventSponsor> eventSponsors = new ArrayList<>();
-
-
-
-
-
 
 }

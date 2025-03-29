@@ -89,7 +89,9 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
-      preventDuplicates: true,
+      preventDuplicates: true,             // Prevent duplicate toasts from being shown
+      closeButton: true,                     // Enable close button on the toast
+      progressBar: true 
     })
 ,
   ],

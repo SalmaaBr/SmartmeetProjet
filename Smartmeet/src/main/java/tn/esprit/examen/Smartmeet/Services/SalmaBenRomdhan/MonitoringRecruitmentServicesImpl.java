@@ -31,6 +31,8 @@ public class MonitoringRecruitmentServicesImpl implements IMonitoringRecruitment
     public MonitoringRecruitment updateMonitoringRecruitment(Long id, MonitoringRecruitment monitoringRecruitment) {
         MonitoringRecruitment existingMonitoringRecruitment = monitoringRecruitmentRepository.findById(id).orElseThrow(() -> new RuntimeException("MonitoringRecruitment not found"));
         existingMonitoringRecruitment.setCreatedAt(monitoringRecruitment.getCreatedAt());
+        existingMonitoringRecruitment.setTitle(monitoringRecruitment.getTitle());
+        existingMonitoringRecruitment.setDescription(monitoringRecruitment.getDescription());
         existingMonitoringRecruitment.setStatus(monitoringRecruitment.getStatus());
         existingMonitoringRecruitment.setQuizId(monitoringRecruitment.getQuizId());
         existingMonitoringRecruitment.setQuizResultsLink(monitoringRecruitment.getQuizResultsLink());

@@ -20,7 +20,8 @@ public class EventServicesImpl implements IEventServices {
     private final UserRepository userRepository;
 
 
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event, String imagePath) {
+        event.setImagePath(imagePath);
         return IEventRepository.save(event);
     }
 

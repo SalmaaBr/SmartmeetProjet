@@ -23,8 +23,20 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
+  
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/upload`, formData, { responseType: 'text' });
+  }
+
   createEvent(event: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/createevent`, event);
+  }
+
+  createEventWithImage(event: any, imagePath: string | null): Observable<any> {
+    const eventWithImage = { ...event, imagePath };
+    return this.http.post(`${this.apiUrl}/createevent`, eventWithImage);
   }
 
   getEvents(): Observable<Event[]> {

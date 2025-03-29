@@ -10,80 +10,113 @@
         <div class="mb-3">
           <label class="form-label">Nom de l'événement :</label>
           <input type="text" class="form-control border-primary" id="title" formControlName="title">
-          <span *ngIf="form.controls['title'].errors?.['required']" class="text-danger">Le nom est requis.</span>
+          <div *ngIf="isFormSubmitted && form.controls['title'].invalid" class="text-danger">
+            <div *ngIf="form.controls['title'].errors?.['required']">Le nom est requis.</div>
+          </div>
         </div>
 
         <!-- Description -->
         <div class="mb-3">
           <label class="form-label">Description :</label>
           <textarea class="form-control border-primary" id="description" formControlName="description"></textarea>
-          <span *ngIf="form.controls['description'].errors?.['required']" class="text-danger">La description est requise.</span>
+          <div *ngIf="isFormSubmitted && form.controls['description'].invalid" class="text-danger">
+            <div *ngIf="form.controls['description'].errors?.['required']">La description est requise.</div>
+          </div>
         </div>
 
         <!-- Localisation -->
         <div class="mb-3">
           <label class="form-label">Localisation :</label>
           <input type="text" class="form-control border-primary" id="location" formControlName="location">
-          <span *ngIf="form.controls['location'].errors?.['required']" class="text-danger">La localisation est requise.</span>
+          <div *ngIf="isFormSubmitted && form.controls['location'].invalid" class="text-danger">
+            <div *ngIf="form.controls['location'].errors?.['required']">La localisation est requise.</div>
+          </div>
         </div>
 
+        <!-- Types dans la même ligne -->
         <div class="row">
           <!-- Type d'événement -->
           <div class="col-md-4 mb-3">
             <label class="form-label">Type d'événement :</label>
-            <select class="form-select border-primary" id="typeevent" formControlName="typeevent">
+            <select class="form-control border-primary" formControlName="typeevent">
               <option *ngFor="let type of typeevent" [value]="type">{{ type }}</option>
             </select>
+            <div *ngIf="isFormSubmitted && form.controls['typeevent'].invalid" class="text-danger">
+              <div *ngIf="form.controls['typeevent'].errors?.['required']">Le type d'événement est requis.</div>
+            </div>
           </div>
 
-          <!-- Thème -->
+          <!-- Type de thème -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Thème :</label>
-            <select class="form-select border-primary" id="typetheme" formControlName="typetheme">
+            <label class="form-label">Type de thème :</label>
+            <select class="form-control border-primary" formControlName="typetheme">
               <option *ngFor="let theme of typetheme" [value]="theme">{{ theme }}</option>
             </select>
+            <div *ngIf="isFormSubmitted && form.controls['typetheme'].invalid" class="text-danger">
+              <div *ngIf="form.controls['typetheme'].errors?.['required']">Le type de thème est requis.</div>
+            </div>
           </div>
 
-          <!-- Météo -->
+          <!-- Type de météo -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Météo :</label>
-            <select class="form-select border-primary" id="typeweather" formControlName="typeweather">
+            <label class="form-label">Type de météo :</label>
+            <select class="form-control border-primary" formControlName="typeweather">
               <option *ngFor="let weather of typeweather" [value]="weather">{{ weather }}</option>
             </select>
+            <div *ngIf="isFormSubmitted && form.controls['typeweather'].invalid" class="text-danger">
+              <div *ngIf="form.controls['typeweather'].errors?.['required']">Le type de météo est requis.</div>
+            </div>
           </div>
         </div>
 
+        <!-- Dates dans la même ligne -->
         <div class="row">
-          <!-- Date et heure de début -->
+          <!-- Heure de début -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Date et heure de début :</label>
+            <label class="form-label">Heure de début :</label>
             <input type="datetime-local" class="form-control border-primary" id="startTime" formControlName="startTime">
-            <div *ngIf="form.controls['startTime'].touched && form.controls['startTime'].errors?.['required']" class="text-danger">
-              La date de début est requise.
+            <div *ngIf="isFormSubmitted && form.controls['startTime'].invalid" class="text-danger">
+              <div *ngIf="form.controls['startTime'].errors?.['required']">L'heure de début est requise.</div>
             </div>
           </div>
 
-          <!-- Date et heure de fin -->
+          <!-- Heure de fin -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Date et heure de fin :</label>
+            <label class="form-label">Heure de fin :</label>
             <input type="datetime-local" class="form-control border-primary" id="endTime" formControlName="endTime">
-            <div *ngIf="dateError" class="text-danger">
-              La date de fin doit être après la date de début.
+            <div *ngIf="isFormSubmitted && form.controls['endTime'].invalid" class="text-danger">
+              <div *ngIf="form.controls['endTime'].errors?.['required']">L'heure de fin est requise.</div>
             </div>
+                              <!-- Afficher erreur de date -->
+          <div *ngIf="dateError" class="text-danger mb-3">
+            La date de fin doit être après la date de début.
+           </div>
           </div>
+
         </div>
+
 
         <!-- Nombre maximal de participants -->
         <div class="mb-3">
           <label class="form-label">Nombre maximal de participants :</label>
           <input type="number" class="form-control border-primary" id="maxParticipants" formControlName="maxParticipants">
-          <span *ngIf="form.controls['maxParticipants'].errors?.['required']" class="text-danger">Le nombre de participants est requis.</span>
-          <span *ngIf="form.controls['maxParticipants'].errors?.['min']" class="text-danger">Le nombre doit être au moins 1.</span>
+          <div *ngIf="isFormSubmitted && form.controls['maxParticipants'].invalid" class="text-danger">
+            <div *ngIf="form.controls['maxParticipants'].errors?.['required']">Le nombre de participants est requis.</div>
+            <div *ngIf="form.controls['maxParticipants'].errors?.['min']">Le nombre de participants doit être supérieur ou égal à 1.</div>
+          </div>
         </div>
+
+
+        <div class="mb-3">
+          <label class="form-label">Image de l'événement :</label>
+          <input type="file" class="form-control border-primary" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+        
+        <!-- Insérez ce bloc après la description ou où vous voulez dans votre formulaire -->
 
         <!-- Boutons -->
         <div class="d-flex justify-content-between">
-          <button type="submit" class="btn btn-primary btn-sm w-45" [disabled]="form.invalid || dateError">Créer l'événement</button>
+          <button type="submit" class="btn btn-primary btn-sm w-45">Créer l'événement</button>
           <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
         </div>
       </form>
