@@ -108,11 +108,10 @@
 
 
         <div class="mb-3">
-          <label class="form-label">Image de l'événement :</label>
-          <input type="file" class="form-control border-primary" (change)="onFileSelected($event)" accept="image/*">
+          <label for="file" class="form-label">Télécharger un fichier :</label>
+          <input type="file" (change)="onFileSelected($event)" class="form-control" id="file" accept="image/*,application/pdf">
         </div>
-        
-        <!-- Insérez ce bloc après la description ou où vous voulez dans votre formulaire -->
+      
 
         <!-- Boutons -->
         <div class="d-flex justify-content-between">

@@ -13,6 +13,8 @@ export interface Event {
   startTime: string;
   endTime: string;
   maxParticipants: number;
+  filePath?: string;  // Ajout de la propriété filePath
+  imageUrl?: string;  // Ajout de la propriété imageUrl
 }
 
 @Injectable({
@@ -23,21 +25,14 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  
-  uploadImage(file: File): Observable<string> {
-    const formData = new FormData();
+  createEvent(event: any, file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('event', new Blob([JSON.stringify(event)], { type: 'application/json' }));
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/upload`, formData, { responseType: 'text' });
-  }
 
-  createEvent(event: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/createevent`, event);
-  }
+    return this.http.post(`${this.apiUrl}/createevent`, formData);
+}
 
-  createEventWithImage(event: any, imagePath: string | null): Observable<any> {
-    const eventWithImage = { ...event, imagePath };
-    return this.http.post(`${this.apiUrl}/createevent`, eventWithImage);
-  }
 
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/getallevent`);
@@ -57,6 +52,9 @@ export class EventService {
       return this.http.get<Event>(`${this.apiUrl}/getevent/${id}`);
   }
   
-
+  getImage(fileName: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/image/${fileName}`, { responseType: 'blob' });
+  }
+  
 
 }

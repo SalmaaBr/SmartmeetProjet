@@ -64,13 +64,21 @@ export class ServiceFrontComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (data: Event[]) => {
         console.log("Données récupérées pour la home page :", data);
-        this.events = data;  // Stocke les événements dans la variable
+        this.events = data.map(event => {
+          // Si filePath existe, créer imageUrl en utilisant le filePath
+          if (event.filePath) {
+            event.imageUrl = `http://localhost:8082/${event.filePath}`;  // Assurez-vous que l'URL est correcte
+          }
+          return event;
+        });
       },
       (error) => {
         console.error("Erreur lors de la récupération des événements :", error);
       }
     );
   }
+  
+  
 
   // Charger les recrutements
   loadRecruitments(): void {

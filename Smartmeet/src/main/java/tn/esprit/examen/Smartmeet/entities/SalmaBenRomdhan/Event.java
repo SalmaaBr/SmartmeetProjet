@@ -48,7 +48,7 @@ public class Event implements Serializable {
 
     private int maxParticipants;
 
-    private String imagePath;
+    private String filePath;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Users> users;
