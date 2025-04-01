@@ -45,10 +45,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],  // Protecting the main route
     canActivateChild: [AuthGuard], // Protecting child routes
     children: [
+      { path: 'users', component: UserComponent },
       { path: 'resources', component: ResourceManagementComponent },
       { path: 'resource-reservations', component: ResourceReservationManagementComponent },
-      { path: 'users', component: UserComponent },
-      { path: '', redirectTo: 'resources', pathMatch: 'full' },
+      
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'events', component: GeteventComponent },  
       { path: 'create-event', component: CreateeventComponent },
       { path: 'edit-event/:id', component: EditEventComponent },

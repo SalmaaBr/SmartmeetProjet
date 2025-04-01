@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventService, Event } from '../../../../services/event.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-getevent',
   templateUrl: './getevent.component.html',

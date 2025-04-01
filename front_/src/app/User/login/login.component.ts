@@ -58,7 +58,7 @@ export class LoginComponent {
         if (roles.includes('ADMIN')) {
           this.router.navigate(['/admin']);
         } else if (roles.includes('USER')) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/front']);
         } else {
           console.error('Rôle non reconnu');
         }

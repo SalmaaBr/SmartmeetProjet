@@ -129,11 +129,11 @@
     <div *ngFor="let event of events" class="event-card">
       <div class="event-header">
 
-        <!-- Affichage de l'image si disponible -->
-        <div *ngIf="event.imageUrl">
-          <img [src]="'http://localhost:8082/uploads/' + event.imageUrl" alt="Event Image" class="event-image"/>
 
-        </div>
+              <!-- Affichage de l'image si disponible -->
+      <div *ngIf="event.imageUrl">
+        <img [src]="event.imageUrl" alt="Event Image" class="event-image"/>
+      </div>
         <p>{{ event.imageUrl }}</p> <!-- Affiche l'URL de l'image pour le debugging -->
 
         <h3>{{ event.title }}</h3>

@@ -30,18 +30,14 @@ public class EventController {
     @PostMapping(value = "/createevent", consumes = { "multipart/form-data" })
     public Event createEvent(@RequestPart("event") Event event, @RequestPart("file") MultipartFile file) {
         try {
-            // Récupération du chemin du répertoire de téléchargement depuis les propriétés
-            String uploadDir = "C:/Users/benro/Desktop/uploads"; // ou via @Value("${file.upload-dir}")
+            String uploadDir = "C:/Users/benro/Desktop/uploads";
+            String fileName = file.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir, fileName);
 
-            // Construire le chemin complet
-            Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
+            file.transferTo(filePath.toFile());
 
-            // Sauvegarde du fichier sur le serveur
-            File destinationFile = filePath.toFile();
-            file.transferTo(destinationFile);
-
-            // Associer le chemin du fichier à l'entité Event
-            event.setFilePath(filePath.toString());
+            // Stocker seulement le nom du fichier, pas le chemin complet
+            event.setFilePath(fileName);
 
             return eventService.createEvent(event);
         } catch (IOException e) {
@@ -83,11 +79,20 @@ public class EventController {
             // Chemin relatif pour l'image
             Path path = Paths.get("C:/Users/benro/Desktop/uploads", fileName);
             byte[] image = Files.readAllBytes(path);
-            // Utilisation de ResponseEntity pour renvoyer l'image
-            return ResponseEntity.ok().body(image);
+
+            // Déterminer le type MIME de l'image
+            String mimeType = Files.probeContentType(path);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .header("Content-Type", mimeType)
+                    .body(image);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(null);  // Image non trouvée
+            return ResponseEntity.status(404).body(null); // Image non trouvée
         }
     }
+
 
 }

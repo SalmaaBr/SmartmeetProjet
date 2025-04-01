@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Event {
   id: number;
@@ -33,10 +34,20 @@ export class EventService {
     return this.http.post(`${this.apiUrl}/createevent`, formData);
 }
 
-
-  getEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.apiUrl}/getallevent`);
-  }
+getEvents(): Observable<Event[]> {
+  return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
+    map(events => events.map(event => {
+      if (event.filePath) {
+        // Récupération du nom de fichier uniquement
+        const fileName = event.filePath.split('\\').pop()?.split('/').pop();
+        if (fileName) {
+          event.imageUrl = `${this.apiUrl}/image/${fileName}`;
+        }
+      }
+      return event;
+    }))
+  );
+}
 
 
   deleteEvent(id: number): Observable<void> {
@@ -54,7 +65,8 @@ export class EventService {
   
   getImage(fileName: string): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/image/${fileName}`, { responseType: 'blob' });
-  }
+}
+
   
 
 }
