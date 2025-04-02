@@ -124,38 +124,30 @@
     No events available at the moment.
   </div>
 
-  <!-- Event List -->
-  <div class="event-list">
-    <div *ngFor="let event of events" class="event-card">
-      <div class="event-header">
-
-
-          <!-- Affichage image -->
-        <div *ngIf="event.imageUrl; else noImage">
-          <img [src]="event.imageUrl" 
-               (error)="event.imageUrl='assets/default-event.jpg'"
-               alt="Event Image" 
-               class="event-image img-fluid rounded">
-        </div>
-        <ng-template #noImage>
-          <img src="assets/default-event.jpg" class="event-image img-fluid rounded">
-        </ng-template>
-          
-
-   
-        <p>{{ event.imageUrl }}</p> <!-- Affiche l'URL de l'image pour le debugging -->
-
-        <h3>{{ event.title }}</h3>
-        <span class="event-type">{{ event.typeevent }}</span>
+<!-- Event List -->
+<div class="event-list">
+  <div *ngFor="let event of events" class="event-card">
+    <div class="event-header">
+      <!-- Affichage image avec gestion d'erreur -->
+      <div class="event-image-container">
+        <img [src]="event.imageUrl || 'assets/default-event.jpg'" 
+             (error)="event.imageUrl = 'assets/default-event.jpg'"
+             alt="Event Image" 
+             class="event-image img-fluid rounded">
       </div>
+
+      <h3>{{ event.title }}</h3>
+      <span class="event-type">{{ event.typeevent }}</span>
+    </div>
+    
+    <div class="event-details">
       <p class="event-theme">🎭 <strong>Theme:</strong> {{ event.typetheme }}</p>
       <p class="event-description">📖 {{ event.description }}</p>
       <p>📍 <strong>Location:</strong> {{ event.location }}</p>
       <p>🌤️ <strong>Expected Weather:</strong> {{ event.typeweather }}</p>
-      <p>🕒 <strong>Start:</strong> {{ event.startTime }}</p>
-      <p>⏳ <strong>End:</strong> {{ event.endTime }}</p>
+      <p>🕒 <strong>Start:</strong> {{ formatDate(event.startTime) }}</p>
+      <p>⏳ <strong>End:</strong> {{ formatDate(event.endTime) }}</p>
       <p>👥 <strong>Max Participants:</strong> {{ event.maxParticipants }}</p>
-
 
       <!-- Participate Button -->
       <button class="participate-button">Participate</button>

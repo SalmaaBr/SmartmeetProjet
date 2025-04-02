@@ -65,9 +65,42 @@ public class EventController {
     }
 
 
-    @PutMapping("updateevent/{id}")
-    public Event updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        return eventService.updateEvent(id, event);
+    @PutMapping(value = "/updateevent/{id}", consumes = { "multipart/form-data" })
+    public Event updateEvent(@PathVariable Long id,
+                             @RequestPart("event") Event event,
+                             @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+
+        // Récupérer l'événement existant
+        Event existingEvent = eventService.getEventById(id);
+
+        // Mettre à jour les champs
+        existingEvent.setTitle(event.getTitle());
+        existingEvent.setDescription(event.getDescription());
+        existingEvent.setLocation(event.getLocation());
+        existingEvent.setTypeevent(event.getTypeevent());
+        existingEvent.setTypetheme(event.getTypetheme());
+        existingEvent.setTypeweather(event.getTypeweather());
+        existingEvent.setStartTime(event.getStartTime());
+        existingEvent.setEndTime(event.getEndTime());
+        existingEvent.setMaxParticipants(event.getMaxParticipants());
+
+        // Si un nouveau fichier est fourni
+        if (file != null && !file.isEmpty()) {
+            // Supprimer l'ancien fichier s'il existe
+            if (existingEvent.getFilePath() != null) {
+                Path oldFilePath = Paths.get(uploadDir).resolve(existingEvent.getFilePath());
+                Files.deleteIfExists(oldFilePath);
+            }
+
+            // Sauvegarder le nouveau fichier
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
+            Files.copy(file.getInputStream(), filePath);
+
+            existingEvent.setFilePath(fileName);
+        }
+
+        return eventService.updateEvent(id, existingEvent);
     }
 
     @DeleteMapping("deleteevent/{id}")

@@ -40,25 +40,28 @@ export class EventService {
 
 getEvents(): Observable<Event[]> {
   return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
-    tap(events => console.log("Données brutes reçues :", events)),
     map(events => events.map(event => {
       if (event.filePath) {
-        const url = `${this.apiUrl}/images/${event.filePath}`;
-        console.log("URL construite pour", event.filePath, ":", url);
-        event.imageUrl = url;
+        event.imageUrl = `${this.apiUrl}/images/${event.filePath}`;
       }
       return event;
-    })),
-    tap(events => console.log("Événements transformés :", events))
+    }))
   );
 }
-
   deleteEvent(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/deleteevent/${id}`);
   }
   
-  updateEvent(id: number, event: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/updateevent/${id}`, event);
+  updateEventWithImage(id: number, event: any, file: File | null): Observable<Event> {
+    const formData: FormData = new FormData();
+    formData.append('event', new Blob([JSON.stringify(event)], { 
+        type: 'application/json' 
+    }));
+    if (file) {
+        formData.append('file', file);
+    }
+    
+    return this.http.put<Event>(`${this.apiUrl}/updateevent/${id}`, formData);
   }
 
   // Méthode pour récupérer un événement par son ID

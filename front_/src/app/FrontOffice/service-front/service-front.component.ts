@@ -59,6 +59,12 @@ export class ServiceFrontComponent implements OnInit {
     console.log('ServiceFrontComponent Loaded ✅');
   }
 
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleString(); // ou utilisez un formatage plus précis
+  }
+  
   // Charger les événements
   loadEvents(): void {
     this.eventService.getEvents().subscribe(
