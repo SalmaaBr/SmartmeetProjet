@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.IEventServices;
 import org.springframework.beans.factory.annotation.Value;
+import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -27,6 +29,8 @@ public class EventController {
 
     private final IEventServices eventService;
 
+    private final IEventRepository eventRepository;
+
     @PostMapping(value = "/createevent", consumes = { "multipart/form-data" })
     public Event createEvent(@RequestPart("event") Event event, @RequestPart("file") MultipartFile file) {
         try {
@@ -35,6 +39,9 @@ public class EventController {
             Path filePath = Paths.get(uploadDir, fileName);
 
             file.transferTo(filePath.toFile());
+
+            // Formater le chemin du fichier en remplaçant les backslashes par des slashes
+            event.setFilePath(filePath.toString().replace("\\", "/"));
 
             // Stocker seulement le nom du fichier, pas le chemin complet
             event.setFilePath(fileName);
@@ -76,23 +83,24 @@ public class EventController {
     @GetMapping("/image/{fileName}")
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
-            // Chemin relatif pour l'image
             Path path = Paths.get("C:/Users/benro/Desktop/uploads", fileName);
             byte[] image = Files.readAllBytes(path);
-
-            // Déterminer le type MIME de l'image
-            String mimeType = Files.probeContentType(path);
-            if (mimeType == null) {
-                mimeType = "application/octet-stream";
-            }
+            String contentType = Files.probeContentType(path);
 
             return ResponseEntity.ok()
-                    .header("Content-Type", mimeType)
+                    .header("Content-Type", contentType != null ? contentType : "image/jpeg")
                     .body(image);
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body(null); // Image non trouvée
+        } catch (IOException e) {
+            return ResponseEntity.status(404).body(null);
         }
     }
+
+    @GetMapping("/check-recruitment/{title}")
+    public boolean checkEventHasRecruitment(@PathVariable String title) {
+        Optional<Event> eventOpt = eventRepository.findByTitle(title);
+        return eventOpt.isPresent() && eventOpt.get().getMonitorungrecutement() != null;
+    }
+
 
 
 }

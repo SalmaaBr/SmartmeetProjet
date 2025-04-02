@@ -132,7 +132,8 @@
 
               <!-- Affichage de l'image si disponible -->
       <div *ngIf="event.imageUrl">
-        <img [src]="event.imageUrl" alt="Event Image" class="event-image"/>
+        <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="Image de l'événement" width="200">
+
       </div>
         <p>{{ event.imageUrl }}</p> <!-- Affiche l'URL de l'image pour le debugging -->
 

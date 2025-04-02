@@ -1,10 +1,12 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Entity
-public class MonitoringRecruitment {
+public class MonitoringRecruitment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,5 +40,10 @@ public class MonitoringRecruitment {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Users> users;
+
+    @OneToOne(mappedBy="monitorungrecutement")
+    @JsonIgnoreProperties("monitorungrecutement") // Ignore la propriété "monitorungrecutement" lors de la sérialisation de Event
+
+    private Event event;
 
 }

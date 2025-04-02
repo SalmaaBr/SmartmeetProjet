@@ -46,4 +46,9 @@ public class MonitoringRecruitmentController {
         monitoringRecruitmentService.AddAndAssignMonitoringRecruitmentToUser(userId, monitoringRecruitment);
     }
 
+    @PostMapping("/assign-to-event/{title}")
+    public void assignRecruitmentToEvent(@PathVariable("title") String title, @RequestBody MonitoringRecruitment monitoringRecruitment) {
+        monitoringRecruitmentService.AddAndAssignRecruitmentToEvent(title, monitoringRecruitment);
+    }
+
 }

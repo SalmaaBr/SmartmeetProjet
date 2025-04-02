@@ -1,34 +1,51 @@
 <div class="container mt-5">
-    <div class="card shadow-lg border-primary">
-      <div class="card-header bg-primary text-white text-center">
-        <h2>Créer un Recrutement</h2>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="recruitmentForm" (ngSubmit)="onSubmit()">
-          <!-- Titre -->
-          <div class="mb-3">
-            <label for="title" class="form-label">Titre :</label>
-            <input type="text" id="title" formControlName="title" class="form-control border-primary" required>
-          </div>
-      
-          <!-- Description -->
-          <div class="mb-3">
-            <label for="description" class="form-label">Description :</label>
-            <textarea id="description" formControlName="description" class="form-control border-primary" required></textarea>
-          </div>
-      
-          <div class="d-flex justify-content-between">
-            <!-- Bouton Créer -->
-            <button type="submit" class="btn btn-primary btn-sm w-45" [disabled]="recruitmentForm.invalid">Créer</button>
-            <!-- Bouton Annuler -->
-            <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
-          </div>
-        </form>
-      
-        <div *ngIf="successMessage" class="alert alert-success mt-3">
-          {{ successMessage }}
+  <div class="card shadow-lg border-primary">
+    <div class="card-header bg-primary text-white text-center">
+      <h2>Créer un Recrutement</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="recruitmentForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="title" class="form-label">Titre :</label>
+          <input type="text" id="title" formControlName="title" class="form-control border-primary" required>
         </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description :</label>
+          <textarea id="description" formControlName="description" class="form-control border-primary" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="eventTitle" class="form-label">Associer à un Événement :</label>
+          <select 
+            id="eventTitle" 
+            formControlName="eventTitle" 
+            class="form-select border-primary" 
+            required
+            (change)="onEventSelect(recruitmentForm.get('eventTitle')?.value ?? '')">            <option value="" disabled selected>-- Sélectionner un événement --</option>
+            <option *ngFor="let event of events" [value]="event.title">
+              {{ event.title }}
+              <span *ngIf="$any(event).monitorungrecutement"> (pocéde un recrutement)</span>            </option>
+          </select>
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-sm w-45" 
+            [disabled]="recruitmentForm.invalid || eventHasRecruitment">
+            Créer
+          </button>
+          <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
+        </div>
+      </form>
+
+      <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
       </div>
     </div>
   </div>
-  
+</div>

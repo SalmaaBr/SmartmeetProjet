@@ -16,6 +16,7 @@ export interface Event {
   maxParticipants: number;
   filePath?: string;  // Ajout de la propriété filePath
   imageUrl?: string;  // Ajout de la propriété imageUrl
+
 }
 
 @Injectable({
@@ -67,6 +68,10 @@ getEvents(): Observable<Event[]> {
     return this.http.get(`${this.apiUrl}/image/${fileName}`, { responseType: 'blob' });
 }
 
-  
+// Dans event.service.ts
+// Ajoutez cette méthode
+checkEventHasRecruitment(title: string): Observable<boolean> {
+  return this.http.get<boolean>(`${this.apiUrl}/check-recruitment/${title}`);
+}
 
 }

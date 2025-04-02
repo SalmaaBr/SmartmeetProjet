@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecutementService } from '../../../services/recutement.service';
+import { EventService, Event } from '../../../services/event.service';
 
 @Component({
   selector: 'app-edit-recruitment',
@@ -11,28 +12,40 @@ export class EditRecruitmentComponent implements OnInit {
 
   recrutement: any = {
     title: '',
-    description: ''
+    description: '',
+    eventTitle: ''
   };
   id!: number;
+  events: Event[] = [];
+  errorMessage: string = '';
+  eventHasRecruitment: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private recrutementService: RecutementService,
+    private eventService: EventService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));  // Récupérer l'ID depuis la route
+    this.loadEvents();
     if (this.id) {
       this.getMonitoringRecruitment();  // Récupérer les données du recrutement
     }
   }
 
-  // Récupérer les détails du recrutement à éditer
+  loadEvents(): void {
+    this.eventService.getEvents().subscribe(events => {
+      this.events = events;
+    });
+  }
+
   getMonitoringRecruitment(): void {
     this.recrutementService.getMonitoringRecruitmentById(this.id).subscribe(
       (data) => {
         this.recrutement = data;
+        this.recrutement.eventTitle = data.eventTitle || '';  // Assigner le titre de l'événement s'il existe
       },
       (error) => {
         console.error('Erreur de récupération du recrutement', error);
@@ -40,11 +53,27 @@ export class EditRecruitmentComponent implements OnInit {
     );
   }
 
-  // Mettre à jour le recrutement
-  updateRecruitment(): void {
-    const { title, description } = this.recrutement; // Utiliser les valeurs du formulaire
+  onEventSelect(eventTitle: string) {
+    if (eventTitle) {
+      this.eventService.checkEventHasRecruitment(eventTitle).subscribe(hasRecruitment => {
+        this.eventHasRecruitment = hasRecruitment;
+        if (hasRecruitment) {
+          this.errorMessage = 'Cet événement possède déjà un recrutement.';
+        } else {
+          this.errorMessage = '';
+        }
+      });
+    }
+  }
 
-    // Appeler le service pour mettre à jour
+  updateRecruitment(): void {
+    const { title, description, eventTitle } = this.recrutement;
+
+    if (this.eventHasRecruitment) {
+      this.errorMessage = 'Impossible d\'assigner un nouveau recrutement à cet événement.';
+      return;
+    }
+
     this.recrutementService.updateMonitoringRecruitment(this.id, title, description).subscribe(
       (data) => {
         alert('Recrutement mis à jour avec succès');
