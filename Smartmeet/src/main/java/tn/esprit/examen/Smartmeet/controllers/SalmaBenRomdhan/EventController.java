@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -91,23 +92,31 @@ public class EventController {
         return ResponseEntity.ok("Événement assigné avec succès !");
     }
 
-    @GetMapping("/image/{fileName:.+}")
+    @GetMapping(value = "/images/{fileName:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
-            Path path = Paths.get(uploadDir, fileName);
-            byte[] imageBytes = Files.readAllBytes(path);
+            // Obtenez le chemin absolu à partir du chemin relatif
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Path filePath = uploadPath.resolve(fileName);
 
-            // Déterminer le type MIME
-            String mimeType = Files.probeContentType(path);
-            if (mimeType == null) {
-                mimeType = "application/octet-stream";
+            System.out.println("Chemin de recherche: " + filePath);
+            System.out.println("Le dossier upload existe ? " + Files.exists(uploadPath));
+
+            if (!Files.exists(filePath)) {
+                System.out.println("Fichier introuvable. Contenu du dossier:");
+                try (Stream<Path> paths = Files.list(uploadPath)) {
+                    paths.forEach(System.out::println);
+                }
+                return ResponseEntity.notFound().build();
             }
 
+            byte[] imageBytes = Files.readAllBytes(filePath);
             return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(mimeType))
+                    .header("Access-Control-Allow-Origin", "*")
                     .body(imageBytes);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(null);
+            System.out.println("ERREUR: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
     }
 

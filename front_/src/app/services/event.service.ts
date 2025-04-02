@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators'; // Ajoutez 'tap' ici
+
 
 export interface Event {
   id: number;
@@ -39,12 +40,16 @@ export class EventService {
 
 getEvents(): Observable<Event[]> {
   return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
-      map(events => events.map(event => {
-          if (event.filePath) {
-              event.imageUrl = `${this.apiUrl}/image/${event.filePath}`;
-          }
-          return event;
-      }))
+    tap(events => console.log("Données brutes reçues :", events)),
+    map(events => events.map(event => {
+      if (event.filePath) {
+        const url = `${this.apiUrl}/images/${event.filePath}`;
+        console.log("URL construite pour", event.filePath, ":", url);
+        event.imageUrl = url;
+      }
+      return event;
+    })),
+    tap(events => console.log("Événements transformés :", events))
   );
 }
 
@@ -62,7 +67,7 @@ getEvents(): Observable<Event[]> {
   }
   
   getImage(fileName: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/image/${fileName}`, { responseType: 'blob' });
+    return this.http.get(`${this.apiUrl}/images/${fileName}`, { responseType: 'blob' });
 }
 
 // Dans event.service.ts

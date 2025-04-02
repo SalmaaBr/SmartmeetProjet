@@ -130,12 +130,19 @@
       <div class="event-header">
 
 
-            <!-- Affichage de l'image si disponible -->
-            <div *ngIf="event.imageUrl" class="mb-3">
-              <img [src]="event.imageUrl" alt="Event Image" class="event-image img-fluid rounded"/>
+          <!-- Affichage image -->
+        <div *ngIf="event.imageUrl; else noImage">
+          <img [src]="event.imageUrl" 
+               (error)="event.imageUrl='assets/default-event.jpg'"
+               alt="Event Image" 
+               class="event-image img-fluid rounded">
+        </div>
+        <ng-template #noImage>
+          <img src="assets/default-event.jpg" class="event-image img-fluid rounded">
+        </ng-template>
           
 
-      </div>
+   
         <p>{{ event.imageUrl }}</p> <!-- Affiche l'URL de l'image pour le debugging -->
 
         <h3>{{ event.title }}</h3>
