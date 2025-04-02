@@ -17,6 +17,7 @@ export class CreateeventComponent {
   typeweather = Object.values(TypeWeather);
   isFormSubmitted = false;  // Variable pour suivre la soumission du formulaire
   selectedFile: File | null = null;
+  previewUrl: string | ArrayBuffer | null = null;
 
   constructor(private fb: FormBuilder, private router: Router, private eventService: EventService, private toastr: ToastrService) {
     this.form = this.fb.group({
@@ -39,14 +40,27 @@ export class CreateeventComponent {
   }
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-  }
+    const file = event.target.files[0];
+    this.selectedFile = file;
+
+    // Prévisualisation de l'image
+    const reader = new FileReader();
+    reader.onload = () => {
+        this.previewUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
+}
 
   onSubmit() {  
     this.isFormSubmitted = true;  // Marquer le formulaire comme soumis
 
     if (this.dateError) {
       this.toastr.error('La date de fin doit être après la date de début.', 'Erreur');
+    }
+
+    if (!this.selectedFile) {
+      this.toastr.error('Veuillez sélectionner une image.', 'Erreur');
+      return;
     }
 
     if (this.form.valid && this.selectedFile && !this.dateError) {
@@ -60,7 +74,9 @@ export class CreateeventComponent {
           this.toastr.error('Erreur lors de la création de l\'événement', 'Erreur');
         }
       );
-    } else {
+    } 
+
+    else {
       this.toastr.error('Veuillez remplir tous les champs requis et sélectionner un fichier.', 'Erreur');
     }
   }

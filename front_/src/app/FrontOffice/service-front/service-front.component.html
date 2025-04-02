@@ -130,9 +130,10 @@
       <div class="event-header">
 
 
-              <!-- Affichage de l'image si disponible -->
-      <div *ngIf="event.imageUrl">
-        <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="Image de l'événement" width="200">
+            <!-- Affichage de l'image si disponible -->
+            <div *ngIf="event.imageUrl" class="mb-3">
+              <img [src]="event.imageUrl" alt="Event Image" class="event-image img-fluid rounded"/>
+          
 
       </div>
         <p>{{ event.imageUrl }}</p> <!-- Affiche l'URL de l'image pour le debugging -->

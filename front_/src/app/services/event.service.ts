@@ -27,29 +27,26 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  createEvent(event: any, file: File): Observable<any> {
+  createEvent(event: any, file: File): Observable<Event> {
     const formData: FormData = new FormData();
-    formData.append('event', new Blob([JSON.stringify(event)], { type: 'application/json' }));
+    formData.append('event', new Blob([JSON.stringify(event)], { 
+        type: 'application/json' 
+    }));
     formData.append('file', file);
-
-    return this.http.post(`${this.apiUrl}/createevent`, formData);
+    
+    return this.http.post<Event>(`${this.apiUrl}/createevent`, formData);
 }
 
 getEvents(): Observable<Event[]> {
   return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
-    map(events => events.map(event => {
-      if (event.filePath) {
-        // Récupération du nom de fichier uniquement
-        const fileName = event.filePath.split('\\').pop()?.split('/').pop();
-        if (fileName) {
-          event.imageUrl = `${this.apiUrl}/image/${fileName}`;
-        }
-      }
-      return event;
-    }))
+      map(events => events.map(event => {
+          if (event.filePath) {
+              event.imageUrl = `${this.apiUrl}/image/${event.filePath}`;
+          }
+          return event;
+      }))
   );
 }
-
 
   deleteEvent(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/deleteevent/${id}`);

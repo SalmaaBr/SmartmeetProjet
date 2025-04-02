@@ -20,6 +20,7 @@ public class EventServicesImpl implements IEventServices {
     private final UserRepository userRepository;
 
 
+    @Override
     public Event createEvent(Event event) {
         return IEventRepository.save(event);
     }

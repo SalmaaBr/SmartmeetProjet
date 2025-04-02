@@ -107,10 +107,16 @@
         </div>
 
 
-        <div class="mb-3">
-          <label for="file" class="form-label">Télécharger un fichier :</label>
-          <input type="file" (change)="onFileSelected($event)" class="form-control" id="file" accept="image/*,application/pdf">
-        </div>
+                <!-- Upload d'image avec prévisualisation -->
+                <div class="mb-3">
+                  <label for="file" class="form-label">Image de l'événement :</label>
+                  <input type="file" (change)="onFileSelected($event)" class="form-control" id="file" accept="image/*" required>
+                  
+                  <!-- Prévisualisation de l'image -->
+                  <div *ngIf="previewUrl" class="mt-3">
+                      <img [src]="previewUrl" alt="Preview" class="img-thumbnail" style="max-height: 200px;">
+                  </div>
+              </div>
       
 
         <!-- Boutons -->

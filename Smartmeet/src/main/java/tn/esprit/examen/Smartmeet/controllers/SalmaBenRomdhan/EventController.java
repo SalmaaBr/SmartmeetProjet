@@ -2,6 +2,7 @@ package tn.esprit.examen.Smartmeet.controllers.SalmaBenRomdhan;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -31,22 +33,31 @@ public class EventController {
 
     private final IEventRepository eventRepository;
 
+    @Value("${app.upload.dir}")
+    private String uploadDir;
+
     @PostMapping(value = "/createevent", consumes = { "multipart/form-data" })
-    public Event createEvent(@RequestPart("event") Event event, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Event> createEvent(@RequestPart("event") Event event,
+                                             @RequestPart("file") MultipartFile file) {
         try {
-            String uploadDir = "C:/Users/benro/Desktop/uploads";
-            String fileName = file.getOriginalFilename();
-            Path filePath = Paths.get(uploadDir, fileName);
+            // Créer le répertoire s'il n'existe pas
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
 
-            file.transferTo(filePath.toFile());
+            // Générer un nom de fichier unique
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
 
-            // Formater le chemin du fichier en remplaçant les backslashes par des slashes
-            event.setFilePath(filePath.toString().replace("\\", "/"));
+            // Sauvegarder le fichier
+            Files.copy(file.getInputStream(), filePath);
 
-            // Stocker seulement le nom du fichier, pas le chemin complet
+            // Stocker seulement le nom du fichier dans la base de données
             event.setFilePath(fileName);
 
-            return eventService.createEvent(event);
+            Event savedEvent = eventService.createEvent(event);
+            return ResponseEntity.ok(savedEvent);
         } catch (IOException e) {
             throw new RuntimeException("Erreur lors de l'upload du fichier : " + e.getMessage());
         }
@@ -80,17 +91,22 @@ public class EventController {
         return ResponseEntity.ok("Événement assigné avec succès !");
     }
 
-    @GetMapping("/image/{fileName}")
+    @GetMapping("/image/{fileName:.+}")
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
-            Path path = Paths.get("C:/Users/benro/Desktop/uploads", fileName);
-            byte[] image = Files.readAllBytes(path);
-            String contentType = Files.probeContentType(path);
+            Path path = Paths.get(uploadDir, fileName);
+            byte[] imageBytes = Files.readAllBytes(path);
+
+            // Déterminer le type MIME
+            String mimeType = Files.probeContentType(path);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream";
+            }
 
             return ResponseEntity.ok()
-                    .header("Content-Type", contentType != null ? contentType : "image/jpeg")
-                    .body(image);
-        } catch (IOException e) {
+                    .contentType(MediaType.parseMediaType(mimeType))
+                    .body(imageBytes);
+        } catch (Exception e) {
             return ResponseEntity.status(404).body(null);
         }
     }
