@@ -117,7 +117,7 @@
 
 
 
-<div class="event-container">
+
   <h2 class="section-title">🎉 Upcoming Events</h2>
 
   <div *ngIf="events.length === 0" class="no-events">
@@ -125,6 +125,8 @@
     <p>No events available at the moment.</p>
     <p class="subtext">Check back later for exciting events!</p>
   </div>
+
+    <!-- Event List -->
 
   <div class="event-list">
     <div *ngFor="let event of events" class="event-card">
@@ -163,9 +165,9 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="recruitment-container">
+
+
   <h2>📢 Available Recruitments</h2>
 
   <div *ngIf="recrutements.length === 0" class="no-recruitments">
@@ -185,4 +187,4 @@
       <button class="participate-button">Apply</button>
     </div>
   </div>
-</div>
+
