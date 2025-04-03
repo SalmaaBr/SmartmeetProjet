@@ -59,12 +59,24 @@ export class ServiceFrontComponent implements OnInit {
     console.log('ServiceFrontComponent Loaded ✅');
   }
 
+  formatTime(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleString(); // ou utilisez un formatage plus précis
   }
-  
+
+  formatShortDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+
   // Charger les événements
   loadEvents(): void {
     this.eventService.getEvents().subscribe(
