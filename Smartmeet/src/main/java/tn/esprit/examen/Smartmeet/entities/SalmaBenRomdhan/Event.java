@@ -1,6 +1,7 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,7 +52,11 @@ public class Event implements Serializable {
 
     private String filePath;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    private Double latitude;
+    private Double longitude;
+
+    @ManyToMany
+    @JsonIgnore
     private Set<Users> users;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="events")
@@ -72,7 +77,6 @@ public class Event implements Serializable {
 
     @OneToOne
     @JsonIgnoreProperties("event") // Ignore la propriété "event" lors de la sérialisation de MonitoringRecruitment
-
     private MonitoringRecruitment monitorungrecutement;
 
 }

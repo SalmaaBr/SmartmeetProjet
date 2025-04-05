@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.OpenStreetMapService;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.IEventServices;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +21,7 @@ import java.nio.file.Paths;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @CrossOrigin("*")
@@ -39,7 +39,7 @@ public class EventController {
 
     @PostMapping(value = "/createevent", consumes = { "multipart/form-data" })
     public ResponseEntity<Event> createEvent(@RequestPart("event") Event event,
-                                             @RequestPart("file") MultipartFile file) {
+                                             @RequestPart("file") MultipartFile file, BindingResult result) {
         try {
             // Créer le répertoire s'il n'existe pas
             Path uploadPath = Paths.get(uploadDir);
@@ -119,11 +119,21 @@ public class EventController {
     }
 
 
-    @PostMapping("/assign/{userId}/{eventId}")
-    public ResponseEntity<String> assignEventToUser(@PathVariable Long userId, @PathVariable Long eventId) {
-        eventService.addAndAssignEventToUser(userId, eventId);
-        return ResponseEntity.ok("Événement assigné avec succès !");
+    @PostMapping("/evenements/{eventId}/participer")
+    public ResponseEntity<?> participer(@PathVariable Long eventId) {
+        try {
+            int newMaxParticipants = eventService.addAndAssignEventToUser(eventId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Participation enregistrée !");
+            response.put("maxParticipants", newMaxParticipants);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
+
+
+
 
     @GetMapping(value = "/images/{fileName:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
@@ -157,6 +167,22 @@ public class EventController {
     public boolean checkEventHasRecruitment(@PathVariable String title) {
         Optional<Event> eventOpt = eventRepository.findByTitle(title);
         return eventOpt.isPresent() && eventOpt.get().getMonitorungrecutement() != null;
+    }
+
+    // Ajoutez ces nouvelles méthodes dans votre contrôleur
+    @Autowired
+    private OpenStreetMapService openStreetMapService;
+
+    @GetMapping("/search-location")
+    public ResponseEntity<String> searchLocation(@RequestParam String query) {
+        String result = openStreetMapService.searchLocation(query).block();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/reverse-geocode")
+    public ResponseEntity<String> reverseGeocode(@RequestParam double lat, @RequestParam double lon) {
+        String result = openStreetMapService.reverseGeocode(lat, lon).block();
+        return ResponseEntity.ok(result);
     }
 
 

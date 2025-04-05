@@ -24,14 +24,45 @@
           </div>
         </div>
 
-        <!-- Localisation -->
+
+        <!-- Localisation avec OpenStreetMap -->
         <div class="mb-3">
           <label class="form-label">Localisation :</label>
-          <input type="text" class="form-control border-primary" id="location" formControlName="location">
+          <div class="input-group">
+            <input type="text" class="form-control border-primary" id="location" 
+                   formControlName="location" (input)="searchLocation()">
+            <button class="btn btn-outline-primary" type="button" (click)="searchLocation()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          
+          <!-- Search results dropdown -->
+          <div class="position-relative">
+            <div class="list-group position-absolute w-100 z-index-1" *ngIf="showSearchResults && searchResults.length">
+              <a href="#" class="list-group-item list-group-item-action" 
+                 *ngFor="let result of searchResults" 
+                 (click)="selectSearchResult(result); $event.preventDefault()">
+                {{ result.display_name }}
+              </a>
+            </div>
+          </div>
+          
           <div *ngIf="isFormSubmitted && form.controls['location'].invalid" class="text-danger">
             <div *ngIf="form.controls['location'].errors?.['required']">La localisation est requise.</div>
           </div>
         </div>
+
+        
+
+        <!-- Carte OpenStreetMap -->
+        <div class="mb-3">
+          <div id="map" style="height: 300px; width: 100%;"></div>
+          <small class="text-muted">Cliquez sur la carte pour sélectionner un emplacement</small>
+        </div>
+
+        <!-- Hidden latitude/longitude fields -->
+        <input type="hidden" formControlName="latitude">
+        <input type="hidden" formControlName="longitude">
 
         <!-- Types dans la même ligne -->
         <div class="row">

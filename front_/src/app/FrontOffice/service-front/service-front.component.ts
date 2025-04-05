@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef  } from '@angular/core';
 import { EventService, Event } from '../../services/event.service'; // Vérifie le bon chemin
 import { RecutementService } from '../../services/recutement.service';
 import * as AOS from 'aos';
+import { MatSnackBar } from '@angular/material/snack-bar'; // Pour les notifications
 
 import { InteractivePublicationService } from 'src/app/services/interactive-publication.service';
 import { InteractivePublication } from 'src/app/models/interactive-publication.model';
@@ -40,7 +41,10 @@ export class ServiceFrontComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private recrutementService: RecutementService,
-    private publicationService: InteractivePublicationService
+    private publicationService: InteractivePublicationService,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +68,7 @@ export class ServiceFrontComponent implements OnInit {
     const date = new Date(dateString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-  
+
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -90,6 +94,28 @@ export class ServiceFrontComponent implements OnInit {
   }
   
   
+  participate(eventId: number, eventIndex: number): void {
+    this.eventService.participateToEvent(eventId).subscribe({
+      next: (response) => {
+        this.snackBar.open(response.message, 'Fermer', { duration: 3000 });
+  
+        this.events = this.events.map((event, idx) => 
+          idx === eventIndex ? { ...event, maxParticipants: response.maxParticipants } : event
+        );
+  
+        this.cdr.detectChanges(); // 👈 force Angular à détecter les changements
+      },
+      error: (err) => {
+        console.error('Erreur lors de la participation:', err);
+        this.snackBar.open(err.error.message || 'Erreur lors de la participation', 'Fermer', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  
+
 
   // Charger les recrutements
   loadRecruitments(): void {

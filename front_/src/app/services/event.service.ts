@@ -11,6 +11,8 @@ export interface Event {
   title: string;
   description: string;
   location: string;
+  latitude: number;
+  longitude:number;
   typeweather: string;
   startTime: string;
   endTime: string;
@@ -30,13 +32,17 @@ export class EventService {
 
   createEvent(event: any, file: File): Observable<Event> {
     const formData: FormData = new FormData();
-    formData.append('event', new Blob([JSON.stringify(event)], { 
+    formData.append('event', new Blob([JSON.stringify({
+      ...event,
+      // Include the coordinates in the location string or as separate fields
+      location: `${event.location} (${event.latitude},${event.longitude})`
+    })], { 
         type: 'application/json' 
     }));
     formData.append('file', file);
     
     return this.http.post<Event>(`${this.apiUrl}/createevent`, formData);
-}
+  }
 
 getEvents(): Observable<Event[]> {
   return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
@@ -77,6 +83,10 @@ getEvents(): Observable<Event[]> {
 // Ajoutez cette méthode
 checkEventHasRecruitment(title: string): Observable<boolean> {
   return this.http.get<boolean>(`${this.apiUrl}/check-recruitment/${title}`);
+}
+//aadandAsignEventToUser
+participateToEvent(eventId: number): Observable<{message: string, maxParticipants: number}> {
+  return this.http.post<{message: string, maxParticipants: number}>(`${this.apiUrl}/evenements/${eventId}/participer`, {});
 }
 
 }

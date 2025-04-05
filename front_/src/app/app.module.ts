@@ -42,6 +42,9 @@ import { EditEventComponent } from './models/event/edit-event/edit-event.compone
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import { MonitoringRecruitmentListComponent } from './models/recutement/monitoring-recruitment-list/monitoring-recruitment-list.component';
 import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -76,8 +79,7 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
     EditEventComponent,
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
-    EditRecruitmentComponent
-  ],
+    EditRecruitmentComponent  ],
   imports: [
     ReactiveFormsModule ,
     FormsModule,
@@ -92,8 +94,11 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
       preventDuplicates: true,             // Prevent duplicate toasts from being shown
       closeButton: true,                     // Enable close button on the toast
       progressBar: true 
-    })
+    }),
+    LeafletModule,
+    MatSnackBarModule
 ,
+
   ],
   providers: [
      ReservationService,

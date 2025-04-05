@@ -35,7 +35,9 @@
               "src/assets/BackOffice/assets/vendor/css/theme-default.css",
               "src/assets/BackOffice/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/boxicons/css/boxicons.min.css"
+              "node_modules/boxicons/css/boxicons.min.css",
+              "node_modules/leaflet/dist/leaflet.css"
+            
 
 
             ],

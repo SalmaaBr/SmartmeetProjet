@@ -74,3 +74,12 @@
   .participate-button:hover {
     background-color: #45a049;
   }
+
+
+  .red-marker {
+    filter: hue-rotate(300deg) brightness(1.2);
+  }
+
+
+
+  
