@@ -21,13 +21,16 @@
   
   /* Affichage des événements en grille */
   .event-list {
-    .event-list {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
       gap: 20px;
       border-radius: var(--container-radius);
       overflow: hidden;
-    }
+      margin: 20px auto; /* Centrer la liste */
+      max-width: 1200px; /* Vous pouvez ajuster la largeur maximale */
+
+
+    
   }
   
   .event-card {
@@ -403,13 +406,6 @@
   margin-bottom: 8px;
 }
 
-.event-location {
-  font-size: 0.8rem;
-  margin: 0 0 8px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .event-dates {
   display: flex;
@@ -468,6 +464,8 @@
   margin-bottom: 2rem;
   position: relative;
   display: inline-block;
+  text-align: center;  /* Centre le texte */
+  margin-bottom: 20px;  /* Ajoute un espace sous le titre */
 }
 
 .section-title::after {
@@ -479,6 +477,9 @@
   height: 4px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: 2px;
+  text-align: center;  /* Centre le texte */
+
+
 }
 
 .no-events {
@@ -577,12 +578,6 @@
   font-size: 0.9rem;
 }
 
-.event-theme, .event-location {
-  color: var(--text-light);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
 
 .event-dates {
   display: flex;
@@ -651,9 +646,7 @@
     padding: 1.5rem 1rem;
   }
   
-  .section-title {
-    font-size: 1.5rem;
-  }
+
   
   .event-list {
     grid-template-columns: 1fr;
@@ -704,25 +697,7 @@
   padding: 2rem 1.5rem;
 }
 
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
-}
 
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  border-radius: 2px;
-}
 
 .no-events {
   background: var(--card-bg);
@@ -808,7 +783,7 @@
   color: var(--text-light);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.15rem;
 }
 
 .event-dates {

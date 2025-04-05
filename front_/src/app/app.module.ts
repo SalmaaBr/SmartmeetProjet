@@ -44,6 +44,7 @@ import { MonitoringRecruitmentListComponent } from './models/recutement/monitori
 import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
 
 
 
@@ -79,7 +80,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EditEventComponent,
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
-    EditRecruitmentComponent  ],
+    EditRecruitmentComponent,
+    ViewProfileComponent
+      ],
   imports: [
     ReactiveFormsModule ,
     FormsModule,

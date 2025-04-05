@@ -3,6 +3,7 @@ package tn.esprit.examen.Smartmeet.Services;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
@@ -12,5 +13,7 @@ public interface UserService {
     Users updateUser(Long id, Users userDetails);
     void deleteUser(Long id);
     Users getUserByEmail(String email);
+    Optional<Users> findByUsername(String username);
 
-}
+
+    }

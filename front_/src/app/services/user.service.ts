@@ -18,6 +18,7 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
+  
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/by-email`, {
       params: { email }
@@ -38,5 +39,10 @@ export class UserService {
 
   getRoles(): TypeUserRole[] {
     return ['USER', 'ADMIN', 'PARTICIPANT', 'SPEAKER', 'TRAINER', 'SPONSOR', 'COMPANY'];
+  }
+
+  // Ajoutez cette nouvelle méthode pour l'utilisateur connecté
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 }

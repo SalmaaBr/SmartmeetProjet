@@ -24,6 +24,8 @@ import { GeteventComponent } from './models/event/getevent/getevent/getevent.com
 import { EditEventComponent } from './models/event/edit-event/edit-event.component';
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import {EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
+import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+
 
 const routes: Routes = [
   {
@@ -36,6 +38,8 @@ const routes: Routes = [
       {path: 'portfolio', component:PortfolioComponent},
       {path: 'contact', component:ContactComponent},
       { path: 'profile', component: ProfileComponent  },
+      { path: 'profile/me', component: ViewProfileComponent }
+
 
     ]
   },
