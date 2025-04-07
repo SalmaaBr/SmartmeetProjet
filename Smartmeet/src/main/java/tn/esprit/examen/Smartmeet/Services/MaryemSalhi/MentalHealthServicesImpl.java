@@ -1,5 +1,10 @@
 package tn.esprit.examen.Smartmeet.Services.MaryemSalhi;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,8 @@ import tn.esprit.examen.Smartmeet.repositories.MaryemSalhi.IMentalhealthReposito
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 import tn.esprit.examen.Smartmeet.security.services.UserDetailsImpl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,6 +87,33 @@ public class MentalHealthServicesImpl implements IMentalHealthServices {
         System.out.println(notification); // Pour tester
 
         return savedMentalHealth;
+    }
+
+    public byte[] generateQRCode(Long mentalHealthId, int width, int height) throws WriterException, IOException {
+        MentalHealth mentalHealth = getMentalhealthById(mentalHealthId); // Replace with your actual method to fetch MentalHealth
+        if (mentalHealth == null) {
+            throw new IllegalArgumentException("Enregistrement de santé mentale non trouvé avec l'ID : " + mentalHealthId);
+        }
+
+        // Créer une chaîne contenant les détails de l'enregistrement de santé mentale
+        String mentalHealthDetails = String.format(
+                "Mental Health ID: %d\nResponse Moment: %s\nStress Level: %d\nEmotional State: %s\nSupport Need: %s\nSubmission Date: %s",
+                mentalHealth.getIdMentalHealth(),
+                mentalHealth.getResponseMoment().toString(),
+                mentalHealth.getStressLevel(),
+                mentalHealth.getEmotionalState().toString(),
+                mentalHealth.getSupportNeed().toString(),
+                mentalHealth.getSubmissionDate().toString()
+        );
+
+        // Générer le QR Code
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(mentalHealthDetails, BarcodeFormat.QR_CODE, width, height);
+
+        // Convertir le QR Code en image PNG sous forme de byte[]
+        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+        return pngOutputStream.toByteArray();
     }
 }
 

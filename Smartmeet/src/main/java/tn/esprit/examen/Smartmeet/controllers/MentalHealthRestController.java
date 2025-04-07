@@ -3,7 +3,9 @@ package tn.esprit.examen.Smartmeet.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -73,6 +75,24 @@ public class MentalHealthRestController {
         response.put("result", savedMentalHealth); // Résultat envoyé à l’utilisateur
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/qrcode")
+    public ResponseEntity<byte[]> generateQRCode(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "300") int width,
+            @RequestParam(defaultValue = "300") int height) {
+        try {
+            byte[] qrCodeImage = servicesMentalhealth.generateQRCode(id, width, height); // Updated to use mentalHealthService
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            headers.setContentLength(qrCodeImage.length);
+
+            return new ResponseEntity<>(qrCodeImage, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 
