@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.IFeedbackServices;
+import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.MailingService;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.Feedback;
 
 import java.util.List;
@@ -23,11 +25,21 @@ import java.util.List;
 
 public class FeedbackRestController {
     private final IFeedbackServices servicesFeedback;
+    private final MailingService mailingService;
 
     @PostMapping("/Add-feedbacks")
-    public Feedback addFeedback(@RequestBody Feedback feedback) {
+    public ResponseEntity<Feedback> addFeedback(@RequestBody Feedback feedback) {
         log.info("Adding feedback: {}", feedback);
-        return servicesFeedback.addFeedback(feedback);
+
+        Feedback savedFeedback = servicesFeedback.addFeedback(feedback);
+        // Send email notification after feedback is saved
+        String subject = "New Feedback Submitted";
+        String message = "A new feedback has been submitted:\n\n" +
+                "Event Title: " + savedFeedback.getEventTitle() + "\n" +
+                "Message: " + savedFeedback.getMessage() + "\n";
+        String recipientEmail = "mariam.salhiai@gmail.com";
+        mailingService.sendVerificationCode(recipientEmail, message);
+        return ResponseEntity.ok(savedFeedback);
     }
 
     @PutMapping("/Update-feedbacks")
