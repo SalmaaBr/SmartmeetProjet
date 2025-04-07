@@ -79,14 +79,16 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/**"
                     ).permitAll()
-                    /*.requestMatchers("/api/auth/**",
+                    .requestMatchers("/api/auth/**",
                             "/InteractivePublication/**",
                             "/api/test/**",
                             "/event/createevent",
                             "/login",
                             "/admin"
-                            ).permitAll()*/
+                            ).permitAll()
 //                    .requestMatchers("/dashboard/**").authenticated()
+                    .requestMatchers("/api/mentalhealth/submit-for-current-user").authenticated() // Protéger ton endpoint
+                    .requestMatchers("/api/users/**").authenticated() // Exemple pour les endpoints utilisateurs
                     .anyRequest().authenticated());
     http.authenticationProvider(authenticationProvider());
 

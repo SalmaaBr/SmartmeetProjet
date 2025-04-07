@@ -7,9 +7,8 @@ import java.util.List;
 public interface IMentalHealthServices {
     MentalHealth addMentalhealth(MentalHealth mentalhealth);
     MentalHealth updateMentalhealth(MentalHealth mentalhealth);
-    void deleteMentalhealth(Integer id);
-    MentalHealth getMentalhealthById(int id);
+    void deleteMentalhealth(Long id);
+    MentalHealth getMentalhealthById(Long id);
     List<MentalHealth> getAllMentalhealths();
-    MentalHealth addMentalHealthAndAssignToUser(MentalHealth mentalHealth, Long userId);
-
+    MentalHealth addMentalHealthForCurrentUser(MentalHealth mentalHealth);
 }
