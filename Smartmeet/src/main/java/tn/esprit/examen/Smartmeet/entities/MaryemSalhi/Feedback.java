@@ -22,7 +22,10 @@ public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long idFeedback;
+    @Column(name = "message", length = 10000)  // or use TEXT for larger comments
     String message;// Contenu du feedback
+
+
     @Column(nullable = false)
     LocalDate date = LocalDate.now(); // Date automatique
     @Enumerated(EnumType.STRING)

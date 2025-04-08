@@ -19,16 +19,25 @@ public class FeedbackServicesImpl implements IFeedbackServices {
 
     private final IFeedbackRepository feedbackRepository;
     private final IEventRepository eventRepository;
-
+    private final GeminiService geminiService;
     @Override
     public Feedback addFeedback(Feedback feedback) {
         log.info("Adding feedback: {}", feedback);
-        // Si un événement est associé, remplir eventTitle
+
+        // Reformuler le message s'il n'est pas vide
+        if (feedback.getMessage() != null && !feedback.getMessage().isBlank()) {
+            String professionalMessage = geminiService.reformulateMessage(feedback.getMessage());
+            feedback.setMessage(professionalMessage); // mise à jour du message
+        }
+
+        // Remplir le titre de l’événement si nécessaire
         if (feedback.getEvents() != null) {
             feedback.setEventTitle(feedback.getEvents().getTitle());
         }
+
         return feedbackRepository.save(feedback);
     }
+
 
     @Override
     public Feedback updateFeedback(Feedback feedback) {

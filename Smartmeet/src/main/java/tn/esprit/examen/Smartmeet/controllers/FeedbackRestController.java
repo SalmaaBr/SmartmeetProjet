@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.GeminiService;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.IFeedbackServices;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.MailingService;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.Feedback;
@@ -26,12 +27,25 @@ import java.util.List;
 public class FeedbackRestController {
     private final IFeedbackServices servicesFeedback;
     private final MailingService mailingService;
+    private final GeminiService geminiService; // Ton service qui utilise l'API Gemini
 
     @PostMapping("/Add-feedbacks")
     public ResponseEntity<Feedback> addFeedback(@RequestBody Feedback feedback) {
         log.info("Adding feedback: {}", feedback);
 
+        try {
+            // Appel à Gemini pour reformuler le message
+            String originalMessage = feedback.getMessage();
+            String reformulatedMessage = geminiService.reformulateMessage(originalMessage); // ⬅ reformulation ici
+            feedback.setMessage(reformulatedMessage); // ⬅ On remplace l'ancien message par le reformulé
+            log.info("Message reformulated by Gemini: {}", reformulatedMessage);
+        } catch (Exception e) {
+            log.error("Failed to reformulate message with Gemini: {}", e.getMessage());
+            // Tu peux choisir de continuer avec le message original ou retourner une erreur
+        }
+
         Feedback savedFeedback = servicesFeedback.addFeedback(feedback);
+
         // Send email notification after feedback is saved
         String subject = "New Feedback Submitted";
         String message = "A new feedback has been submitted:\n\n" +
@@ -39,8 +53,10 @@ public class FeedbackRestController {
                 "Message: " + savedFeedback.getMessage() + "\n";
         String recipientEmail = "mariam.salhiai@gmail.com";
         mailingService.sendVerificationCode(recipientEmail, message);
+
         return ResponseEntity.ok(savedFeedback);
     }
+
 
     @PutMapping("/Update-feedbacks")
     public Feedback updateFeedback(@RequestBody Feedback feedback) {

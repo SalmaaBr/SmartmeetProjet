@@ -1,72 +1,70 @@
 package tn.esprit.examen.Smartmeet.Services.MaryemSalhi;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
+@Slf4j
 public class GeminiService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GeminiService.class);
+    private final WebClient webClient;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String apiKey = "AIzaSyCFuor3YAig1FvWj39eEMiW6ERz4UjeoqU"; // à sécuriser ensuite
 
-    @Value("${gemini.api.key}")
-    private String apiKey;
+    public GeminiService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder
+                .baseUrl("https://generativelanguage.googleapis.com")
+                .build();
+    }
 
-    private final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    public String reformulateMessage(String originalMessage) {
+        String prompt = "Please rewrite the following message as a professional and polished paragraph:\n" + originalMessage;
 
-    public String makeProfessional(String comment) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Build the full URL with the API key appended
-        String url = GEMINI_URL + "?key=" + apiKey;
-
-        // Prepare the request body for the Gemini API with an enhanced instruction to generate a detailed response
-        Map<String, Object> requestBody = Map.of(
-                "contents", List.of(
-                        Map.of("parts", List.of(
-                                Map.of("text",
-                                        "Reformule ce commentaire de manière professionnelle et détaillée. " +
-                                                "Ajoute une analyse complète, couvrant les aspects positifs et négatifs du cours, " +
-                                                "et présente les informations de manière claire et argumentée. " +
-                                                "Voici le commentaire : " + comment)
-                        ))
-                )
-        );
-
-        // Set up headers for the request
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // Create the HTTP request entity
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
+        String requestBody = """
+        {
+          "contents": [
+            {
+              "parts": [
+                {
+                  "text": "%s"
+                }
+              ]
+            }
+          ]
+        }
+        """.formatted(prompt);
 
         try {
-            // Send the POST request to the Gemini API
-            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-            logger.info("Gemini API response: " + response.getStatusCode());
+            String response = webClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v1beta/models/gemini-2.0-flash:generateContent")
+                            .queryParam("key", apiKey)
+                            .build())
+                    .header("Content-Type", "application/json")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.getBody().get("candidates");
-                if (candidates != null && !candidates.isEmpty()) {
-                    Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
-                    List<Map<String, String>> parts = (List<Map<String, String>>) content.get("parts");
-                    String result = parts.get(0).get("text");
-                    logger.info("Reformulated comment: " + result);
-                    return result;
-                }
+            log.info("Gemini raw response: {}", response);
+
+            // Extraction du texte reformulé
+            JsonNode root = objectMapper.readTree(response);
+            JsonNode textNode = root.path("candidates").get(0).path("content").path("parts").get(0).path("text");
+
+            if (!textNode.isMissingNode()) {
+                return textNode.asText();
             } else {
-                logger.error("Error in Gemini API response: " + response.getBody());
+                log.warn("No reformulated text found in Gemini response.");
+                return originalMessage;
             }
-        } catch (Exception e) {
-            logger.error("Error calling Gemini API: ", e);
-        }
 
-        return comment; // Return the original comment if something goes wrong
+        } catch (Exception e) {
+            log.error("Error while calling Gemini API: {}", e.getMessage());
+            return originalMessage;
+        }
     }
 }
