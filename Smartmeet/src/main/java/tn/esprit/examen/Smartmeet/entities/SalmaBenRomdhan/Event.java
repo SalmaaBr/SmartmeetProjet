@@ -76,7 +76,7 @@ public class Event implements Serializable {
     private List<EventSponsor> eventSponsors = new ArrayList<>();
 
     @OneToOne
-    @JsonIgnoreProperties("event") // Ignore la propriété "event" lors de la sérialisation de MonitoringRecruitment
+    @JsonIgnoreProperties("event")
     private MonitoringRecruitment monitorungrecutement;
 
 }

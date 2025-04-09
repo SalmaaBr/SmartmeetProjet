@@ -25,6 +25,8 @@ import { EditEventComponent } from './models/event/edit-event/edit-event.compone
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import {EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
 import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+import { CalendarComponent } from './models/calendar/calendar.component';
+import { NotificationsComponent } from './models/notifications/notifications.component';
 
 
 const routes: Routes = [
@@ -52,13 +54,15 @@ const routes: Routes = [
       { path: 'users', component: UserComponent },
       { path: 'resources', component: ResourceManagementComponent },
       { path: 'resource-reservations', component: ResourceReservationManagementComponent },
-      
+
       { path: '', redirectTo: 'users', pathMatch: 'full' },
-      { path: 'events', component: GeteventComponent },  
+      { path: 'events', component: GeteventComponent },
+      { path: 'cal', component: CalendarComponent },
       { path: 'create-event', component: CreateeventComponent },
       { path: 'edit-event/:id', component: EditEventComponent },
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
+      { path: 'notif', component: NotificationsComponent },
     ]
   },
   {
@@ -66,7 +70,7 @@ const routes: Routes = [
     component: RegisterComponent // Route indépendante pour RegisterComponent
   },
   {
-    path: '', 
+    path: '',
     redirectTo: '/login',  // Redirige vers la page de connexion par défaut
     pathMatch: 'full'      // Assure que l'URL vide redirige bien vers /login
   },

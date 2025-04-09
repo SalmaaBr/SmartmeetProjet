@@ -45,6 +45,12 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+import { CalendarComponent } from './models/calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { NotificationsComponent } from './models/notifications/notifications.component';
+
+
+
 
 
 
@@ -81,7 +87,9 @@ import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.com
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
     EditRecruitmentComponent,
-    ViewProfileComponent
+    ViewProfileComponent,
+    CalendarComponent,
+    NotificationsComponent
       ],
   imports: [
     ReactiveFormsModule ,
@@ -91,12 +99,13 @@ import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.com
     CodeInputModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FullCalendarModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,             // Prevent duplicate toasts from being shown
       closeButton: true,                     // Enable close button on the toast
-      progressBar: true 
+      progressBar: true
     }),
     LeafletModule,
     MatSnackBarModule
