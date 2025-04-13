@@ -4,8 +4,167 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a2072f1-dc09-4dab-84a6-0589ebba6234" name="Changes" comment="BACK-USER">
+    <list default="true" id="4a2072f1-dc09-4dab-84a6-0589ebba6234" name="Changes" comment="FRONT-USER">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/ResReq/request/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/ResReq/request/SignupRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/ResReq/response/JwtResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/ResReq/response/MessageResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/AuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/AuthenticationServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/ClaimServcesImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/EventSponsorServicesImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/FoundItemImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/IClaimServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/IEventSponsorServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/IFoundItemServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/ISponsorServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/GhanemRidene/SponsorServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/IUsersServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/IInteractivePublicationServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/IResourceReservationServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/IResourceServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/InteractivePublicationServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/ResourceReservationServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemAbid/ResourceServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/DocumentServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/IDocumentServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/IParticipationServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/IPaymentServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/ParticipationServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemJeljli/PaymentServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemSalhi/FeedbackServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemSalhi/IFeedbackServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemSalhi/IMentalHealthServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/MaryemSalhi/MentalHealthServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/SalmaBenRomdhan/EventServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/SalmaBenRomdhan/IEventServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/SalmaBenRomdhan/IMonitoringRecruitmentServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/SalmaBenRomdhan/MonitoringRecruitmentServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/UserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/UsersServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/ISessionServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/ISmartMeetingServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/ISmartMeetingServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/ITagsServices.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/SessionServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/Services/YousraFourati/TagsServicesImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/SmartmeetApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/aspects/LoggingAspect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/aspects/PerformanceAspect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/config/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/ClaimRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/DocumentRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/EventSponsorRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/FeedbackRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/FoundItemRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/InteractivePublicationRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/MentalHealthRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/MonitoringRecruitmentRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/ParticipationRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/PaymentRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/ResourceReservationRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/ResourceRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/SalmaBenRomdhan/EventController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/SalmaBenRomdhan/MonitoringRecruitmentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/SessionRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/SmartMeetingRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/SponsorRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/TagsRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/Users/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/Users/ResetPasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/Users/TestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/controllers/Users/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/email/EmailService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/email/EmailTemplateName.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/Claim.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/ClaimStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/EventSponsor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/FoundItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/ItemStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/Sponsor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/SponsorLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/TypeFoundObjectStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/TypeSponsorship.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/GhanemRidene/TypeSponsorshipMaterial.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/InteractivePublication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/Resource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/ResourceReservation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/TypeIPublicationModerationStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/TypeIPublicationStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/TypeIPublicationVisibility.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/TypeResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemAbid/TypeResourceStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/Document.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/Participation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/Payment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeAccessLevelDocument.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeDocument.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeDocumentTheme.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeDocumentVisibility.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeParticipationStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypePaymentMethod.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypePaymentStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemJeljli/TypeWeather.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemSalhi/Feedback.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemSalhi/MentalHealth.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemSalhi/TypeEmotionalState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/MaryemSalhi/TypeFeeling.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/Event.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/MonitoringRecruitment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/TypeEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/TypeFollowUpStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/TypeTheme.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/SalmaBenRomdhan/TypeWeather.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/Users/BlacklistedToken.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/Users/TypeUserRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/Users/Users.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/YousraFourati/Session.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/YousraFourati/SmartMeeting.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/YousraFourati/Tags.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/entities/YousraFourati/TypeSessionStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/GhanemRiden/IClaimRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/GhanemRiden/IEventSponsorRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/GhanemRiden/IFoundItemRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/GhanemRiden/ISponsorRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemAbid/IInteractivePublicationRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemAbid/IResourceRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemAbid/IResourceReservationRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemJeljli/IDocumentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemJeljli/IParticipationRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemJeljli/IPaymentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemSalhi/IFeedbackRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/MaryemSalhi/IMentalhealthRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/SalmaBenRomdhan/IEventRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/SalmaBenRomdhan/IMonitoringRecruitmentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/Users/BlacklistedTokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/Users/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/YousraFourati/ISessionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/YousraFourati/ISmartMeetingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/repositories/YousraFourati/ITagsRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/WebSecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/jwt/AuthEntryPointJwt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/jwt/AuthTokenFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/jwt/Base64Encoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/jwt/JwtUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/services/DataInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/services/UserDetailsImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/tn/esprit/examen/Smartmeet/security/services/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/templates/activate_account.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/templates/reset_password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/tn/esprit/examen/Smartmeet/nomPrenomClasseExamenApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,32 +198,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.SmartmeetApplication.executor": "Run",
-    "git-widget-placeholder": "ghanemRidene",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/riden/Desktop/Smartmeet",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.Angular CLI Server.executor": "Run",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.SmartmeetApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ghanemRidene&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/riden/Desktop/PROJ/Smartmeet&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.Angular CLI Server.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\riden\\Desktop\\PROJ\\Frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Spring Boot.SmartmeetApplication">
     <configuration name="SmartmeetApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <option name="ALTERNATIVE_JRE_PATH" value="23 (2)" />
@@ -110,7 +270,9 @@
       <workItem from="1744553996258" duration="83000" />
       <workItem from="1744554090912" duration="28000" />
       <workItem from="1744554128482" duration="2482000" />
-      <workItem from="1744556648088" duration="23000" />
+      <workItem from="1744556648088" duration="738000" />
+      <workItem from="1744557428834" duration="198000" />
+      <workItem from="1744557758881" duration="272000" />
     </task>
     <task id="LOCAL-00001" summary="resolve">
       <option name="closed" value="true" />
@@ -128,7 +290,31 @@
       <option name="project" value="LOCAL" />
       <updated>1744556556508</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="BACK-USER">
+      <option name="closed" value="true" />
+      <created>1744556717527</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1744556717527</updated>
+    </task>
+    <task id="LOCAL-00004" summary="BACK-USER">
+      <option name="closed" value="true" />
+      <created>1744556758821</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1744556758821</updated>
+    </task>
+    <task id="LOCAL-00005" summary="FRONT-USER">
+      <option name="closed" value="true" />
+      <created>1744557291102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1744557291102</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,6 +326,7 @@
     </ignored-roots>
     <MESSAGE value="resolve" />
     <MESSAGE value="BACK-USER" />
-    <option name="LAST_COMMIT_MESSAGE" value="BACK-USER" />
+    <MESSAGE value="FRONT-USER" />
+    <option name="LAST_COMMIT_MESSAGE" value="FRONT-USER" />
   </component>
 </project>
