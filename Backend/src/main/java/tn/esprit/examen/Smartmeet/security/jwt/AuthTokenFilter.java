@@ -30,32 +30,28 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
           throws ServletException, IOException {
-    String path = request.getServletPath();
-
-    // Bypass JWT validation for public endpoints
-    if (path.startsWith("/api/auth/") ||
-            path.startsWith("/api/InteractivePublication/") ||
-            path.startsWith("/api/test/") ||
-            path.equals("/event/createevent") ||
-            path.equals("/login") ||
-            path.equals("/admin")) {
-      filterChain.doFilter(request, response);
-      return;
-    }
-
     try {
       String jwt = parseJwt(request);
-      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+      if (jwt != null) {
+
+
+        // ✅ Vérification et authentification de l'utilisateur
+        if (jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
+          UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+          UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                  userDetails, null, userDetails.getAuthorities());
+          authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+          SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
       }
     } catch (Exception e) {
       logger.error("Erreur lors de l'authentification : {}", e.getMessage());
     }
+
     filterChain.doFilter(request, response);
   }
 

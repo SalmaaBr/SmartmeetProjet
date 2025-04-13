@@ -1,7 +1,9 @@
 package tn.esprit.examen.Smartmeet.controllers.Users;
 
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.Smartmeet.ResReq.request.LoginRequest;
 import tn.esprit.examen.Smartmeet.ResReq.request.SignupRequest;
 import tn.esprit.examen.Smartmeet.ResReq.response.JwtResponse;
 import tn.esprit.examen.Smartmeet.ResReq.response.MessageResponse;
+import tn.esprit.examen.Smartmeet.Services.AuthenticationService;
+import tn.esprit.examen.Smartmeet.Services.AuthenticationServiceImpl;
+import tn.esprit.examen.Smartmeet.Services.UserService;
 import tn.esprit.examen.Smartmeet.entities.Users.BlacklistedToken;
 import tn.esprit.examen.Smartmeet.entities.Users.TypeUserRole;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
@@ -25,29 +31,23 @@ import tn.esprit.examen.Smartmeet.security.jwt.JwtUtils;
 import tn.esprit.examen.Smartmeet.security.services.UserDetailsImpl;
 
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 @RestController
 @RequestMapping("/api/auth")
 
+@RequiredArgsConstructor
 public class AuthController {
-	@Autowired
-	 AuthenticationManager authenticationManager;
-
-	@Autowired
-	JwtUtils jwtUtils;
-
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	 PasswordEncoder encoder;
-
+	private final BlacklistedTokenRepository blacklistedTokenRepository;
+	private final AuthenticationService service;
+	private final AuthenticationManager authenticationManager;
+	private final JwtUtils jwtUtils;
+	private final UserRepository userRepository;
+	private final PasswordEncoder encoder;
+	private final UserService userService;
 
 
 	@PostMapping("/signin")
@@ -70,9 +70,22 @@ public class AuthController {
 			List<String> roles = userDetails.getAuthorities().stream()
 					.map(item -> item.getAuthority())
 					.collect(Collectors.toList());
+			Users user =  userService.getUserByEmail(userDetails.getEmail());
+			if (user.isEnabled()){
+				System.out.println("User authenticated successfully: " + userDetails.getUsername());
+				return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 
-			System.out.println("User authenticated successfully: " + userDetails.getUsername());
-			return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+			}else{
+				System.out.println("User authentication failed: " + userDetails.getUsername() + " is not active");
+
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(Map.of(
+								"status", HttpStatus.FORBIDDEN.value(),
+								"error", "User Not Active",
+								"message", "Your account is not activated. Please contact support.",
+								"timestamp", Instant.now()
+						));
+			}
 
 		} catch (BadCredentialsException e) {
 			System.out.println("Invalid username or password");
@@ -127,7 +140,7 @@ public class AuthController {
 		}
 
 		user.setRoles(roles);
-
+		user.setEnabled(false);
 		// Enregistrer l'utilisateur dans la base de données
 		userRepository.save(user);
 
@@ -135,11 +148,7 @@ public class AuthController {
 
 	}
 
-	private final BlacklistedTokenRepository blacklistedTokenRepository;
 
-	public AuthController(BlacklistedTokenRepository blacklistedTokenRepository) {
-		this.blacklistedTokenRepository = blacklistedTokenRepository;
-	}
 
 
 	@PostMapping("/logout")
@@ -160,6 +169,41 @@ public class AuthController {
 
 	}
 
+	@GetMapping("/activate-account")
+	public void confirm(
+			@RequestParam String token
+	) throws MessagingException {
+		service.activateAccount(token);
+	}
+	@PostMapping("/reset-password-request")
+	public ResponseEntity<?> resetPasswordRequest(@RequestParam String email) {
+		try {
+			service.initiatePasswordReset(email);
+			return ResponseEntity.ok("Password reset email sent");
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		} catch (MessagingException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send email");
+		}
+	}
 
+	@GetMapping("/validate-reset-token")
+	public ResponseEntity<?> validateResetToken(@RequestParam String token) {
+		try {
+			service.validatePasswordResetToken(token);
+			return ResponseEntity.ok("Token is valid");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 
-}
+		@PostMapping("/reset-password")
+		public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+			try {
+				service.resetPassword(request.getToken(), request.getNewPassword());
+				return ResponseEntity.ok("Password reset successfully");
+			} catch (RuntimeException e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			}
+		}
+	}

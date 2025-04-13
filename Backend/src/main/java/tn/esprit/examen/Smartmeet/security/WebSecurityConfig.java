@@ -86,21 +86,7 @@ public class WebSecurityConfig {
                             "/login",
                             "/admin"
                             ).permitAll()*/
-                                        .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/test/**").permitAll()
-                    .requestMatchers("/event/createevent").permitAll()
-                    .requestMatchers("/login","/admin").permitAll()
-                    .requestMatchers("/Session/CreateSession").permitAll()
-                    .requestMatchers("/event/getallevent").permitAll()
-                    .requestMatchers("/event/deleteevent/{id}").permitAll()
-                    .requestMatchers("/event/getevent/{id}").permitAll()
-                    .requestMatchers("/event/updateevent/{id}").permitAll()
-                    .requestMatchers("/api/users/getbyId/{id}").permitAll()
-                    .requestMatchers("/monitoringRecruitment/createRecutement").permitAll()
-                    .requestMatchers("/monitoringRecruitment/updateRecutement/{id}").permitAll()
-                    .requestMatchers("/monitoringRecruitment/deleteRecutement/{id}").permitAll()
-                    .requestMatchers("/monitoringRecruitment/getbyRecutementId/{id}").permitAll()
-                    .requestMatchers("/monitoringRecruitment/getrecutement").permitAll()
+//                    .requestMatchers("/dashboard/**").authenticated()
                     .anyRequest().authenticated());
     http.authenticationProvider(authenticationProvider());
 

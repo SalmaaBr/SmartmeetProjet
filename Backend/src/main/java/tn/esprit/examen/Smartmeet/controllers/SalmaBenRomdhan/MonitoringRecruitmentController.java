@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@RequestMapping("/monitoringRecruitment")
+@RequestMapping("monitoringRecruitment")
 @RestController
 public class MonitoringRecruitmentController {
     @Autowired
@@ -31,7 +31,7 @@ public class MonitoringRecruitmentController {
         monitoringRecruitmentService.deleteMonitoringRecruitment(id);
     }
 
-    @GetMapping("/getbyRecutementId/{id}")
+    @GetMapping("/getrecutement/{id}")
     public MonitoringRecruitment getMonitoringRecruitmentById(@PathVariable Long id) {
         return monitoringRecruitmentService.getMonitoringRecruitmentById(id);
     }
@@ -44,6 +44,11 @@ public class MonitoringRecruitmentController {
     @PostMapping("/add/{userId}")
     public void addAndAssignMonitoringRecruitmentToUser(@PathVariable Long userId, @RequestBody MonitoringRecruitment monitoringRecruitment) {
         monitoringRecruitmentService.AddAndAssignMonitoringRecruitmentToUser(userId, monitoringRecruitment);
+    }
+
+    @PostMapping("/assign-to-event/{title}")
+    public void assignRecruitmentToEvent(@PathVariable("title") String title, @RequestBody MonitoringRecruitment monitoringRecruitment) {
+        monitoringRecruitmentService.AddAndAssignRecruitmentToEvent(title, monitoringRecruitment);
     }
 
 }

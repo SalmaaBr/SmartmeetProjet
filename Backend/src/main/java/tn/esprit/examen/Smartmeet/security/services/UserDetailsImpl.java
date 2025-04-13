@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private String userID;
 
 	private String username;
 
@@ -57,7 +57,7 @@ public class UserDetailsImpl implements UserDetails {
 	}
 
 	public String getId() {
-		return id;
+		return userID;
 	}
 
 	public String getEmail() {
@@ -101,6 +101,6 @@ public class UserDetailsImpl implements UserDetails {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		UserDetailsImpl user = (UserDetailsImpl) o;
-		return Objects.equals(id, user.id);
+		return Objects.equals(userID, user.userID);
 	}
 }

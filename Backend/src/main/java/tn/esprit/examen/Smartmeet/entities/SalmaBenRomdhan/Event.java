@@ -1,10 +1,12 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Announcement;
-import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Sponsor;
+import tn.esprit.examen.Smartmeet.entities.GhanemRidene.EventSponsor;
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.Resource;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Participation;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.Feedback;
@@ -47,7 +49,14 @@ public class Event implements Serializable {
     private LocalDateTime endTime;
 
     private int maxParticipants;
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    private String filePath;
+
+    private Double latitude;
+    private Double longitude;
+
+    @ManyToMany
+    @JsonIgnore
     private Set<Users> users;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="events")
@@ -63,14 +72,11 @@ public class Event implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy="events")
     private Set<Resource> Resources;
 
-  @ManyToMany(mappedBy = "events")
-  private List<Sponsor> sponsors = new ArrayList<>();
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-  List<Announcement> announcements = new ArrayList<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<EventSponsor> eventSponsors = new ArrayList<>();
 
-
-
-
-
+    @OneToOne
+    @JsonIgnoreProperties("event")
+    private MonitoringRecruitment monitorungrecutement;
 
 }

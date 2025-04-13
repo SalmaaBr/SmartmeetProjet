@@ -1,9 +1,12 @@
 package tn.esprit.examen.Smartmeet.entities.Users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Claim;
+import tn.esprit.examen.Smartmeet.entities.GhanemRidene.FoundItem;
 import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Sponsor;
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.InteractivePublication;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
@@ -13,6 +16,8 @@ import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MonitoringRecruitment
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +39,10 @@ public class Users implements Serializable {
     private String password;
     private String phoneNumber;
     private String address;
+    private boolean enabled;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BlacklistedToken> blacklistedTokens = new HashSet<>();
 
     // Change ici pour permettre plusieurs rôles
     @ElementCollection(targetClass = TypeUserRole.class)
@@ -69,9 +78,13 @@ public class Users implements Serializable {
     private Set<Document> Documents;
 
 
+    @OneToMany(mappedBy = "foundByUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FoundItem> reportedItems = new ArrayList<>();
 
-
-
+    @OneToMany(mappedBy = "claimedByUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Claim> claims = new ArrayList<>();
+    @OneToMany(mappedBy = "admin")
+    private List<Sponsor> sponsorsGeres;
 
 
 

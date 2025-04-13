@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface BlacklistedTokenRepository extends JpaRepository<BlacklistedToken, String> {
     Optional<BlacklistedToken> findByToken(String token);
+
+    void deleteByUserUserID(Long userId);
 }
