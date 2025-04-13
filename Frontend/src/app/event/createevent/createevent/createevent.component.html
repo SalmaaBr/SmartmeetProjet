@@ -1,0 +1,85 @@
+<div class="container mt-5">
+    <div class="card shadow-lg border-primary">
+      <div class="card-header bg-primary text-white text-center">
+        <h2>Créer un événement</h2>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="createEvent()" #eventForm="ngForm">
+  
+          <!-- Nom de l'événement -->
+          <div class="mb-3">
+            <label class="form-label">Nom de l'événement :</label>
+            <input type="text" class="form-control border-primary" [(ngModel)]="eventData.title" name="title" required>
+          </div>
+  
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description :</label>
+            <textarea class="form-control border-primary" [(ngModel)]="eventData.description" name="description" required></textarea>
+          </div>
+  
+          <!-- Lieu -->
+          <div class="mb-3">
+            <label class="form-label">Lieu :</label>
+            <input type="text" class="form-control border-primary" [(ngModel)]="eventData.location" name="location" required>
+          </div>
+  
+          <div class="row">
+            <!-- Type d'événement -->
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Type d'événement :</label>
+              <select class="form-select border-primary" [(ngModel)]="eventData.typeevent" name="typeevent" required>
+                <option *ngFor="let type of typeevent" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+  
+            <!-- Thème -->
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Thème :</label>
+              <select class="form-select border-primary" [(ngModel)]="eventData.typetheme" name="typetheme" required>
+                <option *ngFor="let theme of typetheme" [value]="theme">{{ theme }}</option>
+              </select>
+            </div>
+  
+            <!-- Météo -->
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Météo :</label>
+              <select class="form-select border-primary" [(ngModel)]="eventData.typeweather" name="typeweather" required>
+                <option *ngFor="let weather of typeweather" [value]="weather">{{ weather }}</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="row">
+            <!-- Date et heure de début -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Date et heure de début :</label>
+              <input type="datetime-local" class="form-control border-primary" [(ngModel)]="eventData.startTime" name="startTime" required>
+            </div>
+  
+            <!-- Date et heure de fin -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Date et heure de fin :</label>
+              <input type="datetime-local" class="form-control border-primary" [(ngModel)]="eventData.endTime" name="endTime" required>
+            </div>
+          </div>
+  
+          <!-- Nombre max de participants -->
+          <div class="mb-3">
+            <label class="form-label">Nombre max de participants :</label>
+            <input type="number" class="form-control border-primary" [(ngModel)]="eventData.maxParticipants" name="maxParticipants" required>
+          </div>
+  
+          <!-- Boutons -->
+          <div class="d-flex justify-content-between">
+            <!-- Lien retour avec un petit espacement à gauche -->
+            <a class="btn btn-secondary btn-sm w-20 py-2" [routerLink]="['/admin/events']">Retour</a>
+            
+            <!-- Bouton Créer l'événement avec un petit espacement à droite -->
+            <button type="submit" class="btn btn-primary btn-sm w-20 py-2 ms-auto">Créer l'événement</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

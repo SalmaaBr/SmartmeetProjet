@@ -1,0 +1,15 @@
+export enum TypeResource {
+  ROOM = 'ROOM',
+  CHAIR = 'CHAIR',
+  LAPTOP = 'LAPTOP',
+  MICROPHONE = 'MICROPHONE',
+  WHITEBOARD = 'WHITEBOARD',
+  PROJECTOR = 'PROJECTOR'
+}
+
+export enum TypeResourceStatus {
+  AVAILABLE = 'AVAILABLE',
+  RESERVED = 'RESERVED',
+  BROKEN = 'BROKEN',
+  UNDER_MAINTENANCE = 'UNDER_MAINTENANCE'
+}

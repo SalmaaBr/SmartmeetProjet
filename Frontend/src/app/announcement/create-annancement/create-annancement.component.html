@@ -1,0 +1,54 @@
+<div class="container mt-5">
+    <div class="card shadow-lg border-primary">
+      <div class="card-header bg-primary text-white text-center">
+        <h2>Créer une annonce</h2> <!-- Update title -->
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="createAnnouncement()" #announcementForm="ngForm">
+  
+          <!-- Title -->
+          <div class="mb-3">
+            <label class="form-label">Titre :</label>
+            <input type="text" class="form-control border-primary" 
+                   [(ngModel)]="announcementData.title" name="title" required>
+          </div>
+  
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description :</label>
+            <textarea class="form-control border-primary" 
+                      [(ngModel)]="announcementData.description" name="description" required></textarea>
+          </div>
+  
+          <!-- Status -->
+          <div class="mb-3">
+            <label class="form-label">Statut :</label>
+            <select class="form-select border-primary" 
+                    [(ngModel)]="announcementData.status" name="status" required>
+              <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+            </select>
+          </div>
+  
+          <!-- Event ID -->
+          <div class="mb-3">
+            <label class="form-label">ID de l'événement associé :</label>
+            <input type="number" class="form-control border-primary" 
+                   [(ngModel)]="selectedEventId" name="eventId" required>
+          </div>
+  
+          <!-- Date Posted (optional) -->
+          <!-- <div class="mb-3">
+            <label class="form-label">Date de publication :</label>
+            <input type="datetime-local" class="form-control border-primary" 
+                   [(ngModel)]="announcementData.datePosted" name="datePosted">
+          </div> -->
+  
+          <!-- Buttons -->
+          <div class="d-flex justify-content-between">
+            <a class="btn btn-secondary btn-sm w-20 py-2" [routerLink]="['/front/create-annancement']">Retour</a>
+            <button type="submit" class="btn btn-primary btn-sm w-20 py-2 ms-auto">Créer l'annonce</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

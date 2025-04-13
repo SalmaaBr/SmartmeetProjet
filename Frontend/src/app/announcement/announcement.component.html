@@ -1,0 +1,54 @@
+<div class="card" style="margin: 6mm;">
+  <!-- En-tête -->
+  <h5 class="card-header" style="font-size: 36px; font-weight: bold; color: #0056b3;">Annonces</h5>
+  
+  <!-- Formulaire de création/modification -->
+  <div class="card-body">
+    <h6>{{ isEditMode ? 'Modifier une Annonce' : 'Créer une Annonce' }}</h6>
+    <form (ngSubmit)="submitForm()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Titre</label>
+        <input type="text" class="form-control" id="title" [(ngModel)]="newAnnouncement.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" [(ngModel)]="newAnnouncement.description" name="description" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="eventId" class="form-label">ID de l'événement</label>
+        <input type="number" class="form-control" id="eventId" [(ngModel)]="newAnnouncement.eventId" name="eventId" required>
+      </div>
+      <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Créer' }}</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">Annuler</button>
+    </form>
+  </div>
+  
+  <!-- Tableau des annonces -->
+  <div class="table-responsive text-nowrap">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>TITRE</th>
+          <th>DESCRIPTION</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        <tr *ngFor="let announcement of announcements">
+          <td>{{ announcement.id }}</td>
+          <td>{{ announcement.title }}</td>
+          <td>{{ announcement.description }}</td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="announcement.id !== undefined && getAnnouncementById(announcement.id)">
+              <i class="bx bx-edit-alt"></i> Modifier
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="announcement.id !== undefined && deleteAnnouncement(announcement.id)">
+              <i class="bx bx-trash"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

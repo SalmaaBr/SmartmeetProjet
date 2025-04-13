@@ -1,0 +1,47 @@
+.hero {
+  min-height: 100vh;
+  padding-top: 7rem;
+}
+
+.hover-shadow-lg {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hover-shadow-lg:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.hover-shadow-lg {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-shadow-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.border-2 {
+  border-width: 2px !important;
+}
+
+.btn-outline-primary:hover .bi-pencil,
+.btn-outline-danger:hover .bi-trash {
+  color: white !important;
+}

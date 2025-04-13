@@ -1,0 +1,168 @@
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-header bg-primary text-white py-3">
+      <h2 class="mb-0 fw-normal">
+        <i class="bi bi-calendar2-range me-2"></i>
+        Gestion des Réservations de Ressources
+      </h2>
+    </div>
+
+    <div class="card-body p-4">
+      <div class="row g-4">
+        <!-- Formulaire -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light py-3">
+              <h4 class="mb-0 text-primary">
+                <i class="bi me-2" [class.bi-pencil-square]="isEditing" [class.bi-plus-circle]="!isEditing"></i>
+                {{ isEditing ? 'Modifier Réservation' : 'Nouvelle Réservation' }}
+              </h4>
+            </div>
+
+            <div class="card-body">
+              <form (ngSubmit)="onSubmit()" #reservationForm="ngForm">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="resource-id" class="form-label fw-medium">
+                      Ressource <span class="text-danger">*</span>
+                    </label>
+                    <select [(ngModel)]="newReservation.resourceId"
+                            id="resource-id"
+                            class="form-select form-select-lg border-2"
+                            name="resourceId"
+                            required>
+                      <option value="" disabled selected>Sélectionnez une ressource</option>
+                      <option *ngFor="let resource of resources"
+                              [value]="resource.idResource"
+                                >
+                        {{ resource.name }} ({{ resource.typeResource }})
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="user" class="form-label fw-medium">
+                      Utilisateur <span class="text-danger">*</span>
+                    </label>
+                    <input [(ngModel)]="newReservation.user"
+                          id="user"
+                          type="text"
+                          class="form-control form-control-lg border-2"
+                          placeholder="Nom de l'utilisateur"
+                          name="user"
+                          required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="start-date" class="form-label fw-medium">
+                      Date de début <span class="text-danger">*</span>
+                    </label>
+                    <input [(ngModel)]="newReservation.startTime"
+                          id="start-date"
+                          type="date"
+                          class="form-control form-control-lg border-2"
+                          name="startTime"
+                          required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="end-date" class="form-label fw-medium">
+                      Date de fin <span class="text-danger">*</span>
+                    </label>
+                    <input [(ngModel)]="newReservation.endTime"
+                          id="end-date"
+                          type="date"
+                          class="form-control form-control-lg border-2"
+                          name="endTime"
+                          required>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end border-top pt-4">
+                      <button *ngIf="isEditing"
+                              type="button"
+                              class="btn btn-outline-danger btn-lg px-4"
+                              (click)="cancelEdit()">
+                        <i class="bi bi-x-circle me-2"></i>Annuler
+                      </button>
+                      <button type="submit"
+                              class="btn btn-primary btn-lg px-4">
+                        <i class="bi me-2"
+                          [class.bi-save]="isEditing"
+                          [class.bi-plus-lg]="!isEditing"></i>
+                        {{ isEditing ? 'Mettre à jour' : 'Ajouter' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Liste des réservations -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light py-3">
+              <h4 class="mb-0 text-primary">
+                <i class="bi bi-list-task me-2"></i>
+                Réservations Existantes
+              </h4>
+            </div>
+
+            <div class="card-body">
+              <div class="list-group">
+                <div *ngFor="let reservation of reservations"
+                    class="list-group-item list-group-item-action rounded-3 mb-3 shadow-sm border-0">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div class="w-75">
+                      <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-primary rounded-pill me-2">
+                          #{{ reservation.reservationId }}
+                        </span>
+                        <small class="text-muted">
+                          <i class="bi bi-clock-history me-1"></i>
+                          {{ reservation.startTime | date:'mediumDate' }} → {{ reservation.endTime | date:'mediumDate' }}
+                        </small>
+                      </div>
+
+                      <div class="mb-2">
+                        <span class="badge bg-info-subtle text-info-emphasis me-2">
+                          <i class="bi bi-person me-1"></i>
+                          {{ reservation.user }}
+                        </span>
+                        <span class="badge bg-success-subtle text-success-emphasis">
+                          <i class="bi bi-box-seam me-1"></i>
+                         {{ reservation?.resources?.[0]?.name }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                      <button (click)="editReservation(reservation)"
+                              class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-pencil me-2"></i>Modifier
+                      </button>
+                      <button (click)="reservation.reservationId && deleteReservation(reservation.reservationId)"
+                              class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                        <i class="bi bi-trash me-2"></i>Supprimer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="reservations.length === 0"
+                    class="text-center py-5 bg-light rounded-3">
+                  <i class="bi bi-inbox text-muted display-6 mb-3"></i>
+                  <p class="text-muted mb-0">Aucune réservation trouvée</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
