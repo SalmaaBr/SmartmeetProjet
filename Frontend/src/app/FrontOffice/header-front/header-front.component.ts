@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 })
 export class HeaderFrontComponent {
 isAuth = localStorage.getItem('auth_token')
-
-errorMessage: string = '';
+username = localStorage.getItem("username")
+roles = localStorage.getItem("roles")
 
     constructor(private router: Router) {}
 
@@ -17,17 +17,6 @@ errorMessage: string = '';
     localStorage.removeItem("roles")
     localStorage.removeItem("username")
     localStorage.removeItem("auth_token")
-    this.router.navigate(['/login']);
+    this.router.navigate(['login']);
   }
-
-    // Méthode pour gérer la navigation selon le rôle
-    navigateToTeam(): void {
-      const roles = localStorage.getItem('roles');
-      if (roles && roles.includes('ADMIN')) {
-        this.router.navigate(['/admin/resources']);  // Redirige vers /admin/resources si l'utilisateur est ADMIN
-      } else {
-        this.router.navigate(['/front']);  // Reste sur la même page ou redirige ailleurs pour les autres rôles
-        alert('Accès non autorisé');
-      }
-    }
 }

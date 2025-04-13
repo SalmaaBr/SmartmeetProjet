@@ -117,34 +117,65 @@
 
 
 
-<div class="event-container">
-  <h2>🎉 Upcoming Events</h2>
+
+  <h2 class="section-title">🎉 Upcoming Events</h2>
 
   <div *ngIf="events.length === 0" class="no-events">
-    No events available at the moment.
+    <div class="no-events-icon">📅</div>
+    <p>No events available at the moment.</p>
+    <p class="subtext">Check back later for exciting events!</p>
   </div>
 
-  <!-- Event List -->
+    <!-- Event List -->
+
   <div class="event-list">
-    <div *ngFor="let event of events" class="event-card">
-      <div class="event-header">
-        <h3>{{ event.title }}</h3>
-        <span class="event-type">{{ event.typeevent }}</span>
+    <div *ngFor="let event of events ; let i = index" class="event-card">
+      <div class="event-image-container">
+        <img [src]="event.imageUrl || 'assets/default-event.jpg'" 
+             (error)="event.imageUrl = 'assets/default-event.jpg'"
+             alt="Event Image" 
+             class="event-image">
       </div>
-      <p class="event-theme">🎭 <strong>Theme:</strong> {{ event.typetheme }}</p>
-      <p class="event-description">📖 {{ event.description }}</p>
-      <p>📍 <strong>Location:</strong> {{ event.location }}</p>
-      <p>🌤️ <strong>Expected Weather:</strong> {{ event.typeweather }}</p>
-      <p>🕒 <strong>Start:</strong> {{ event.startTime }}</p>
-      <p>⏳ <strong>End:</strong> {{ event.endTime }}</p>
-      <p>👥 <strong>Max Participants:</strong> {{ event.maxParticipants }}</p>
-      <!-- Participate Button -->
-      <button class="participate-button">Participate</button>
+      
+      <div class="event-details">
+        <h3 class="event-title">{{ event.title }}</h3>
+        <div class="event-meta">
+          <span class="event-theme">⚙️{{ event.typeevent }}</span>
+          <span class="event-theme">🎭 {{ event.typetheme }}</span>
+          <span class="event-location">📍 {{ event.location }}</span>
+                  <!-- Afficher le nombre de places restantes -->
+          <div class="event-location" *ngIf="event.maxParticipants > 0">
+            {{ event.maxParticipants }} place(s) restante(s)
+          </div>
+          <div class="complet" *ngIf="event.maxParticipants <= 0">
+            Événement complet
+          </div>
+        </div>
+        
+        <div class="event-dates">
+          <div class="date-item">
+            <span class="date-icon">🕒</span>
+            <span>{{ formatShortDate(event.startTime) }}</span>
+          </div>
+          <div class="date-item">
+            <span class="date-icon">⏳</span>
+            <span>{{ formatShortDate(event.endTime) }}</span>
+          </div>
+        </div>
+        
+        <button class="participate-button" (click)="participate(event.id, i)" [disabled]="event.maxParticipants <= 0">
+          <span *ngIf="event.maxParticipants > 0">Participate</span>
+          <span *ngIf="event.maxParticipants <= 0">Complet</span>
+          <svg *ngIf="event.maxParticipants > 0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="recruitment-container">
+
+
   <h2>📢 Available Recruitments</h2>
 
   <div *ngIf="recrutements.length === 0" class="no-recruitments">
@@ -164,4 +195,4 @@
       <button class="participate-button">Apply</button>
     </div>
   </div>
-</div>
+

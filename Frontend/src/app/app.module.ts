@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule,ReactiveFormsModule   } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,20 +28,29 @@ import { ResourceReservationManagementComponent} from "./BackOffice/resource-res
 import { ReservationService } from './services/reservation.service';  // Importation du service
 import { ResourceService} from "./services/resource.service";
 import { AddInteractivePublicationComponent } from './FrontOffice/add-interactive-publication/add-interactive-publication.component';
-import { ToastrModule } from 'ngx-toastr';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CreateeventComponent } from './event/createevent/createevent/createevent.component';
-import { GeteventComponent } from './event/getevent/getevent/getevent.component';
-import { EditEventComponent } from './event/edit-event/edit-event.component';
-import { CreateRecutementComponent } from './recutement/create-recutement/create-recutement.component';
-import { MonitoringRecruitmentListComponent } from './recutement/monitoring-recruitment-list/monitoring-recruitment-list.component';
-import { EditRecruitmentComponent } from './recutement/edit-recruitment/edit-recruitment.component';
-import { DashboardComponent } from './FrontOffice/dashboard/dashboard.component';
-import { AnnouncementComponent } from './announcement/announcement.component';
-import { SponsorComponent } from './sponsor/sponsor.component';
-import { CreateSponsorComponent } from './sponsor/create-sponsor/create-sponsor.component';
-import { EditSponsorComponent } from './sponsor/edit-sponsor/edit-sponsor.component';
-import { CreateAnnancementComponent } from './announcement/create-annancement/create-annancement.component';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { CodeInputModule } from 'angular-code-input';
+import { ActivateAccountComponent } from './User/activate-account/activate-account.component';
+import { ResetPasswordRequestComponent } from './User/reset-password-request/reset-password-request.component';
+import { ResetPasswordComponent } from './User/reset-password/reset-password.component';
+import { UserComponent } from './BackOffice/user/user.component';
+import { ProfileComponent } from './BackOffice/profile/profile.component';
+import { CreateeventComponent } from './models/event/createevent/createevent/createevent.component';
+import { GeteventComponent } from './models/event/getevent/getevent/getevent.component';
+import { EditEventComponent } from './models/event/edit-event/edit-event.component';
+import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
+import { MonitoringRecruitmentListComponent } from './models/recutement/monitoring-recruitment-list/monitoring-recruitment-list.component';
+import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+import { CalendarComponent } from './models/calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { NotificationsComponent } from './models/notifications/notifications.component';
+
+
+
 
 
 
@@ -65,38 +74,49 @@ import { CreateAnnancementComponent } from './announcement/create-annancement/cr
     PortfolioComponent,
     ContactComponent,
     ResourceManagementComponent,
+    ActivateAccountComponent,
+    ResetPasswordRequestComponent,
+    ResetPasswordComponent,
     ResourceReservationManagementComponent,
-    AddInteractivePublicationComponent, // Déclaration des composants
+    AddInteractivePublicationComponent,
+    UserComponent,
+    ProfileComponent,  // Déclaration des composants
     CreateeventComponent,
     GeteventComponent,
     EditEventComponent,
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
     EditRecruitmentComponent,
-    DashboardComponent,
-    AnnouncementComponent,
-    SponsorComponent,
-    CreateSponsorComponent,
-    EditSponsorComponent,
-    CreateAnnancementComponent  
-  ],
+    ViewProfileComponent,
+    CalendarComponent,
+    NotificationsComponent
+      ],
   imports: [
+    ReactiveFormsModule ,
     FormsModule,
     HttpClientModule,
     BrowserModule,
+    CodeInputModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
+    FullCalendarModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
-      preventDuplicates: true,
-    })
+      preventDuplicates: true,             // Prevent duplicate toasts from being shown
+      closeButton: true,                     // Enable close button on the toast
+      progressBar: true
+    }),
+    LeafletModule,
+    MatSnackBarModule
 ,
+
   ],
   providers: [
      ReservationService,
     ResourceService,
+    provideAnimations(),
+    provideToastr(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]

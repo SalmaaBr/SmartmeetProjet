@@ -31,7 +31,7 @@ export class RecutementService {
 
     // Récupérer un recrutement par ID
     getMonitoringRecruitmentById(id: number): Observable<any> {
-      return this.http.get(`${this.apiUrl}/getbyRecutementId/${id}`);
+      return this.http.get(`${this.apiUrl}/getrecutement/${id}`);
     }
   
     // Mettre à jour un recrutement
@@ -39,5 +39,10 @@ export class RecutementService {
       return this.http.put(`${this.apiUrl}/updateRecutement/${id}`,  { title, description });
     }
 
+      // Ajouter cette méthode au service RecutementService
+  assignRecruitmentToEvent(title: string, monitoringRecruitment: any): Observable<any> {
+    const url = `${this.apiUrl}/assign-to-event/${title}`;
+    return this.http.post<any>(url, monitoringRecruitment);
+  }
 
 }

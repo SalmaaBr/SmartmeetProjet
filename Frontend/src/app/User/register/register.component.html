@@ -102,32 +102,41 @@
               <h4 class="mb-2">Adventure starts here 🚀</h4>
               <p class="mb-4">Make your app management easy and fun!</p>
 
-              <!-- Formulaire d'inscription -->
-              <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+              <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
                 <div class="mb-3">
                   <label for="username" class="form-label">Nom d'utilisateur</label>
                   <input
                     type="text"
                     class="form-control"
                     id="username"
-                    name="username"
-                    [(ngModel)]="username"
-                    required
+                    formControlName="username"
+                    [class.is-invalid]="f['username'].invalid && (f['username'].dirty || f['username'].touched)"
                     placeholder="Enter your username"
                   />
+                  <div *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                    <div *ngIf="f['username'].errors?.['required']">Username is required</div>
+                    <div *ngIf="f['username'].errors?.['minlength']">
+                      Username must be at least 3 characters
+                    </div>
+                  </div>
                 </div>
+
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
                   <input
                     type="email"
                     class="form-control"
                     id="email"
-                    name="email"
-                    [(ngModel)]="email"
-                    required
+                    formControlName="email"
+                    [class.is-invalid]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
                     placeholder="Enter your email"
                   />
+                  <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                    <div *ngIf="f['email'].errors?.['email']">Please enter a valid email</div>
+                  </div>
                 </div>
+
                 <div class="mb-3 form-password-toggle">
                   <label class="form-label" for="password">Mot de passe</label>
                   <div class="input-group input-group-merge">
@@ -135,37 +144,55 @@
                       type="password"
                       id="password"
                       class="form-control"
-                      name="password"
-                      [(ngModel)]="password"
-                      required
+                      formControlName="password"
+                      [class.is-invalid]="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      aria-describedby="password"
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+                      <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                      <div *ngIf="f['password'].errors?.['minlength']">
+                        Password must be at least 8 characters
+                      </div>
+                      <div *ngIf="f['password'].errors?.['missingUpperCase']">
+                        Password must contain at least one uppercase letter
+                      </div>
+                      <div *ngIf="f['password'].errors?.['missingSpecialChar']">
+                        Password must contain at least one special character {{'(!@#$%^&*(),.?":&#123;&#125;|<>)'}}
+                      </div>
+                    </div>
                   </div>
                 </div>
+
                 <div class="mb-3">
                   <div class="form-check">
                     <input
                       class="form-check-input"
                       type="checkbox"
                       id="terms-conditions"
-                      name="terms"
-                      required
+                      formControlName="terms"
+                      [class.is-invalid]="f['terms'].invalid && f['terms'].touched"
                     />
                     <label class="form-check-label" for="terms-conditions">
                       I agree to
                       <a href="javascript:void(0);">privacy policy & terms</a>
                     </label>
+                    <div *ngIf="f['terms'].invalid && f['terms'].touched" class="invalid-feedback">
+                      You must agree to the terms
+                    </div>
                   </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!signupForm.valid">
+           
+                <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="signupForm.invalid">
                   S'inscrire
                 </button>
               </form>
 
               <!-- Message d'erreur ou de succès -->
-              <p *ngIf="message" class="text-center mt-3">{{ message }}</p>
+              <p *ngIf="message" class="text-center mt-3" [class.text-success]="message.includes('réussie')"
+                 [class.text-danger]="!message.includes('réussie')">
+                {{ message }}
+              </p>
 
               <p class="text-center">
                 <span>Already have an account?</span>

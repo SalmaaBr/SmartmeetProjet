@@ -1,0 +1,45 @@
+<div class="profile-container">
+    <div *ngIf="isLoading" class="loading">Loading user data...</div>
+    
+    <div *ngIf="error" class="error-alert">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="user && !isLoading" class="user-profile">
+      <h2>{{ isCurrentUser ? 'My Profile' : 'User Profile' }}</h2>
+      
+      <div class="profile-info">
+        <!-- Vos champs existants restent les mêmes -->
+        <div class="info-row">
+          <span class="label">Username:</span>
+          <span class="value">{{ user.username }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Email:</span>
+          <span class="value">{{ user.email }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Phone Number:</span>
+          <span class="value">{{ user.phoneNumber || 'Not provided' }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Address:</span>
+          <span class="value">{{ user.address || 'Not provided' }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Roles:</span>
+          <span class="value">{{ getUserRoles() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+        <a *ngIf="isCurrentUser" [routerLink]="['/front/profile']" class="btn btn-primary">
+            Edit Profile
+        </a>
+      </div>
+  </div>

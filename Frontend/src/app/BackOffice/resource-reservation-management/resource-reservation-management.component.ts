@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { Reservation } from '../../models/reservation.model';
 import { Resource } from 'src/app/models/resource.model';
@@ -14,7 +15,7 @@ import { switchMap } from 'rxjs';
 })
 export class ResourceReservationManagementComponent implements OnInit {
   reservations: Reservation[] = [];
-  newReservation: Reservation = { resourceId: 0, user: '', startTime: '', endTime: '' };
+  reservationForm: FormGroup;
   resources: Resource[] = [];
   isEditing = false;
   currentReservationId: number | null = null;
@@ -23,7 +24,14 @@ export class ResourceReservationManagementComponent implements OnInit {
     private resourceService: ResourceService,
     private reservationService: ReservationService,
     private toastr: ToastrService
-  ) { }
+  ) {
+    this.reservationForm = new FormGroup({
+      resourceId: new FormControl('', Validators.required),
+      user: new FormControl('', Validators.required),
+      startTime: new FormControl('', Validators.required),
+      endTime: new FormControl('', Validators.required)
+    });
+  }
 
   ngOnInit(): void {
     this.loadResources();
@@ -55,72 +63,58 @@ export class ResourceReservationManagementComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.validateForm()) return;
+    if (this.reservationForm.invalid) {
+      this.markFormGroupTouched(this.reservationForm);
+      return;
+    }
 
-    // Format dates
-    const formattedStartDate = format(new Date(this.newReservation.startTime), 'yyyy-MM-dd');
-    const formattedEndDate = format(new Date(this.newReservation.endTime), 'yyyy-MM-dd');
-
-    // Prepare reservation data
+    const formValue = this.reservationForm.value;
     const reservationToSend: Reservation = {
-      ...this.newReservation,
-      startTime: formattedStartDate,
-      endTime: formattedEndDate,
-      resources: [] // Initialize resources array
+      resourceId: formValue.resourceId,
+      user: formValue.user,
+      startTime: format(new Date(formValue.startTime), 'yyyy-MM-dd'),
+      endTime: format(new Date(formValue.endTime), 'yyyy-MM-dd'),
+      resources: []
     };
 
     if (this.isEditing && this.currentReservationId) {
-      // Update existing reservation
-      this.resourceService.getResourceById(reservationToSend.resourceId).pipe(
-        switchMap((resource: Resource) => {
-          if (!resource.idResource) {
-            throw new Error('Resource not found');
-          }
-          reservationToSend.resources = [resource];
-          return this.reservationService.updateResourceReservation(
-            this.currentReservationId!,
-            reservationToSend
-          );
-        })
-      ).subscribe({
-        next: () => {
-          this.toastr.success('Réservation mise à jour avec succès', 'Succès');
-          this.resetForm();
-          this.loadReservations();
-        },
-        error: (error) => {
-          this.toastr.error(error.message || 'Erreur de mise à jour', 'Erreur');
-          console.error(error);
-        }
-      });
+      this.updateReservation(reservationToSend);
     } else {
-      // Create new reservation
-      this.resourceService.getResourceById(reservationToSend.resourceId).pipe(
-        switchMap((resource: Resource) => {
-          if (!resource.idResource) {
-            throw new Error('Resource not found');
-          }
-          reservationToSend.resources = [resource];
-          return this.reservationService.createResourceReservation(reservationToSend);
-        })
-      ).subscribe({
-        next: () => {
-          this.toastr.success('Réservation créée avec succès', 'Succès');
-          this.resetForm();
-          this.loadReservations();
-        },
-        error: (error) => {
-          this.toastr.error(error.message || 'Erreur de création', 'Erreur');
-          console.error(error);
-        }
-      });
+      this.createReservation(reservationToSend);
     }
+  }
+
+  private createReservation(reservation: Reservation) {
+    this.resourceService.getResourceById(reservation.resourceId).pipe(
+      switchMap((resource: Resource) => {
+        reservation.resources = [resource];
+        return this.reservationService.createResourceReservation(reservation);
+      })
+    ).subscribe({
+      next: () => this.handleSuccess('Réservation créée avec succès'),
+      error: (error) => this.handleError(error, 'Erreur de création')
+    });
+  }
+
+  private updateReservation(reservation: Reservation) {
+    this.resourceService.getResourceById(reservation.resourceId).pipe(
+      switchMap((resource: Resource) => {
+        reservation.resources = [resource];
+        return this.reservationService.updateResourceReservation(
+          this.currentReservationId!,
+          reservation
+        );
+      })
+    ).subscribe({
+      next: () => this.handleSuccess('Reservation created successfully'),
+      error: (error) => this.handleError(error, 'Erreur de mise à jour')
+    });
   }
 
   deleteReservation(id: number) {
     this.reservationService.deleteResourceReservation(id).subscribe({
       next: () => {
-        this.toastr.success('Réservation supprimée avec succès', 'Succès');
+        this.toastr.success('Reservation successfully deleted', 'success');
         this.loadReservations();
       },
       error: (error) => {
@@ -133,33 +127,39 @@ export class ResourceReservationManagementComponent implements OnInit {
   editReservation(reservation: Reservation) {
     this.isEditing = true;
     this.currentReservationId = reservation.reservationId!;
-    this.newReservation = {
-      ...reservation,
+    this.reservationForm.patchValue({
+      resourceId: reservation.resources?.[0]?.idResource || '',
+      user: reservation.user,
       startTime: format(parseISO(reservation.startTime.toString()), 'yyyy-MM-dd'),
       endTime: format(parseISO(reservation.endTime.toString()), 'yyyy-MM-dd')
-    };
+    });
   }
 
   cancelEdit() {
     this.isEditing = false;
     this.currentReservationId = null;
-    this.resetForm();
+    this.reservationForm.reset();
   }
 
-  private validateForm(): boolean {
-    if (!this.newReservation.resourceId ||
-        !this.newReservation.user ||
-        !this.newReservation.startTime ||
-        !this.newReservation.endTime) {
-      this.toastr.warning('Veuillez remplir tous les champs obligatoires', 'Attention');
-      return false;
-    }
-    return true;
-  }
-
-  private resetForm() {
-    this.newReservation = { resourceId: 0, user: '', startTime: '', endTime: '' };
+  private handleSuccess(message: string) {
+    this.toastr.success(message, 'Success');
+    this.reservationForm.reset();
+    this.loadReservations();
     this.isEditing = false;
     this.currentReservationId = null;
+  }
+
+  private handleError(error: any, title: string) {
+    this.toastr.error(error.message || title, 'Erreur');
+    console.error(error);
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

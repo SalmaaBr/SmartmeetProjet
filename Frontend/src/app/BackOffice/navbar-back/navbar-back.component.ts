@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { EventService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-navbar-back',
@@ -7,18 +8,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar-back.component.css']
 })
 export class NavbarBackComponent {
-  isAuth = localStorage.getItem('auth_token')
+  username = localStorage.getItem("username");
+  roles = localStorage.getItem("roles");
+  notifications: any[] = []; // Tableau pour stocker les notifications
+  notificationCount: number = 0;
 
-  username = localStorage.getItem("username")
-  roles = localStorage.getItem("roles")
-    constructor(private router: Router) {}
+  constructor(private router: Router, private eventService: EventService) {}
 
-    logout() {
-      localStorage.removeItem("roles");
-      localStorage.removeItem("username");
-      localStorage.removeItem("auth_token");
-      this.router.navigate(['/login']).then(() => {
-        location.reload(); // Forcer un rafraîchissement de la page après la redirection
-      });
-    }
+  ngOnInit() {
+    this.getNotifications();
+  }
+
+  // Récupère les notifications depuis l'API Spring
+  getNotifications() {
+    this.eventService.getNotifications().subscribe(notifications => {
+      this.notifications = notifications;
+      this.notificationCount = notifications.length;
+    });
+  }
+
+  logout() {
+    localStorage.removeItem("roles");
+    localStorage.removeItem("username");
+    localStorage.removeItem("auth_token");
+    this.router.navigate(['/']);
+  }
 }

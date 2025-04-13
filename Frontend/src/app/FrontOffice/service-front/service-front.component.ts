@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef  } from '@angular/core';
 import { EventService, Event } from '../../services/event.service'; // Vérifie le bon chemin
 import { RecutementService } from '../../services/recutement.service';
 import * as AOS from 'aos';
+import { MatSnackBar } from '@angular/material/snack-bar'; // Pour les notifications
 
 import { InteractivePublicationService } from 'src/app/services/interactive-publication.service';
 import { InteractivePublication } from 'src/app/models/interactive-publication.model';
@@ -40,7 +41,10 @@ export class ServiceFrontComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private recrutementService: RecutementService,
-    private publicationService: InteractivePublicationService
+    private publicationService: InteractivePublicationService,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+
   ) {}
 
   ngOnInit(): void {
@@ -59,18 +63,59 @@ export class ServiceFrontComponent implements OnInit {
     console.log('ServiceFrontComponent Loaded ✅');
   }
 
+  formatTime(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleString(); // ou utilisez un formatage plus précis
+  }
+
+  formatShortDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+
   // Charger les événements
   loadEvents(): void {
     this.eventService.getEvents().subscribe(
       (data: Event[]) => {
-        console.log("Données récupérées pour la home page :", data);
-        this.events = data;  // Stocke les événements dans la variable
+        this.events = data; // Le mapping est déjà fait dans le service
       },
       (error) => {
-        console.error("Erreur lors de la récupération des événements :", error);
+        console.error("Erreur :", error);
       }
     );
   }
+  
+  
+  participate(eventId: number, eventIndex: number): void {
+    this.eventService.participateToEvent(eventId).subscribe({
+      next: (response) => {
+        this.snackBar.open(response.message, 'Fermer', { duration: 3000 });
+  
+        this.events = this.events.map((event, idx) => 
+          idx === eventIndex ? { ...event, maxParticipants: response.maxParticipants } : event
+        );
+  
+        this.cdr.detectChanges(); // 👈 force Angular à détecter les changements
+      },
+      error: (err) => {
+        console.error('Erreur lors de la participation:', err);
+        this.snackBar.open(err.error.message || 'Erreur lors de la participation', 'Fermer', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  
+
 
   // Charger les recrutements
   loadRecruitments(): void {

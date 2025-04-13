@@ -3,7 +3,7 @@
     <div class="card-header bg-primary text-white py-3">
       <h2 class="mb-0 fw-normal">
         <i class="bi bi-calendar2-range me-2"></i>
-        Gestion des Réservations de Ressources
+        Resource Reservation Management
       </h2>
     </div>
 
@@ -15,66 +15,81 @@
             <div class="card-header bg-light py-3">
               <h4 class="mb-0 text-primary">
                 <i class="bi me-2" [class.bi-pencil-square]="isEditing" [class.bi-plus-circle]="!isEditing"></i>
-                {{ isEditing ? 'Modifier Réservation' : 'Nouvelle Réservation' }}
+                {{ isEditing ? 'Update Reservation' : 'New reservation' }}
               </h4>
             </div>
 
             <div class="card-body">
-              <form (ngSubmit)="onSubmit()" #reservationForm="ngForm">
+              <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
                 <div class="row g-3">
+                  <!-- Resource Selection -->
                   <div class="col-12">
                     <label for="resource-id" class="form-label fw-medium">
                       Ressource <span class="text-danger">*</span>
                     </label>
-                    <select [(ngModel)]="newReservation.resourceId"
+                    <select formControlName="resourceId"
                             id="resource-id"
                             class="form-select form-select-lg border-2"
-                            name="resourceId"
-                            required>
-                      <option value="" disabled selected>Sélectionnez une ressource</option>
+                            [class.is-invalid]="reservationForm.get('resourceId')?.invalid && reservationForm.get('resourceId')?.touched">
+                      <option value="" disabled selected>Select a resource</option>
                       <option *ngFor="let resource of resources"
-                              [value]="resource.idResource"
-                                >
+                              [value]="resource.idResource">
                         {{ resource.name }} ({{ resource.typeResource }})
                       </option>
                     </select>
+                    <div *ngIf="reservationForm.get('resourceId')?.invalid && reservationForm.get('resourceId')?.touched"
+                         class="invalid-feedback">
+                      Resource selection is required
+                    </div>
                   </div>
 
+                  <!-- User Input -->
                   <div class="col-12">
                     <label for="user" class="form-label fw-medium">
-                      Utilisateur <span class="text-danger">*</span>
+                      User <span class="text-danger">*</span>
                     </label>
-                    <input [(ngModel)]="newReservation.user"
+                    <input formControlName="user"
                           id="user"
                           type="text"
                           class="form-control form-control-lg border-2"
                           placeholder="Nom de l'utilisateur"
-                          name="user"
-                          required>
+                          [class.is-invalid]="reservationForm.get('user')?.invalid && reservationForm.get('user')?.touched">
+                    <div *ngIf="reservationForm.get('user')?.invalid && reservationForm.get('user')?.touched"
+                         class="invalid-feedback">
+                      User name is required
+                    </div>
                   </div>
 
+                  <!-- Start Date -->
                   <div class="col-md-6">
                     <label for="start-date" class="form-label fw-medium">
-                      Date de début <span class="text-danger">*</span>
+                      Booking Date <span class="text-danger">*</span>
                     </label>
-                    <input [(ngModel)]="newReservation.startTime"
+                    <input formControlName="startTime"
                           id="start-date"
                           type="date"
                           class="form-control form-control-lg border-2"
-                          name="startTime"
-                          required>
+                          [class.is-invalid]="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched">
+                    <div *ngIf="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched"
+                         class="invalid-feedback">
+                      Start date is required
+                    </div>
                   </div>
 
+                  <!-- End Date -->
                   <div class="col-md-6">
                     <label for="end-date" class="form-label fw-medium">
-                      Date de fin <span class="text-danger">*</span>
+                      Return Date <span class="text-danger">*</span>
                     </label>
-                    <input [(ngModel)]="newReservation.endTime"
+                    <input formControlName="endTime"
                           id="end-date"
                           type="date"
                           class="form-control form-control-lg border-2"
-                          name="endTime"
-                          required>
+                          [class.is-invalid]="reservationForm.get('endTime')?.invalid && reservationForm.get('endTime')?.touched">
+                    <div *ngIf="reservationForm.get('endTime')?.invalid && reservationForm.get('endTime')?.touched"
+                         class="invalid-feedback">
+                      End date is required
+                    </div>
                   </div>
 
                   <div class="col-12">
@@ -83,14 +98,14 @@
                               type="button"
                               class="btn btn-outline-danger btn-lg px-4"
                               (click)="cancelEdit()">
-                        <i class="bi bi-x-circle me-2"></i>Annuler
+                        <i class="bi bi-x-circle me-2"></i>Cancel
                       </button>
                       <button type="submit"
                               class="btn btn-primary btn-lg px-4">
                         <i class="bi me-2"
                           [class.bi-save]="isEditing"
                           [class.bi-plus-lg]="!isEditing"></i>
-                        {{ isEditing ? 'Mettre à jour' : 'Ajouter' }}
+                        {{ isEditing ? 'Update' : 'Confirm' }}
                       </button>
                     </div>
                   </div>
@@ -106,7 +121,7 @@
             <div class="card-header bg-light py-3">
               <h4 class="mb-0 text-primary">
                 <i class="bi bi-list-task me-2"></i>
-                Réservations Existantes
+                Current Reservations
               </h4>
             </div>
 
@@ -141,11 +156,11 @@
                     <div class="d-flex gap-2">
                       <button (click)="editReservation(reservation)"
                               class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                        <i class="bi bi-pencil me-2"></i>Modifier
+                        <i class="bi bi-pencil me-2"></i>Update
                       </button>
                       <button (click)="reservation.reservationId && deleteReservation(reservation.reservationId)"
                               class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                        <i class="bi bi-trash me-2"></i>Supprimer
+                        <i class="bi bi-trash me-2"></i>Delete
                       </button>
                     </div>
                   </div>
@@ -154,7 +169,7 @@
                 <div *ngIf="reservations.length === 0"
                     class="text-center py-5 bg-light rounded-3">
                   <i class="bi bi-inbox text-muted display-6 mb-3"></i>
-                  <p class="text-muted mb-0">Aucune réservation trouvée</p>
+                  <p class="text-muted mb-0">No reservations found</p>
                 </div>
               </div>
             </div>

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { HttpClient, HttpContext, HttpResponse } from '@angular/common/http';
+import { filter, map, Observable } from 'rxjs';
+import { RequestBuilder } from './request-builder';
+import { StrictHttpResponse } from './strict-http-response';
+export interface Confirm$Params {
+  token: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -39,5 +43,35 @@ export class AuthService {
 
   clearToken(): void {
     localStorage.removeItem('auth_token');
+  }
+
+
+
+  activateAccount(token: string): Observable<string> {
+    return this.http.get(`${this.authUrl}/activate-account`, {
+      params: { token },
+      responseType: 'text'
+    });
+  }
+
+  resetPasswordRequest(email: string): Observable<string> {
+    return this.http.post(`${this.authUrl}/reset-password-request`, null, {
+      params: { email },
+      responseType: 'text'
+    });
+  }
+
+  validateResetToken(token: string): Observable<string> {
+    return this.http.get(`${this.authUrl}/validate-reset-token`, {
+      params: { token },
+      responseType: 'text'
+    });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<string> {
+    return this.http.post(`${this.authUrl}/reset-password`,
+      { token, newPassword },
+      { responseType: 'text' }
+    );
   }
 }

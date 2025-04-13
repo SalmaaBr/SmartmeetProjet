@@ -13,14 +13,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-
     <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
-
     <meta name="description" content="" />
-
     <!-- Icons. Uncomment required icon fonts -->
   </head>
-
   <body>
     <!-- Content -->
     <div class="container-xxl">
@@ -77,7 +73,7 @@
                             </g>
                             <g
                               id="Triangle"
-                              transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) "
+                              transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000)"
                             >
                               <use fill="#696cff" xlink:href="#path-5"></use>
                               <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5"></use>
@@ -93,60 +89,76 @@
               <!-- /Logo -->
               <h4 class="mb-2">Welcome to SmartMeet 👋</h4>
               <p class="mb-4">Please sign-in to your account and start the adventure</p>
+              <div class="alert alert-danger mt-3" *ngIf="loginError">
+                {{ loginError }}
+              </div>
 
-              <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="mb-3">
-                <div class="mb-3">
-                  <label for="username" class="form-label">Nom d'utilisateur</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    [(ngModel)]="credentials.username"
-                    required
-                    placeholder="Enter your username"
-                    autofocus
-                  />
-                </div>
-                <div class="mb-3 form-password-toggle">
-                  <div class="d-flex justify-content-between">
-                    <label class="form-label" for="password">Mot de passe</label>
-                    <a [routerLink]="'/password'">
-                        <small>Forgot Password?</small>
-                    </a>                      
-                  </div>
-                  <div class="input-group input-group-merge">
-                    <input
-                      type="password"
-                      id="password"
-                      class="form-control"
-                      name="password"
-                      [(ngModel)]="credentials.password"
-                      required
-                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      aria-describedby="password"
-                    />
-                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember-me" />
-                    <label class="form-check-label" for="remember-me"> Remember Me </label>
-                  </div>
-                </div>
-                <div class="mb-3">
-                    <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!loginForm.valid">
-                        Sign in
-                    </button>
-                </div>
-              </form>
+             <!-- Keep the same template structure, just update the form part -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="Username" class="form-label">Username</label>
+    <input
+      type="Username"
+      class="form-control"
+      id="Username"
+      formControlName="username"
+      [class.is-invalid]="username?.invalid && username?.touched"
+      placeholder="Enter your Username"
+      autofocus
+    />
+    <div *ngIf="username?.invalid && username?.touched" class="invalid-feedback">
+      <div *ngIf="username?.errors?.['required']">Username is required</div>
+    </div>
+  </div>
+
+  <div class="mb-3 form-password-toggle">
+    <div class="d-flex justify-content-between">
+      <label class="form-label" for="password">Password</label>
+      <a [routerLink]="'/reset-password-request'">
+        <small>Forgot Password?</small>
+      </a>
+    </div>
+    <div class="input-group input-group-merge">
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        formControlName="password"
+        [class.is-invalid]="password?.invalid && (password?.touched || password?.dirty)"
+        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+      />
+      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+      <div *ngIf="password?.invalid && (password?.touched || password?.dirty)" class="invalid-feedback">
+        <div *ngIf="password?.errors?.['required']">Password is required</div>
+        <div *ngIf="password?.errors?.['minlength']">
+          Password must be at least 8 characters
+        </div>
+        <div *ngIf="password?.errors?.['missingUpperCase']">
+          Password must contain at least one uppercase letter
+        </div>
+        <div *ngIf="password?.errors?.['missingSpecialChar']">
+          Password must contain at least one special character  {{SpecialChar}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <button
+      class="btn btn-primary d-grid w-100"
+      type="submit"
+      [disabled]="loginForm.invalid"
+    >
+      Sign in
+    </button>
+  </div>
+</form>
 
               <p class="text-center">
                 <span>New on our platform?</span>
                 <a [routerLink]="'/register'">
                     <span>Create an account</span>
-                  </a>                  
+                </a>
               </p>
             </div>
           </div>
@@ -154,7 +166,6 @@
         </div>
       </div>
     </div>
-
     <!-- / Content -->
   </body>
 </html>

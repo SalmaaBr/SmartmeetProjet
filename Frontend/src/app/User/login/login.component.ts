@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -8,25 +9,54 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  credentials = {
-    username: '',
-    password: ''
-  };
+  loginForm: FormGroup;
+  SpecialChar = '(!@#$%^&*(),.?":{}|<>)';
+  loginError: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.loginForm = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        this.passwordValidator.bind(this)
+      ])
+    });
+  }
+
+  passwordValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    const errors: ValidationErrors = {};
+    if (!hasUpperCase) errors['missingUpperCase'] = true;
+    if (!hasSpecialChar) errors['missingSpecialChar'] = true;
+
+    return Object.keys(errors).length ? errors : null;
+  }
 
   onSubmit() {
-    this.authService.login(this.credentials).subscribe(
-      (response: any) => {
-        // Correct the token property name to accessToken
-        this.authService.saveToken(response.accessToken);
+    this.loginError = null; // Reset error message on new submission
 
-        // Existing role handling
+    if (this.loginForm.invalid) return;
+
+    const credentials = {
+      username: this.loginForm.value.username,
+      password: this.loginForm.value.password
+    };
+
+    this.authService.login(credentials).subscribe(
+      (response: any) => {
+        this.authService.saveToken(response.accessToken);
         const roles = response.roles;
-        localStorage.setItem("roles", roles)
-        localStorage.setItem("username", response.username)
+
+        localStorage.setItem("roles", roles);
+        localStorage.setItem("username", response.username);
+        localStorage.setItem("email", response.email);
+
         if (roles.includes('ADMIN')) {
-          this.router.navigate(['/front']);
+          this.router.navigate(['/admin']);
         } else if (roles.includes('USER')) {
           this.router.navigate(['/front']);
         } else {
@@ -35,8 +65,17 @@ export class LoginComponent {
       },
       (error: any) => {
         console.error('Erreur d\'authentification', error);
+        if (error.status === 403 && error.error.message === 'User Not Active') {
+          this.loginError = 'Your account has been disabled. Please contact support.';
+        } else if (error.status === 401) {
+          this.loginError = 'Invalid username or password.';
+        } else {
+          this.loginError = 'An unexpected error occurred. Please try again later.';
+        }
       }
     );
   }
 
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
 }

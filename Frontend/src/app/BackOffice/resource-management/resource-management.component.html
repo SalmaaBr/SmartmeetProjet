@@ -5,37 +5,38 @@
       <div class="card p-3 shadow-sm">
         <h4 class="mb-3">{{ editingResourceId !== null ? 'Edit Resource' : 'Add New Resource' }}</h4>
 
-        <div class="mb-3">
-          <label for="resourceName" class="form-label">Resource Name</label>
-          <input type="text" class="form-control" id="resourceName"
-                 [(ngModel)]="newResource.name" placeholder="Enter resource name">
-        </div>
+        <form [formGroup]="resourceForm" (ngSubmit)="editingResourceId !== null ? updateResource() : addResource()">
+          <div class="mb-3">
+            <label for="resourceName" class="form-label">Resource Name</label>
+            <input type="text" class="form-control" id="resourceName" formControlName="name" placeholder="Enter resource name">
+            <div *ngIf="resourceForm.get('name')?.invalid && resourceForm.get('name')?.touched" class="text-danger">
+              Name is required.
+            </div>
+          </div>
 
-        <div class="mb-3">
-          <label for="resourceType" class="form-label">Resource Type</label>
-          <select class="form-select" id="resourceType" [(ngModel)]="newResource.typeResource">
-            <option *ngFor="let type of resourceTypes" [value]="type">{{ type }}</option>
-          </select>
-        </div>
+          <div class="mb-3">
+            <label for="resourceType" class="form-label">Resource Type</label>
+            <select class="form-select" id="resourceType" formControlName="typeResource">
+              <option *ngFor="let type of resourceTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
 
-        <div class="mb-3">
-          <label for="resourceStatus" class="form-label">Resource Status</label>
-          <select class="form-select" id="resourceStatus" [(ngModel)]="newResource.typeResourceStatus">
-            <option *ngFor="let status of resourceStatuses" [value]="status">{{ status }}</option>
-          </select>
-        </div>
+          <div class="mb-3">
+            <label for="resourceStatus" class="form-label">Resource Status</label>
+            <select class="form-select" id="resourceStatus" formControlName="typeResourceStatus">
+              <option *ngFor="let status of resourceStatuses" [value]="status">{{ status }}</option>
+            </select>
+          </div>
 
-        <div class="d-grid gap-2">
-          <button class="btn btn-primary"
-                  (click)="editingResourceId !== null ? updateResource() : addResource()">
-            {{ editingResourceId !== null ? 'Update Resource' : 'Add Resource' }}
-          </button>
-          <button *ngIf="editingResourceId !== null"
-                  class="btn btn-secondary"
-                  (click)="cancelEdit()">
-            Cancel
-          </button>
-        </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" type="submit" [disabled]="resourceForm.invalid">
+              {{ editingResourceId !== null ? 'Update Resource' : 'Add Resource' }}
+            </button>
+            <button *ngIf="editingResourceId !== null" class="btn btn-secondary" type="button" (click)="cancelEdit()">
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -65,12 +66,10 @@
             </div>
 
             <div>
-              <button class="btn btn-sm btn-outline-primary me-2"
-                      (click)="startEdit(resource)">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="startEdit(resource)">
                 Edit
               </button>
-              <button class="btn btn-sm btn-outline-danger"
-                      (click)="resource.idResource && deleteResource(resource.idResource)">
+              <button class="btn btn-sm btn-outline-danger" (click)="resource.idResource && deleteResource(resource.idResource)">
                 Delete
               </button>
             </div>
