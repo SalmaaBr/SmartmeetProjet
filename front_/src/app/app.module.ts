@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts'; // Ajout de l'import
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,6 +43,12 @@ import { EditEventComponent } from './models/event/edit-event/edit-event.compone
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import { MonitoringRecruitmentListComponent } from './models/recutement/monitoring-recruitment-list/monitoring-recruitment-list.component';
 import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
+import { AddFeedbackComponent } from './BackOffice/add-feedback/add-feedback.component';
+import { MentalHealthComponent } from './BackOffice/mental-health/mental-health.component';
+import { FeedbackListComponent } from './BackOffice/feedback-list/feedback-list.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -76,7 +83,10 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
     EditEventComponent,
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
-    EditRecruitmentComponent
+    EditRecruitmentComponent,
+    AddFeedbackComponent,
+    MentalHealthComponent,
+    FeedbackListComponent,
   ],
   imports: [
     ReactiveFormsModule ,
@@ -86,6 +96,10 @@ import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/e
     CodeInputModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NgChartsModule, // Ajout du module ng2-charts
+    MatTableModule,
+    MatSelectModule,
+    MatFormFieldModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',

@@ -35,7 +35,7 @@ export class EventService {
   deleteEvent(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/deleteevent/${id}`);
   }
-  
+
   updateEvent(id: number, event: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/updateevent/${id}`, event);
   }
@@ -44,7 +44,7 @@ export class EventService {
   getEventById(id: number): Observable<Event> {
       return this.http.get<Event>(`${this.apiUrl}/getevent/${id}`);
   }
-  
+
 
 
 }

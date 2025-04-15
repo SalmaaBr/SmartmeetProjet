@@ -1,0 +1,73 @@
+/* src/app/back-office/feedback-list/feedback-list.component.css */
+.container {
+  max-width: 1200px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+.chart-container {
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  padding: 12px;
+  text-align: left;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.btn-sm {
+  font-size: 0.85rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* Styles pour le filtre select */
+.form-label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.form-select {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1.1rem;
+  border: 2px solid #ccc;
+  max-width: 400px; /* Taille compacte comme AddFeedbackComponent */
+}
+
+.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+/* S’assurer qu’aucun élément parasite n’est affiché */
+.container > div:not(.card),
+.card-body > div:not(.chart-container):not(.mat-elevation-z8):not(.text-center):not(.mb-4) {
+  display: none; /* Débogage temporaire pour cacher tout affichage indésirable */
+}

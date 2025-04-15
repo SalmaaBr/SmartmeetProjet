@@ -24,6 +24,9 @@ import { GeteventComponent } from './models/event/getevent/getevent/getevent.com
 import { EditEventComponent } from './models/event/edit-event/edit-event.component';
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import {EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
+import {AddFeedbackComponent} from "./BackOffice/add-feedback/add-feedback.component";
+import { MentalHealthComponent } from './BackOffice/mental-health/mental-health.component';
+import {FeedbackListComponent} from "./BackOffice/feedback-list/feedback-list.component";
 
 const routes: Routes = [
   {
@@ -49,11 +52,16 @@ const routes: Routes = [
       { path: 'resource-reservations', component: ResourceReservationManagementComponent },
       { path: 'users', component: UserComponent },
       { path: '', redirectTo: 'resources', pathMatch: 'full' },
-      { path: 'events', component: GeteventComponent },  
+      { path: 'events', component: GeteventComponent },
       { path: 'create-event', component: CreateeventComponent },
       { path: 'edit-event/:id', component: EditEventComponent },
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
+      { path: 'feedback', component: AddFeedbackComponent },
+      { path: 'add-feedback/:id', component: AddFeedbackComponent }, // Route pour l'édition
+      { path: 'feedback-list', component: FeedbackListComponent },
+      { path: '', redirectTo: 'feedback', pathMatch: 'full' },      { path: 'mental-health', component: MentalHealthComponent },
+
     ]
   },
   {
@@ -61,7 +69,7 @@ const routes: Routes = [
     component: RegisterComponent // Route indépendante pour RegisterComponent
   },
   {
-    path: '', 
+    path: '',
     redirectTo: '/login',  // Redirige vers la page de connexion par défaut
     pathMatch: 'full'      // Assure que l'URL vide redirige bien vers /login
   },

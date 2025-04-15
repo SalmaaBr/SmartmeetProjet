@@ -1,0 +1,95 @@
+/* Style adapté avec effet de survol */
+.container {
+  max-width: 1200px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+.form-label {
+  font-size: 1rem;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.form-control-lg, .form-select-lg {
+  font-size: 1.1rem;
+}
+
+.border-2 {
+  border-width: 2px !important;
+}
+
+.invalid-feedback {
+  font-size: 0.9rem;
+}
+
+.emoji-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.emoji {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
+}
+
+.emoji:hover {
+  background-color: #e0e0e0;
+}
+
+.emoji.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.list-group-item {
+  padding: 15px;
+  transition: all 0.3s ease; /* Ajout de transition pour effet fluide */
+}
+
+.hover-item:hover {
+  background-color: #f8f9fa; /* Légère couleur au survol */
+  transform: translateY(-2px); /* Petit mouvement vers le haut */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre plus prononcée */
+}
+
+.hover-card {
+  transition: all 0.3s ease; /* Transition pour la carte "New Feedback" */
+}
+
+.hover-card:hover {
+  transform: translateY(-5px); /* Mouvement vers le haut au survol */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Ombre plus forte */
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.btn-lg {
+  padding: 10px 20px;
+}
+
+.btn-sm {
+  font-size: 0.85rem;
+}
