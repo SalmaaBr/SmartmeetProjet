@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.GeminiService;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.IFeedbackServices;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.MailingService;
+import tn.esprit.examen.Smartmeet.dto.MaryemSalhi.FeedbackStats;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.Feedback;
 
 import java.util.List;
@@ -101,6 +102,18 @@ public class FeedbackRestController {
     public Feedback addFeedbackAndAffectToEvents(@RequestBody Feedback feedback, @PathVariable Long eventId) {
         log.info("Adding feedback and linking to event ID: {}", eventId);
         return servicesFeedback.addFeedbackAndAffectToEvents(feedback, eventId);
+    }
+
+    @GetMapping("/filtered")
+    public List<Feedback> getFeedbacksByEventTitle(@RequestParam(required = false) String eventTitle) {
+        log.info("Fetching feedbacks for eventTitle: {}", eventTitle);
+        return servicesFeedback.getFeedbacksByEventTitle(eventTitle);
+    }
+
+    @GetMapping("/stats")
+    public FeedbackStats getFeedbackStats(@RequestParam(required = false) String eventTitle) {
+        log.info("Fetching stats for eventTitle: {}", eventTitle);
+        return servicesFeedback.getFeedbackStats(eventTitle);
     }
 
 }

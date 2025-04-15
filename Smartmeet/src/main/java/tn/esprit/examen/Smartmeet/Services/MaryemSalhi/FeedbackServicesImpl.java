@@ -3,13 +3,16 @@ package tn.esprit.examen.Smartmeet.Services.MaryemSalhi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tn.esprit.examen.Smartmeet.dto.MaryemSalhi.FeedbackStats;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.Feedback;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.repositories.MaryemSalhi.IFeedbackRepository;
 import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -96,5 +99,28 @@ public class FeedbackServicesImpl implements IFeedbackServices {
         }
     }
 
+    @Override
+    public List<Feedback> getFeedbacksByEventTitle(String eventTitle) {
+        log.info("Fetching feedbacks for eventTitle: {}", eventTitle);
+        if (eventTitle == null || eventTitle.isBlank()) {
+            return feedbackRepository.findAll();
+        }
+        return feedbackRepository.findByEventTitle(eventTitle);
+    }
+
+    @Override
+    public FeedbackStats getFeedbackStats(String eventTitle) {
+        log.info("Calculating stats for eventTitle: {}", eventTitle);
+        List<Feedback> feedbacks = getFeedbacksByEventTitle(eventTitle);
+
+        // Calculer la moyenne des feelings par eventTitle
+        Map<String, Double> averageFeelingByEvent = feedbacks.stream()
+                .collect(Collectors.groupingBy(
+                        Feedback::getEventTitle,
+                        Collectors.averagingInt(feedback -> feedback.getFeeling().getValue())
+                ));
+
+        return new FeedbackStats(averageFeelingByEvent);
+    }
 
 }
