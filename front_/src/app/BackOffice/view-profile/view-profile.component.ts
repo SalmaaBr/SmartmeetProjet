@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute ,Router} from '@angular/router';
 import * as L from 'leaflet';
 import { EventService, Event } from '../../services/event.service';
-import { MapRoutingService } from 'src/app/services/map-routing.service';
+import { MapRoutingService } from '../../services/map-routing.service';
 import { ElementRef, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { RecommendationService } from '../../services/recommendation.service';
+
 
 
 @Component({
@@ -20,6 +22,7 @@ export class ViewProfileComponent implements OnInit {
   isCurrentUser = false;
   email: string | null = localStorage.getItem("email");
   myEvents: Event[] = [];
+  recommendedEvents: Event[] = [];
   mapRefs: L.Map[] = [];
 
 @ViewChildren('mapContainer') mapContainers!: QueryList<ElementRef>;
@@ -29,12 +32,16 @@ export class ViewProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private eventService: EventService,
     private mapRoutingService: MapRoutingService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private recommendationService: RecommendationService
   ) {}
 
   ngOnInit(): void {
     if (this.email) {
       this.loadUserByEmail(this.email);
+      this.loadMyEvents();
+      this.loadRecommendedEvents();
       this.eventService.getMyEvents().subscribe(events => {
         this.myEvents = events;
         this.cdr.detectChanges(); // Nécessaire pour que @ViewChildren se synchronise
@@ -49,6 +56,28 @@ export class ViewProfileComponent implements OnInit {
   ngAfterViewInit(): void {
     this.mapContainers.changes.subscribe(() => {
       this.initializeEventMaps();
+    });
+  }
+
+  loadRecommendedEvents(): void {
+    this.recommendationService.getRecommendationsForCurrentUser().subscribe({
+      next: (events) => {
+        this.recommendedEvents = events;
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          // Rediriger vers la page de login ou rafraîchir le token
+          this.router.navigate(['/login']);
+        }
+        console.error('Error loading recommended events:', err);
+      }
+    });
+  }
+
+  loadMyEvents(): void {
+    this.eventService.getMyEvents().subscribe(events => {
+      this.myEvents = events;
+      this.cdr.detectChanges();
     });
   }
 
