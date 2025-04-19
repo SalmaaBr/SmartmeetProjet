@@ -41,8 +41,6 @@ const routes: Routes = [
       {path: 'contact', component:ContactComponent},
       { path: 'profile', component: ProfileComponent  },
       { path: 'profile/me', component: ViewProfileComponent }
-
-
     ]
   },
   {
@@ -62,7 +60,7 @@ const routes: Routes = [
       { path: 'edit-event/:id', component: EditEventComponent },
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
-      { path: 'notif', component: NotificationsComponent },
+      { path: 'notif', component: NotificationsComponent }
     ]
   },
   {

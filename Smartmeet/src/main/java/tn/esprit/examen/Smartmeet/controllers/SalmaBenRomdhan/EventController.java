@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +14,9 @@ import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.OpenStreetMapService;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.IEventServices;
 import org.springframework.beans.factory.annotation.Value;
+import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
+import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,7 +38,7 @@ public class EventController {
     private final IEventServices eventService;
 
     private final IEventRepository eventRepository;
-
+    private final UserRepository userRepository ;
     @Value("${app.upload.dir}")
     private String uploadDir;
 
@@ -134,7 +139,6 @@ public class EventController {
 
 
 
-
     @GetMapping(value = "/images/{fileName:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
@@ -183,6 +187,18 @@ public class EventController {
     public ResponseEntity<String> reverseGeocode(@RequestParam double lat, @RequestParam double lon) {
         String result = openStreetMapService.reverseGeocode(lat, lon).block();
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/my-events")
+    public ResponseEntity<List<Event>> getEventsForCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
+
+        List<Event> events = new ArrayList<>(user.getEvents());
+        return ResponseEntity.ok(events);
     }
 
 

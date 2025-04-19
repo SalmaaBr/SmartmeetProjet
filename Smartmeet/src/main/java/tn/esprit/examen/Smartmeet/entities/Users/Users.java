@@ -12,7 +12,9 @@ import tn.esprit.examen.Smartmeet.entities.MaryemAbid.InteractivePublication;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.MentalHealth;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.EventUserCalendar;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MonitoringRecruitment;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
 
 
 import java.io.Serializable;
@@ -40,6 +42,11 @@ public class Users implements Serializable {
     private String phoneNumber;
     private String address;
     private boolean enabled;
+
+    @ElementCollection(targetClass = TypeTheme.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<TypeTheme> interests = new HashSet<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BlacklistedToken> blacklistedTokens = new HashSet<>();
@@ -70,6 +77,9 @@ public class Users implements Serializable {
     @ManyToMany(mappedBy="users", cascade = CascadeType.ALL)
     private Set<Event> events;
 
+    @OneToMany(mappedBy="users", cascade = CascadeType.ALL)
+    private Set<EventUserCalendar> eventcalender;
+
     @ManyToMany(mappedBy="users", cascade = CascadeType.ALL)
     private Set<MonitoringRecruitment> monitoringrecruitments;
 
@@ -85,7 +95,5 @@ public class Users implements Serializable {
     private List<Claim> claims = new ArrayList<>();
     @OneToMany(mappedBy = "admin")
     private List<Sponsor> sponsorsGeres;
-
-
 
 }

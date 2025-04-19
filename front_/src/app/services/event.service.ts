@@ -33,19 +33,24 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  createEvent(event: any, file: File): Observable<Event> {
+  createEvent(event: any, file?: File): Observable<Event> {
     const formData: FormData = new FormData();
+  
     formData.append('event', new Blob([JSON.stringify({
       ...event,
-      // Include the coordinates in the location string or as separate fields
       location: `${event.location} (${event.latitude},${event.longitude})`
     })], {
-        type: 'application/json'
+      type: 'application/json'
     }));
-    formData.append('file', file);
-
+  
+    // Ajouter le fichier uniquement s'il existe
+    if (file) {
+      formData.append('file', file);
+    }
+  
     return this.http.post<Event>(`${this.apiUrl}/createevent`, formData);
   }
+  
 
 getEvents(): Observable<Event[]> {
   return this.http.get<Event[]>(`${this.apiUrl}/getallevent`).pipe(
@@ -119,5 +124,17 @@ participateToEvent(eventId: number): Observable<{message: string, maxParticipant
 getNotifications(): Observable<any[]> {
   return this.http.get<any[]>(this.notificationsUrl); // Appel à l'API des notifications
 }
+
+getMyEvents(): Observable<Event[]> {
+  return this.http.get<Event[]>(`${this.apiUrl}/my-events`).pipe(
+    map(events => events.map(event => {
+      if (event.filePath) {
+        event.imageUrl = `${this.apiUrl}/images/${event.filePath}`;
+      }
+      return event;
+    }))
+  );
+}
+
 
 }

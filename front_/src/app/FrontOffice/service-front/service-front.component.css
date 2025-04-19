@@ -1,855 +1,864 @@
 .event-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  h2 {
-    color: #333;
-    font-size: 28px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  
-  .no-events {
-    color: red;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  /* Affichage des événements en grille */
-  .event-list {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
-      gap: 20px;
-      border-radius: var(--container-radius);
-      overflow: hidden;
-      margin: 20px auto; /* Centrer la liste */
-      max-width: 1200px; /* Vous pouvez ajuster la largeur maximale */
-
-
-    
-  }
-  
-  .event-card {
-    background: #ffffff;
-    border-radius: 20px; /* Coins plus arrondis */
-    overflow: hidden; /* Important pour que l'image suive le border-radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-    border: none; /* Suppression de la bordure si elle existe */
-   
-  }
-
-  .recruitment-card {
-    width: calc(33.33% - 20px);  /* Chaque carte occupe 1/3 de la largeur */
-    background-color: #f9f9f9;
-    border-radius: 0px;
-    border: 2px solid #ccc;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
-  
-  .event-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  }
-  
-  .event-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .event-header h3 {
-    font-size: 20px;
-    color: #007bff;
-    margin: 0;
-  }
-  
-  .event-type {
-    background: #4187d2;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
-  
-  p {
-    margin: 5px 0;
-    font-size: 16px;
-  }
-  
-  .event-theme {
-    font-style: italic;
-    color: #6c757d;
-  }
-  
-  .event-description {
-    font-weight: bold;
-    color: #555;
-  }
-  
-  /* Responsive : 2 événements par ligne sur tablette */
-  @media (max-width: 992px) {
-    .event-list {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  /* Responsive : 1 événement par ligne sur mobile */
-  @media (max-width: 600px) {
-    .event-list {
-      grid-template-columns: repeat(1, 1fr);
-    }
-  }
-
-
-  .recruitment-container {
-    margin: 20px;
-    text-align: center;
-  }
-  
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .no-recruitments {
-    font-size: 1.2rem;
-    color: #999;
-  }
-  
-  .recruitment-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .recruitment-card {
-    width: calc(33.33% - 20px);  /* Chaque carte occupe 1/3 de la largeur */
-    background-color: #f9f9f9;
-    border-radius: 16px;
-    border: 2px solid #ccc;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
-  
-  .recruitment-card:hover {
-    transform: scale(1.05);  /* Effet d'agrandissement au survol */
-  }
-  
-  .recruitment-header h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .recruitment-body p {
-    font-size: 1rem;
-    margin: 10px 0;
-  }
-  
-  @media (max-width: 1024px) {
-    .recruitment-card {
-      width: calc(50% - 20px); /* Sur les écrans moyens, chaque carte occupe la moitié de la largeur */
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .recruitment-card {
-      width: 100%;  /* Sur les petits écrans, chaque carte prend toute la largeur */
-    }
-  }
-  
-
-/* Style pour le bouton "Postuler" */
-.participate-button {
-    background-color: #007bff; /* Bleu moderne */
-    color: white;
-    border: none;
-    padding: 6px 12px; /* Réduit la taille du bouton */
-    font-size: 14px; /* Réduit la taille du texte */
-    border-radius: 4px; /* Coins légèrement arrondis */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .participate-button:hover {
-    background-color: #0056b3; /* Bleu foncé au survol */
-    transform: scale(1.05);
-  }
-  
-  .participate-button:active {
-    transform: scale(0.95);
-  }
-
-  .recruitment-header h3 {
-    color: #124d8b; /* Bleu moderne */
-    font-size: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  
-
-  /* Ajout d'une légère ombre pour différencier les sections */
-.event-container, .recruitment-container {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-  border-radius: var(--container-radius);
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  
-  /* Légère différence d'ombre entre événements et recrutements */
-  .event-container {
-    box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement bleutée */
-  }
-  
-  .recruitment-container {
-    box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement jaunâtre */
-  }
-  
-  /* Style des boutons */
-  .participate-button {
-    background-color: #007bff; /* Bleu */
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .participate-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-  }
-  
-  .participate-button:active {
-    transform: scale(0.95);
-  }
-  
-
-
-  .event-image-container {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    border-top-left-radius: 16px; /* Même valeur que le parent */
-    border-top-right-radius: 16px; /* Même valeur que le parent */
-    background-color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .event-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.5s ease;
-  }
-  
-
-  .event-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  text-align: center;
 }
 
+h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.no-events {
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Affichage des événements en grille */
 .event-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
+    gap: 20px;
+    border-radius: var(--container-radius);
+    overflow: hidden;
+    margin: 20px auto; /* Centrer la liste */
+    max-width: 1200px; /* Vous pouvez ajuster la largeur maximale */
+
+
+  
 }
 
 .event-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  background: #ffffff;
+  border-radius: 20px; /* Coins plus arrondis */
+  overflow: hidden; /* Important pour que l'image suive le border-radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  border: none; /* Suppression de la bordure si elle existe */
+ 
 }
 
-.event-card:hover {
-  transform: translateY(-3px);
-}
-
-.event-image-container {
-  height: 120px;
-  overflow: hidden;
-}
-
-.event-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.event-details {
-  padding: 12px;
-}
-
-.event-title {
-  font-size: 1rem;
-  margin: 0 0 8px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.event-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.event-location {
-  font-size: 0.8rem;
-  margin: 0 0 8px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.event-dates {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  color: #666;
-  margin-bottom: 12px;
-}
-
-.participate-button {
-  width: 100%;
-  padding: 6px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.participate-button:hover {
-  background-color: #3367d6;
-}
-
-.no-events {
+.recruitment-card {
+  width: calc(33.33% - 20px);  /* Chaque carte occupe 1/3 de la largeur */
+  background-color: #f9f9f9;
+  border-radius: 0px;
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  padding: 20px;
-  color: #666;
-}
-.event-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.event-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 15px;
-}
-
-
-.event-card:hover {
-  transform: translateY(-3px);
-}
-
-.event-image-container {
-  height: 120px;
-  overflow: hidden;
-}
-
-.event-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.event-details {
-  padding: 12px;
-}
-
-.event-title {
-  font-size: 1rem;
-  margin: 0 0 8px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.event-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-
-.event-dates {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  color: #666;
-  margin-bottom: 12px;
-}
-
-.participate-button {
-  width: 100%;
-  padding: 6px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.participate-button:hover {
-  background-color: #3367d6;
-}
-
-.no-events {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
-:root {
-  --primary: #4361ee;
-  --primary-hover: #3a56d4;
-  --secondary: #3f37c9;
-  --text: #2b2d42;
-  --text-light: #8d99ae;
-  --background: #f8f9fa;
-  --card-bg: #ffffff;
-  --card-radius: 16px; /* Rayon des coins arrondis */
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre des cartes */
-  --container-radius: 16px;
-  --card-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15); /* Ombre au survol */
-}
-
-
-.event-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
-  text-align: center;  /* Centre le texte */
-  margin-bottom: 20px;  /* Ajoute un espace sous le titre */
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  border-radius: 2px;
-  text-align: center;  /* Centre le texte */
-
-
-}
-
-.no-events {
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  max-width: 500px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.no-events-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.7;
-}
-
-.no-events p {
-  color: var(--text);
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-
-.no-events .subtext {
-  color: var(--text-light);
-  font-size: 0.9rem;
-}
-
-.event-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-
-
-.event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--card-shadow-hover);
-}
-
-.event-image-container {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-top-left-radius: var(--card-radius);
-  border-top-right-radius: var(--card-radius);
-}
-
-.event-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.event-card:hover .event-image {
-  transform: scale(1.05);
-}
-
-.event-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: #4361ee;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  z-index: 1;
-}
-
-.event-details {
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.event-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 0.75rem 0;
-  line-height: 1.4;
-}
-
-.event-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-
-.event-dates {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: auto;
-  margin-bottom: 1.25rem;
-  font-size: 0.85rem;
-}
-
-.date-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-light);
-}
-
-.date-icon {
-  font-size: 1rem;
-}
-
-.participate-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.75rem;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: auto;
-}
-
-.participate-button:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-}
-
-.participate-button svg {
   transition: transform 0.3s ease;
 }
-
-.participate-button:hover svg {
-  transform: translateX(3px);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 1.75rem;
-  }
-  
-  .event-list {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .event-container {
-    padding: 1.5rem 1rem;
-  }
-  
-
-  
-  .event-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-.participate-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 16px;
-  background-color: #4361ee; /* Couleur bleue moderne */
-  color: white !important; /* Force la couleur du texte */
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 16px;
-  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
-}
-
-.participate-button:hover {
-  background-color: #3a56d4 !important; /* Couleur bleue plus foncée */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
-}
-
-
-:root {
-  --primary: #4361ee;
-  --primary-hover: #3a56d4;
-  --secondary: #3f37c9;
-  --text: #2b2d42;
-  --text-light: #8d99ae;
-  --background: #f8f9fa;
-  --card-bg: #ffffff;
-  --radius: 16px; /* Augmenté pour plus de rondeur */
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.event-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-
-
-.no-events {
-  background: var(--card-bg);
-  padding: 2rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  max-width: 500px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.event-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-
 
 .event-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-header h3 {
+  font-size: 20px;
+  color: #007bff;
+  margin: 0;
+}
+
+.event-type {
+  background: #4187d2;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.event-theme {
+  font-style: italic;
+  color: #6c757d;
+}
+
+.event-description {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Responsive : 2 événements par ligne sur tablette */
+@media (max-width: 992px) {
+  .event-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive : 1 événement par ligne sur mobile */
+@media (max-width: 600px) {
+  .event-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+
+.recruitment-container {
+  margin: 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.no-recruitments {
+  font-size: 1.2rem;
+  color: #999;
+}
+
+.recruitment-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.recruitment-card {
+  width: calc(33.33% - 20px);  /* Chaque carte occupe 1/3 de la largeur */
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.recruitment-card:hover {
+  transform: scale(1.05);  /* Effet d'agrandissement au survol */
+}
+
+.recruitment-header h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+.recruitment-body p {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+@media (max-width: 1024px) {
+  .recruitment-card {
+    width: calc(50% - 20px); /* Sur les écrans moyens, chaque carte occupe la moitié de la largeur */
+  }
+}
+
+@media (max-width: 768px) {
+  .recruitment-card {
+    width: 100%;  /* Sur les petits écrans, chaque carte prend toute la largeur */
+  }
+}
+
+
+/* Style pour le bouton "Postuler" */
+.participate-button {
+  background-color: #007bff; /* Bleu moderne */
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Réduit la taille du bouton */
+  font-size: 14px; /* Réduit la taille du texte */
+  border-radius: 4px; /* Coins légèrement arrondis */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.participate-button:hover {
+  background-color: #0056b3; /* Bleu foncé au survol */
+  transform: scale(1.05);
+}
+
+.participate-button:active {
+  transform: scale(0.95);
+}
+
+.recruitment-header h3 {
+  color: #124d8b; /* Bleu moderne */
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+
+/* Ajout d'une légère ombre pour différencier les sections */
+.event-container, .recruitment-container {
+max-width: 1200px;
+margin: auto;
+padding: 20px;
+border-radius: var(--container-radius);
+background: white;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Légère différence d'ombre entre événements et recrutements */
+.event-container {
+  box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement bleutée */
+}
+
+.recruitment-container {
+  box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement jaunâtre */
+}
+
+/* Style des boutons */
+.participate-button {
+  background-color: #007bff; /* Bleu */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.participate-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.participate-button:active {
+  transform: scale(0.95);
+}
+
+
+
 .event-image-container {
-  position: relative;
-  height: 180px;
+  width: 100%;
+  height: 200px;
   overflow: hidden;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
+  border-top-left-radius: 16px; /* Même valeur que le parent */
+  border-top-right-radius: 16px; /* Même valeur que le parent */
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .event-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.5s ease;
 }
 
-.event-card:hover .event-image {
-  transform: scale(1.05);
+
+.event-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px;
 }
 
-.event-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: var(--primary);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 1;
+.event-list {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 15px;
+}
+
+.event-card {
+border: 1px solid #e0e0e0;
+border-radius: 20px;
+overflow: hidden;
+background: white;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+transition: transform 0.2s;
+}
+
+.event-card:hover {
+transform: translateY(-3px);
+}
+
+.event-image-container {
+height: 120px;
+overflow: hidden;
+}
+
+.event-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 .event-details {
-  padding: 1.25rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+padding: 12px;
 }
 
 .event-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 0.75rem 0;
-  line-height: 1.4;
+font-size: 1rem;
+margin: 0 0 8px 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .event-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+display: flex;
+justify-content: space-between;
+font-size: 0.8rem;
+color: #666;
+margin-bottom: 8px;
 }
 
-.event-theme, .event-location {
-  color: var(--text-light);
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
+.event-location {
+font-size: 0.8rem;
+margin: 0 0 8px 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .event-dates {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: auto;
-  margin-bottom: 1.25rem;
-  font-size: 0.85rem;
+display: flex;
+justify-content: space-between;
+font-size: 0.7rem;
+color: #666;
+margin-bottom: 12px;
 }
 
-.date-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-light);
-}
-
-/* Style pour le bouton "Participate" */
 .participate-button {
-  background-color: #1c73cf; /* Bleu par défaut */
-  color: white;
-  border: none;
-  padding: 8px 16px; /* Taille légèrement augmentée */
-  font-size: 14px;
-  border-radius: 6px; /* Coins plus arrondis */
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  display: block; /* Pour une meilleure disposition */
-  margin-top: 12px;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3); /* Ombre douce */
+width: 100%;
+padding: 6px;
+background-color: #4285f4;
+color: white;
+border: none;
+border-radius: 4px;
+font-size: 0.8rem;
+cursor: pointer;
 }
 
 .participate-button:hover {
-  background-color: #0056b3; /* Bleu légèrement plus foncé au survol */
-  transform: translateY(-2px); /* Léger effet de soulèvement */
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Ombre plus prononcée */
+background-color: #3367d6;
 }
 
-.participate-button:active {
-  transform: translateY(0); /* Retour à la position initiale */
+.no-events {
+text-align: center;
+padding: 20px;
+color: #666;
+}
+.event-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px;
+}
+
+.event-list {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 15px;
+}
+
+
+.event-card:hover {
+transform: translateY(-3px);
+}
+
+.event-image-container {
+height: 120px;
+overflow: hidden;
+}
+
+.event-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.event-details {
+padding: 12px;
+}
+
+.event-title {
+font-size: 1rem;
+margin: 0 0 8px 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.event-meta {
+display: flex;
+justify-content: space-between;
+font-size: 0.8rem;
+color: #666;
+margin-bottom: 8px;
+}
+
+
+.event-dates {
+display: flex;
+justify-content: space-between;
+font-size: 0.7rem;
+color: #666;
+margin-bottom: 12px;
+}
+
+.participate-button {
+width: 100%;
+padding: 6px;
+background-color: #4285f4;
+color: white;
+border: none;
+border-radius: 4px;
+font-size: 0.8rem;
+cursor: pointer;
+}
+
+.participate-button:hover {
+background-color: #3367d6;
+}
+
+.no-events {
+text-align: center;
+padding: 20px;
+color: #666;
+}
+
+:root {
+--primary: #4361ee;
+--primary-hover: #3a56d4;
+--secondary: #3f37c9;
+--text: #2b2d42;
+--text-light: #8d99ae;
+--background: #f8f9fa;
+--card-bg: #ffffff;
+--card-radius: 16px; /* Rayon des coins arrondis */
+--card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre des cartes */
+--container-radius: 16px;
+--card-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15); /* Ombre au survol */
+}
+
+
+.event-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 2rem 1.5rem;
+}
+
+.section-title {
+font-size: 2rem;
+font-weight: 700;
+color: var(--text);
+margin-bottom: 2rem;
+position: relative;
+display: inline-block;
+text-align: center;  /* Centre le texte */
+margin-bottom: 20px;  /* Ajoute un espace sous le titre */
+}
+
+.section-title::after {
+content: '';
+position: absolute;
+bottom: -8px;
+left: 0;
+width: 60px;
+height: 4px;
+background: linear-gradient(90deg, var(--primary), var(--secondary));
+border-radius: 2px;
+text-align: center;  /* Centre le texte */
+
+
+}
+
+.no-events {
+background: var(--card-bg);
+padding: 2rem;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+max-width: 500px;
+margin: 0 auto;
+text-align: center;
+}
+
+.no-events-icon {
+font-size: 3rem;
+margin-bottom: 1rem;
+opacity: 0.7;
+}
+
+.no-events p {
+color: var(--text);
+font-size: 1.1rem;
+margin-bottom: 0.5rem;
+}
+
+.no-events .subtext {
+color: var(--text-light);
+font-size: 0.9rem;
+}
+
+.event-list {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 1.5rem;
+}
+
+
+
+.event-card:hover {
+transform: translateY(-5px);
+box-shadow: var(--card-shadow-hover);
+}
+
+.event-image-container {
+width: 100%;
+height: 200px;
+overflow: hidden;
+border-top-left-radius: var(--card-radius);
+border-top-right-radius: var(--card-radius);
+}
+
+.event-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.event-card:hover .event-image {
+transform: scale(1.05);
+}
+
+.event-badge {
+position: absolute;
+top: 15px;
+right: 15px;
+background: #4361ee;
+color: white;
+padding: 5px 12px;
+border-radius: 20px;
+font-size: 0.8rem;
+font-weight: 600;
+text-transform: uppercase;
+z-index: 1;
+}
+
+.event-details {
+padding: 20px;
+flex: 1;
+display: flex;
+flex-direction: column;
+}
+
+.event-title {
+font-size: 1.25rem;
+font-weight: 700;
+color: var(--text);
+margin: 0 0 0.75rem 0;
+line-height: 1.4;
+}
+
+.event-meta {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+margin-bottom: 1rem;
+font-size: 0.9rem;
+}
+
+
+.event-dates {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+margin-top: auto;
+margin-bottom: 1.25rem;
+font-size: 0.85rem;
+}
+
+.date-item {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+color: var(--text-light);
+}
+
+.date-icon {
+font-size: 1rem;
+}
+
+.participate-button {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+width: 100%;
+padding: 0.75rem;
+background-color: var(--primary);
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 0.95rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: auto;
+}
+
+.participate-button:hover {
+background-color: var(--primary-hover);
+transform: translateY(-2px);
+}
+
+.participate-button svg {
+transition: transform 0.3s ease;
+}
+
+.participate-button:hover svg {
+transform: translateX(3px);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .section-title {
-    font-size: 1.75rem;
-  }
-  
-  .event-list {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
+.section-title {
+  font-size: 1.75rem;
+}
+
+.event-list {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
 }
 
 @media (max-width: 480px) {
-  .event-container {
-    padding: 1.5rem 1rem;
-  }
-  
-  .section-title {
-    font-size: 1.5rem;
-  }
-  
-  .event-list {
-    grid-template-columns: 1fr;
-  }
+.event-container {
+  padding: 1.5rem 1rem;
 }
 
+
+
+.event-list {
+  grid-template-columns: 1fr;
+}
+}
+
+.participate-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+width: 100%;
+padding: 12px 16px;
+background-color: #4361ee; /* Couleur bleue moderne */
+color: white !important; /* Force la couleur du texte */
+border: none;
+border-radius: 8px;
+font-size: 0.95rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 16px;
+box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+}
+
+.participate-button:hover {
+background-color: #3a56d4 !important; /* Couleur bleue plus foncée */
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+}
+
+
+:root {
+--primary: #4361ee;
+--primary-hover: #3a56d4;
+--secondary: #3f37c9;
+--text: #2b2d42;
+--text-light: #8d99ae;
+--background: #f8f9fa;
+--card-bg: #ffffff;
+--radius: 16px; /* Augmenté pour plus de rondeur */
+--shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.event-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 2rem 1.5rem;
+}
+
+
+
+.no-events {
+background: var(--card-bg);
+padding: 2rem;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+max-width: 500px;
+margin: 0 auto;
+text-align: center;
+}
+
+.event-list {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 1.5rem;
+}
+
+
+
+.event-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.event-image-container {
+position: relative;
+height: 180px;
+overflow: hidden;
+border-top-left-radius: var(--radius);
+border-top-right-radius: var(--radius);
+}
+
+.event-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.event-card:hover .event-image {
+transform: scale(1.05);
+}
+
+.event-badge {
+position: absolute;
+top: 1rem;
+right: 1rem;
+background: var(--primary);
+color: white;
+padding: 0.25rem 0.75rem;
+border-radius: 50px;
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+z-index: 1;
+}
+
+.event-details {
+padding: 1.25rem;
+flex: 1;
+display: flex;
+flex-direction: column;
+}
+
+.event-title {
+font-size: 1.25rem;
+font-weight: 700;
+color: var(--text);
+margin: 0 0 0.75rem 0;
+line-height: 1.4;
+}
+
+.event-meta {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+margin-bottom: 1rem;
+font-size: 0.9rem;
+}
+
+.event-theme, .event-location {
+color: var(--text-light);
+display: flex;
+align-items: center;
+gap: 0.15rem;
+}
+
+.event-dates {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+margin-top: auto;
+margin-bottom: 1.25rem;
+font-size: 0.85rem;
+}
+
+.date-item {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+color: var(--text-light);
+}
+
+/* Style pour le bouton "Participate" */
+.participate-button {
+background-color: #1c73cf; /* Bleu par défaut */
+color: white;
+border: none;
+padding: 8px 16px; /* Taille légèrement augmentée */
+font-size: 14px;
+border-radius: 6px; /* Coins plus arrondis */
+cursor: pointer;
+transition: all 0.3s ease;
+width: 100%;
+display: block; /* Pour une meilleure disposition */
+margin-top: 12px;
+box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3); /* Ombre douce */
+}
+
+.participate-button:hover {
+background-color: #0056b3; /* Bleu légèrement plus foncé au survol */
+transform: translateY(-2px); /* Léger effet de soulèvement */
+box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Ombre plus prononcée */
+}
+
+.participate-button:active {
+transform: translateY(0); /* Retour à la position initiale */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+.section-title {
+  font-size: 1.75rem;
+}
+
+.event-list {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+}
+
+@media (max-width: 480px) {
+.event-container {
+  padding: 1.5rem 1rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+}
+
+.event-list {
+  grid-template-columns: 1fr;
+}
+
+
+}
+
+full-calendar {
+width: 90%;
+max-width: 800px;
+height: auto;
+font-size: 13px;
+margin: auto;
+}

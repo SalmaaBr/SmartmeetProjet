@@ -8,10 +8,6 @@
   <div *ngIf="eventDetails" class="event-details card shadow-sm mt-4">
     <div class="card-body">
       <h3 class="card-title">Détails de l'événement</h3>
-
-      <div *ngIf="eventDetails.filePath" class="event-image mb-3">
-        <img [src]="eventDetails.filePath" class="img-fluid rounded" alt="Image de l'événement">
-      </div>
       <p><strong>Titre:</strong> {{ eventDetails.title }}</p>
       <p><strong>Lieu:</strong> {{ eventDetails.location }}</p>
       <p><strong>Description:</strong> {{ eventDetails.description }}</p>

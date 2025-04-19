@@ -1,35 +1,34 @@
 .container {
-    width: 80%;
-    margin: auto;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #007bff;
-    color: white;
-  }
+  width: 80%;
+  margin: auto;
+}
 
-  .custom-card {
-    padding-left: 10mm;
-    padding-right: 10mm;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-  .pagination .page-item.active .page-link {
-    background-color: #0056b3; /* Bleu */
-    border-color: #0056b3;
-    color: white;
-  }
-  
-  
-  
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+.custom-card {
+  padding-left: 10mm;
+  padding-right: 10mm;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #0056b3; /* Bleu */
+  border-color: #0056b3;
+  color: white;
+}
+
+

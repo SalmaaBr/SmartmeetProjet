@@ -67,4 +67,29 @@ public class EmailService {
             LOGGER.error("Error sending email to {}: {}", to, e.getMessage());
         }
     }
+    @Async
+    public void sendEventUpdateEmail(String to, String username, String eventTitle) {
+        try {
+            Context context = new Context();
+            context.setVariable("username", username);
+            context.setVariable("subject", eventTitle);
+
+            String htmlContent = templateEngine.process("event_updated", context);
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            helper.setTo(to);
+            helper.setFrom("sps2022noreply@gmail.com");
+            helper.setSubject("🔔 Event Update : " + eventTitle);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(mimeMessage);
+            LOGGER.info("✅ Email envoyé pour mise à jour d'événement à {}", to);
+        } catch (Exception e) {
+            LOGGER.error("❌ Erreur en envoyant le mail de mise à jour : {}", to, e);
+        }
+    }
+
+
 }

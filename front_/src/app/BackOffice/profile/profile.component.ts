@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
+import { TypeTheme } from '../../models/event/createevent/createevent/event.enums';
+
 import { catchError, of } from 'rxjs';
 
 @Component({
@@ -18,6 +20,9 @@ export class ProfileComponent implements OnInit {
   successMessage = '';
   email =localStorage.getItem("email")
   userId?:number;
+  interests: string[] = [];
+  selectedInterests: Set<string> = new Set();
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService
@@ -50,8 +55,16 @@ export class ProfileComponent implements OnInit {
       this.userService.getUserByEmail(this.email).subscribe({
         next: (user) => {
           this.user = user;
-          this.userId = user.userID
+          this.userId = user.userID;
           this.profileForm.patchValue(user);
+          
+          // Initialiser les intérêts sélectionnés
+          if (user.interests) {
+            this.selectedInterests = new Set(user.interests);
+          }
+          
+          // Charger la liste des intérêts disponibles
+          this.interests = this.userService.getInterests();
           this.isLoading = false;
         },
         error: (err) => {
@@ -61,6 +74,15 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
+
+    // Ajoutez cette méthode pour gérer la sélection/désélection
+    toggleInterest(interest: string): void {
+      if (this.selectedInterests.has(interest)) {
+        this.selectedInterests.delete(interest);
+      } else {
+        this.selectedInterests.add(interest);
+      }
+    }
 
   togglePasswordFields(): void {
     this.showPasswordFields = !this.showPasswordFields;
@@ -78,7 +100,7 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const formData = { ...this.profileForm.value };
+    const formData = { ...this.profileForm.value ,interests: Array.from(this.selectedInterests)};
     if (!this.showPasswordFields) {
       delete formData.currentPassword;
       delete formData.newPassword;

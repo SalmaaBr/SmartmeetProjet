@@ -34,7 +34,7 @@ export class EditEventComponent implements OnInit {
       description: ['', Validators.required],
       location: ['', Validators.required],
       typeevent: [TypeEvent.CONCERT, Validators.required],
-      typetheme: [TypeTheme.CULTURE, Validators.required],
+      typetheme: [TypeTheme.PROGRAMMING, Validators.required],
       typeweather: [TypeWeather.SUNNY, Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],

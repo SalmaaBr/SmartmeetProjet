@@ -1,100 +1,99 @@
 <div class="card" style="margin: 6mm;">
-    <h5 class="card-header" style="font-size: 36px; font-weight: bold; color: #0056b3;">Liste des Événements</h5>
-    <div class="table-responsive text-nowrap">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Thème</th>
-            <th>Titre</th>
-            <th>Description</th>
-            <th>Lieu</th>
-            <th>Météo</th>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Participants</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody class="table-border-bottom-0">
-          <tr *ngFor="let event of getPaginatedEvents()">
-            <td>{{ event.id }}</td>
-            <td>{{ event.typeevent }}</td>
-            <td>{{ event.typetheme }}</td>
-            <td>{{ event.title }}</td>
-            <td>{{ event.description }}</td>
-            <td>{{ event.location }}</td>
-            <td>{{ event.typeweather }}</td>
-            <td>{{ event.startTime | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ event.endTime | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ event.maxParticipants }}</td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);" (click)="editEvent(event.id)">
-                    <i class="bx bx-edit-alt me-1 text-success"></i> <span class="text-success">Edit</span>
-                  </a>
-                  <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="deleteEvent(event.id)">
-                    <i class="bx bx-trash me-1"></i> Delete
-                  </a>
-                </div>
+  <h5 class="card-header" style="font-size: 36px; font-weight: bold; color: #0056b3;">Liste des Événements</h5>
+  <div class="table-responsive text-nowrap">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Thème</th>
+          <th>Titre</th>
+          <th>Description</th>
+          <th>Lieu</th>
+          <th>Météo</th>
+          <th>Date de début</th>
+          <th>Date de fin</th>
+          <th>Participants</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        <tr *ngFor="let event of getPaginatedEvents()">
+          <td>{{ event.id }}</td>
+          <td>{{ event.typeevent }}</td>
+          <td>{{ event.typetheme }}</td>
+          <td>{{ event.title }}</td>
+          <td>{{ event.description }}</td>
+          <td>{{ event.location }}</td>
+          <td>{{ event.typeweather }}</td>
+          <td>{{ event.startTime | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ event.endTime | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ event.maxParticipants }}</td>
+          <td>
+            <div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:void(0);" (click)="editEvent(event.id)">
+                  <i class="bx bx-edit-alt me-1 text-success"></i> <span class="text-success">Edit</span>
+                </a>
+                <a class="dropdown-item text-danger" href="javascript:void(0);" (click)="deleteEvent(event.id)">
+                  <i class="bx bx-trash me-1"></i> Delete
+                </a>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Pagination -->
-    <div class="demo-inline-spacing">
-      <nav aria-label="Page navigation">
-        <ul class="pagination d-flex justify-content-center">
-          <!-- First Page Button -->
-          <li class="page-item first">
-            <a class="page-link" href="javascript:void(0);" (click)="goToFirstPage()">
-              <i class="tf-icon bx bx-chevrons-left"></i>
-            </a>
-          </li>
-  
-          <!-- Previous Page Button -->
-          <li class="page-item prev">
-            <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()">
-              <i class="tf-icon bx bx-chevron-left"></i>
-            </a>
-          </li>
-  
-          <!-- Page Numbers -->
-          <li class="page-item" *ngFor="let page of getPageNumbers()" [ngClass]="{'active': page === currentPage}">
-            <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">
-              {{ page }}
-            </a>
-          </li>
-  
-          <!-- Next Page Button -->
-          <li class="page-item next">
-            <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()">
-              <i class="tf-icon bx bx-chevron-right"></i>
-            </a>
-          </li>
-  
-          <!-- Last Page Button -->
-          <li class="page-item last">
-            <a class="page-link" href="javascript:void(0);" (click)="goToLastPage()">
-              <i class="tf-icon bx bx-chevrons-right"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  
-    <div class="text-end mt-3 me-3">
-      <a class="btn btn-primary btn-lg" href="/admin/create-event">Create Event</a>
-    </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
-  <app-monitoring-recruitment-list></app-monitoring-recruitment-list>
-  
+
+  <!-- Pagination -->
+  <div class="demo-inline-spacing">
+    <nav aria-label="Page navigation">
+      <ul class="pagination d-flex justify-content-center">
+        <!-- First Page Button -->
+        <li class="page-item first">
+          <a class="page-link" href="javascript:void(0);" (click)="goToFirstPage()">
+            <i class="tf-icon bx bx-chevrons-left"></i>
+          </a>
+        </li>
+
+        <!-- Previous Page Button -->
+        <li class="page-item prev">
+          <a class="page-link" href="javascript:void(0);" (click)="goToPreviousPage()">
+            <i class="tf-icon bx bx-chevron-left"></i>
+          </a>
+        </li>
+
+        <!-- Page Numbers -->
+        <li class="page-item" *ngFor="let page of getPageNumbers()" [ngClass]="{'active': page === currentPage}">
+          <a class="page-link" href="javascript:void(0);" (click)="goToPage(page)">
+            {{ page }}
+          </a>
+        </li>
+
+        <!-- Next Page Button -->
+        <li class="page-item next">
+          <a class="page-link" href="javascript:void(0);" (click)="goToNextPage()">
+            <i class="tf-icon bx bx-chevron-right"></i>
+          </a>
+        </li>
+
+        <!-- Last Page Button -->
+        <li class="page-item last">
+          <a class="page-link" href="javascript:void(0);" (click)="goToLastPage()">
+            <i class="tf-icon bx bx-chevrons-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="text-end mt-3 me-3">
+    <a class="btn btn-primary btn-lg" href="/admin/create-event">Create Event</a>
+  </div>
+</div>
+
+<app-monitoring-recruitment-list></app-monitoring-recruitment-list>

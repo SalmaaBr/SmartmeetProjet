@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TypeUserRole, User } from '../models/user.model';
+import {TypeTheme} from '../models/event/createevent/createevent/event.enums';
+
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +41,10 @@ export class UserService {
 
   getRoles(): TypeUserRole[] {
     return ['USER', 'ADMIN', 'PARTICIPANT', 'SPEAKER', 'TRAINER', 'SPONSOR', 'COMPANY'];
+  }
+
+  getInterests(): string[] {
+    return Object.values(TypeTheme);
   }
 
   // Ajoutez cette nouvelle méthode pour l'utilisateur connecté

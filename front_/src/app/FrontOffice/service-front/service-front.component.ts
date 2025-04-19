@@ -1,11 +1,16 @@
-import { Component, OnInit,ChangeDetectorRef  } from '@angular/core';
-import { EventService, Event } from '../../services/event.service'; // Vérifie le bon chemin
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { CalendarOptions, EventInput } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { EventService, Event } from '../../services/event.service';
 import { RecutementService } from '../../services/recutement.service';
+import { UsercalenderService, EventUserCalendar } from '../../services/usercalender.service';
 import * as AOS from 'aos';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Pour les notifications
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { InteractivePublicationService } from 'src/app/services/interactive-publication.service';
 import { InteractivePublication } from 'src/app/models/interactive-publication.model';
+import * as L from 'leaflet';
+import { MapRoutingService } from 'src/app/services/map-routing.service';
 
 export enum TypeIPublicationStatus {
   PUBLISHED = 'PUBLISHED',
@@ -25,18 +30,29 @@ export enum TypeIPublicationVisibility {
   templateUrl: './service-front.component.html',
   styleUrls: ['./service-front.component.css']
 })
-export class ServiceFrontComponent implements OnInit {
+export class ServiceFrontComponent implements OnInit, AfterViewInit {
   events: Event[] = [];
-  recrutements: any[] = [];  // Tableau pour stocker les recrutements
-  errorMessage: string = '';
-  
-  // Variables liées aux publications
+  recrutements: any[] = [];
+  errorMessage = '';
+  publications: any[] = [];
+  myEvents: Event[] = [];
+  mapRefs: L.Map[] = [];
+
   TypeIPublicationStatus = TypeIPublicationStatus;
   TypeIPublicationVisibility = TypeIPublicationVisibility;
   isEditing = false;
   currentPublicationId: number | null = null;
   newPublication: InteractivePublication = new InteractivePublication();
-  publications: any[] = [];
+
+  @ViewChildren('mapContainer') mapContainers!: QueryList<ElementRef>;
+
+  unifiedCalendarOptions: CalendarOptions = {
+    plugins: [dayGridPlugin, interactionPlugin],
+    initialView: 'dayGridMonth',
+    weekends: true,
+    events: [],
+    dateClick: this.handleDateClick.bind(this),
+  };
 
   constructor(
     private eventService: EventService,
@@ -44,167 +60,248 @@ export class ServiceFrontComponent implements OnInit {
     private publicationService: InteractivePublicationService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
-
+    private mapRoutingService: MapRoutingService,
+    private usercalenderService: UsercalenderService
   ) {}
 
   ngOnInit(): void {
-    // Appel aux méthodes pour récupérer les événements
     this.loadEvents();
-
-    // Appel aux méthodes pour récupérer les recrutements
     this.loadRecruitments();
-
-    // Charger les publications
     this.loadPublications();
-
-    // Initialisation d'AOS pour les animations
+    this.loadMyEvents();
+    this.loadUnifiedEventsForCalendar();
     setTimeout(() => AOS.init(), 0);
-
-    console.log('ServiceFrontComponent Loaded ✅');
   }
 
-  formatTime(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  ngAfterViewInit(): void {
+    this.mapContainers.changes.subscribe(() => {
+      this.initializeEventMaps();
+    });
   }
 
-  formatDate(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleString(); // ou utilisez un formatage plus précis
+  initializeEventMaps(): void {
+    this.mapRefs.forEach(map => map.remove());
+    this.mapRefs = [];
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+
+        this.mapContainers.forEach((containerRef, index) => {
+          const event = this.myEvents[index];
+          if (event.latitude && event.longitude) {
+            const eventLatLng = L.latLng(event.latitude, event.longitude);
+            const map = L.map(containerRef.nativeElement, {
+              center: eventLatLng,
+              zoom: 13,
+              zoomControl: false,
+              attributionControl: false
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker(eventLatLng).addTo(map)
+              .bindPopup(`<b>${event.title}</b><br>${event.location}`).openPopup();
+
+            L.marker(userLatLng, {
+              icon: L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+              })
+            }).addTo(map).bindPopup("📍 Vous êtes ici");
+
+            this.mapRoutingService.getRoute(
+              [userLatLng.lng, userLatLng.lat],
+              [eventLatLng.lng, eventLatLng.lat]
+            ).subscribe((route: any) => {
+              const coords = route.features[0].geometry.coordinates;
+              const latlngs = coords.map(([lng, lat]: [number, number]) => [lat, lng]);
+              if (latlngs.length > 0) {
+                L.polyline(latlngs, { color: 'blue', weight: 4 }).addTo(map);
+                map.fitBounds(L.latLngBounds(latlngs).pad(0.3));
+              }
+            }, error => {
+              console.error('Erreur récupération route :', error);
+            });
+
+            this.mapRefs.push(map);
+          }
+        });
+      },
+      error => {
+        console.error('Erreur géolocalisation :', error);
+      }
+    );
   }
 
   formatShortDate(dateString: string): string {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  // Charger les événements
   loadEvents(): void {
-    this.eventService.getEvents().subscribe(
-      (data: Event[]) => {
-        this.events = data; // Le mapping est déjà fait dans le service
-      },
-      (error) => {
-        console.error("Erreur :", error);
-      }
-    );
-  }
-  
-  
-  participate(eventId: number, eventIndex: number): void {
-    this.eventService.participateToEvent(eventId).subscribe({
-      next: (response) => {
-        this.snackBar.open(response.message, 'Fermer', { duration: 3000 });
-  
-        this.events = this.events.map((event, idx) => 
-          idx === eventIndex ? { ...event, maxParticipants: response.maxParticipants } : event
-        );
-  
-        this.cdr.detectChanges(); // 👈 force Angular à détecter les changements
-      },
-      error: (err) => {
-        console.error('Erreur lors de la participation:', err);
-        this.snackBar.open(err.error.message || 'Erreur lors de la participation', 'Fermer', {
-          duration: 3000
-        });
-      }
+    this.eventService.getEvents().subscribe({
+      next: data => this.events = data,
+      error: err => console.error('Erreur :', err)
     });
   }
 
-  
-
-
-  // Charger les recrutements
   loadRecruitments(): void {
     this.recrutementService.getAllMonitoringRecruitments().subscribe({
-      next: (data) => {
-        this.recrutements = data;  // Stocke les recrutements dans la variable
-      },
-      error: (error) => {
-        this.errorMessage = 'Erreur lors de la récupération des recrutements.';  // Affiche un message d'erreur
-        console.error('Erreur:', error);
+      next: data => this.recrutements = data,
+      error: err => {
+        this.errorMessage = 'Erreur lors de la récupération des recrutements.';
+        console.error('Erreur:', err);
       }
     });
   }
 
-  // Charger les publications
   loadPublications(): void {
-    this.publicationService.getAllPublications()
-      .subscribe({
-        next: (data: InteractivePublication[]) => {
-          this.publications = data;
-          console.log('Publications loaded successfully:', this.publications);
-        },
-        error: (error) => console.error('Error fetching publications:', error)
-      });
+    this.publicationService.getAllPublications().subscribe({
+      next: data => this.publications = data,
+      error: err => console.error('Error fetching publications:', err)
+    });
   }
 
-  // Supprimer une publication
-  deletePublication(id: number): void {
-    if (confirm('Are you sure you want to delete this publication?')) {
-      this.publicationService.deletePublication(id)
-        .subscribe({
-          next: () => {
-            console.log('Publication deleted successfully');
-            this.loadPublications();
-          },
-          error: (error) => console.error('Error deleting publication:', error)
-        });
+  loadMyEvents(): void {
+    this.eventService.getMyEvents().subscribe({
+      next: data => {
+        this.myEvents = data;
+        this.cdr.detectChanges();
+      },
+      error: err => console.error('Erreur lors de la récupération des événements participés :', err)
+    });
+  }
+
+  loadUnifiedEventsForCalendar(): void {
+    // Charger les événements auxquels l'utilisateur participe
+    this.eventService.getMyEvents().subscribe(myEvents => {
+      const myEventsMapped = myEvents.map(event => ({
+        title: event.title,
+        start: event.startTime,
+        end: event.endTime,
+        description: event.description,
+        location: event.location,
+        color: 'blue' // Couleur pour les événements participés
+      }));
+
+      // Charger les événements du calendrier utilisateur
+      this.usercalenderService.getUserEventsCalender().subscribe({
+        next: (userEvents: EventUserCalendar[]) => {
+          const userEventsMapped = userEvents.map((event: EventUserCalendar) => ({
+            title: event.name,
+            start: event.startDate,
+            end: event.endDate,
+            color: 'green' // Couleur pour les événements du calendrier
+          }));
+
+          // Fusionner les deux listes d'événements
+          this.unifiedCalendarOptions.events = [...myEventsMapped, ...userEventsMapped];
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Erreur lors de la récupération des événements utilisateur :', err);
+          this.snackBar.open('Erreur lors du chargement des événements', 'Fermer', { duration: 3000 });
+        }
+      });
+    });
+  }
+
+  handleDateClick(arg: any) {
+    const name = prompt("Nom de l'événement :");
+    const endDateStr = prompt('Date/heure de fin (YYYY-MM-DDTHH:mm:ss) :', arg.dateStr + 'T00:00:00');
+    if (name) {
+      const newEvent: EventUserCalendar = {
+        name: name,
+        createdDate: `${arg.dateStr}T00:00:00`,
+        startDate: `${arg.dateStr}T00:00:00`,
+        endDate: endDateStr || undefined
+      };
+      this.usercalenderService.addEvent(newEvent).subscribe({
+        next: () => {
+          this.snackBar.open('Événement ajouté avec succès !', 'Fermer', { duration: 3000 });
+          this.loadUnifiedEventsForCalendar();
+        },
+        error: (err) => {
+          console.error("Erreur lors de l'ajout de l'événement", err);
+          this.snackBar.open('Erreur lors de l’ajout de l’événement', 'Fermer', { duration: 3000 });
+        }
+      });
     }
   }
 
-  // Editer une publication - charger dans le formulaire
-  editPublication(pub: InteractivePublication): void {
-    console.log("🚀 ~ ServiceFrontComponent ~ editPublication ~ pub:", pub);
-    this.isEditing = true;
-    this.currentPublicationId = pub.iPublicationId!;
-    this.newPublication = { ...pub }; // Clone the publication object
+  deletePublication(id: number): void {
+    if (confirm('Are you sure you want to delete this publication?')) {
+      this.publicationService.deletePublication(id).subscribe({
+        next: () => this.loadPublications(),
+        error: err => console.error('Error deleting publication:', err)
+      });
+    }
   }
 
-  // Annuler le mode édition
+  editPublication(pub: InteractivePublication): void {
+    this.isEditing = true;
+    this.currentPublicationId = pub.iPublicationId!;
+    this.newPublication = { ...pub };
+  }
+
   cancelEdit(): void {
     this.isEditing = false;
     this.currentPublicationId = null;
     this.resetForm();
   }
 
-  // Soumettre le formulaire
   onSubmit(): void {
-    if (!this.newPublication.title) {
-      console.warn('Please fill in all required fields.');
-      return;
-    }
+    if (!this.newPublication.title) return;
 
     if (this.isEditing && this.currentPublicationId) {
-      // Mettre à jour une publication existante
-      this.publicationService.updatePublication(this.currentPublicationId, this.newPublication)
+      this.publicationService
+        .updatePublication(this.currentPublicationId, this.newPublication)
         .subscribe({
           next: () => {
-            console.log('Publication updated successfully');
             this.loadPublications();
             this.cancelEdit();
           },
-          error: (error) => console.error('Error updating publication:', error)
+          error: (err: any) => {
+            console.error('Error updating publication:', err);
+          }
         });
     } else {
-      // Créer une nouvelle publication
-      this.publicationService.createPublication(this.newPublication as InteractivePublication)
+      this.publicationService
+        .createPublication(this.newPublication)
         .subscribe({
-          next: (response: InteractivePublication) => {
-            console.log('Publication added successfully:', response);
+          next: () => {
             this.loadPublications();
             this.resetForm();
           },
-          error: (error) => console.error('Error adding publication:', error)
+          error: (err: any) => {
+            console.error('Error creating publication:', err);
+          }
         });
     }
   }
 
-  // Réinitialiser les champs du formulaire
   resetForm(): void {
     this.newPublication = new InteractivePublication();
+  }
+
+  participate(eventId: number, index: number): void {
+    this.eventService.participateToEvent(eventId).subscribe({
+      next: (response) => {
+        this.snackBar.open(response.message, 'Fermer', { duration: 3000 });
+        this.events[index].maxParticipants = Math.max(0, this.events[index].maxParticipants - 1);
+        this.loadEvents();
+        this.loadMyEvents();
+        this.loadUnifiedEventsForCalendar(); // Recharger le calendrier unifié
+      },
+      error: (err) => {
+        console.error('Erreur lors de la participation:', err);
+        this.snackBar.open(err.error.message || 'Erreur lors de la participation', 'Fermer', { duration: 3000 });
+      }
+    });
   }
 }

@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.Smartmeet.Services.UserService;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 import tn.esprit.examen.Smartmeet.security.jwt.JwtUtils;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -65,5 +67,19 @@ public class UserController {
         Users user = userService.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/{id}/interests")
+    public ResponseEntity<Set<TypeTheme>> getUserInterests(@PathVariable Long id) {
+        Users user = userService.getUserById(id);
+        return ResponseEntity.ok(user.getInterests());
+    }
+
+    @GetMapping("/me/interests")
+    public ResponseEntity<Set<TypeTheme>> getCurrentUserInterests(Authentication authentication) {
+        String username = authentication.getName();
+        Users user = userService.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return ResponseEntity.ok(user.getInterests());
     }
 }

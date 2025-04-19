@@ -43,14 +43,32 @@ public class UserServiceImpl implements UserService {
     public Users updateUser(Long id, Users userDetails) {
         Users existingUser = getUserById(id);
 
-        // Update all fields
-        existingUser.setUsername(userDetails.getUsername());
-        existingUser.setEmail(userDetails.getEmail());
-        existingUser.setPassword(userDetails.getPassword());
-        existingUser.setPhoneNumber(userDetails.getPhoneNumber());
-        existingUser.setAddress(userDetails.getAddress());
+        // Update only non-null fields
+        if (userDetails.getUsername() != null) {
+            existingUser.setUsername(userDetails.getUsername());
+        }
+        if (userDetails.getEmail() != null) {
+            existingUser.setEmail(userDetails.getEmail());
+        }
+        // Ne mettez à jour le mot de passe que s'il est fourni
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+            existingUser.setPassword(userDetails.getPassword());
+        }
+        if (userDetails.getPhoneNumber() != null) {
+            existingUser.setPhoneNumber(userDetails.getPhoneNumber());
+        }
+        if (userDetails.getAddress() != null) {
+            existingUser.setAddress(userDetails.getAddress());
+        }
         existingUser.setEnabled(userDetails.isEnabled());
-        existingUser.setRoles(userDetails.getUserRole());
+
+        // Gestion des rôles et intérêts
+        if (userDetails.getUserRole() != null) {
+            existingUser.setRoles(userDetails.getUserRole());
+        }
+        if (userDetails.getInterests() != null) {
+            existingUser.setInterests(userDetails.getInterests());
+        }
 
         return userRepository.save(existingUser);
     }
