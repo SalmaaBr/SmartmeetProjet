@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.examen.Smartmeet.email.EmailService;
 import tn.esprit.examen.Smartmeet.email.EmailTemplateName;
+
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
+
 import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
+
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.util.List;
