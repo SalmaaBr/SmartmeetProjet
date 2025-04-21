@@ -1,0 +1,24 @@
+# ==========================
+# 🚀 Fichiers à ignorer 🚀
+# ==========================
+
+# 📂 Backend (Spring Boot)
+Smartmeet/target/
+Smartmeet/.mvn/
+Smartmeet/*.iml
+Smartmeet/.idea/
+
+# Inclure seulement le dossier src et le fichier pom.xml
+!Smartmeet/src/
+!Smartmeet/pom.xml
+
+# 📂 Frontend (Angular)
+front_/node_modules/
+front_/dist/
+front_/.angular/
+front_/.idea/
+front_/*.iml
+
+# 🚀 Ignorer les fichiers système
+.DS_Store
+Thumbs.db

@@ -1,0 +1,82 @@
+<header id="header" class="header d-flex align-items-center sticky-top">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+    <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <!-- Uncomment the line below if you also wish to use an image logo -->
+      <!-- <img src="assets/img/logo.png" alt=""> -->
+      <h1 class="sitename">SmartMeet</h1>
+    </a>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a routerLink="/front" class="active">Home<br></a></li>
+        <li><a routerLink="/front/about" class="btn-get-started">About</a>
+        </li>
+        <li><a routerLink="/front/service">Services</a></li>
+        <li><a routerLink="/front/portfolio">Portfolio</a></li>
+        <li><a href="#team">Team</a></li>
+
+        <li><a [routerLink]="'/front/contact'">Contact</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <a *ngIf="!isAuth" [routerLink]="'/register'" class="btn-getstarted">Get Started</a>
+         <!-- User -->
+          <div  class="ps-3" *ngIf="isAuth" >
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+     <li class="nav-item navbar-dropdown dropdown-user dropdown">
+       <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+         <div class="avatar avatar-online">
+           <img src="/assets/BackOffice/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+         </div>
+       </a>
+       <ul class="dropdown-menu dropdown-menu-end">
+         <li>
+           <a class="dropdown-item" href="#">
+             <div class="d-flex">
+               <div class="flex-shrink-0 me-3">
+                 <div class="avatar avatar-online">
+                   <img src="/assets/BackOffice/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                 </div>
+               </div>
+               <div class="flex-grow-1">
+                 <span class="fw-semibold d-block">{{username}}</span>
+                 <small class="text-muted">{{roles}}</small>
+               </div>
+             </div>
+           </a>
+         </li>
+         <li>
+
+           <div class="dropdown-divider"></div>
+         </li>
+         <li>
+           <a class="dropdown-item" [routerLink]="['/front/profile/me']">     
+             <i class="bx bx-user me-2"></i>
+             <span class="align-middle">My Profile</span>
+           </a>
+         </li>
+
+         <li>
+           <div class="dropdown-divider"></div>   
+         </li>
+         <li>
+           <a class="dropdown-item" href="/login">
+             <i class="bx bx-power-off me-2"></i>
+             <span class="align-middle" (click)="logout()">Log Out</span>
+           </a>
+         </li>
+       </ul>
+     </li>
+     </ul>
+          </div>
+  <!--/ User -->
+
+
+
+
+
+  </div>
+</header>
