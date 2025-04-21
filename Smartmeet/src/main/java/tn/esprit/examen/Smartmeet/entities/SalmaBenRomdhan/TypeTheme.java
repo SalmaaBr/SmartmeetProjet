@@ -1,0 +1,22 @@
+package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
+
+public enum TypeTheme {
+    PROGRAMMING,
+    WEB_DEVELOPMENT,
+    MOBILE_DEVELOPMENT,
+    CLOUD_COMPUTING,
+    CYBERSECURITY,
+    DEVOPS,
+    BLOCKCHAIN,
+    IOT,
+    BIG_DATA,
+    MACHINE_LEARNING,
+    COMPUTER_VISION,
+    NETWORKING,
+    DATABASE,
+    SOFTWARE_ENGINEERING,
+    UI_UX,
+    EMBEDDED_SYSTEMS,
+    QUANTUM_COMPUTING,
+    GAME_DEVELOPMENT
+}
