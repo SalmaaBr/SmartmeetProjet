@@ -18,6 +18,7 @@ import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,6 +58,9 @@ public class Event implements Serializable {
     private Double latitude;
     private Double longitude;
 
+    private Long likes = 0L;
+
+
     @ManyToMany
     @JsonIgnore
     private Set<Users> users;
@@ -80,5 +84,9 @@ public class Event implements Serializable {
     @OneToOne
     @JsonIgnoreProperties("event")
     private MonitoringRecruitment monitorungrecutement;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<EventLike> eventLikes = new HashSet<>();
 
 }

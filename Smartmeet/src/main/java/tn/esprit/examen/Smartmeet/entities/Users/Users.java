@@ -11,10 +11,7 @@ import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Sponsor;
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.InteractivePublication;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.MentalHealth;
-import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
-import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.EventUserCalendar;
-import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MonitoringRecruitment;
-import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.*;
 
 
 import java.io.Serializable;
@@ -95,5 +92,9 @@ public class Users implements Serializable {
     private List<Claim> claims = new ArrayList<>();
     @OneToMany(mappedBy = "admin")
     private List<Sponsor> sponsorsGeres;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<EventLike> eventLikes = new HashSet<>();
 
 }

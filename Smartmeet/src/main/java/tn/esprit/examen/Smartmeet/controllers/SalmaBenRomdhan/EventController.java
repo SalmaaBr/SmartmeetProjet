@@ -123,7 +123,7 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-
+    //participer
     @PostMapping("/evenements/{eventId}/participer")
     public ResponseEntity<?> participer(@PathVariable Long eventId) {
         try {
@@ -137,8 +137,7 @@ public class EventController {
         }
     }
 
-
-
+//image
     @GetMapping(value = "/images/{fileName:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {

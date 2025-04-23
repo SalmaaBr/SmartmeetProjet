@@ -19,7 +19,9 @@ import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
 
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -124,8 +126,5 @@ public class EventServicesImpl implements IEventServices {
 
         return event.getMaxParticipants(); // <-- retourner ici le nouveau nombre
     }
-
-
-
 
 }
