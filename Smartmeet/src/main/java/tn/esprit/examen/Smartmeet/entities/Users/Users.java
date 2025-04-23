@@ -2,6 +2,7 @@ package tn.esprit.examen.Smartmeet.entities.Users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -94,7 +95,7 @@ public class Users implements Serializable {
     private List<Sponsor> sponsorsGeres;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
     private Set<EventLike> eventLikes = new HashSet<>();
 
 }

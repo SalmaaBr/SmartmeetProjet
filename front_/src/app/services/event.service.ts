@@ -21,6 +21,7 @@ export interface Event {
   imageUrl?: string;  // Ajout de la propriété imageUrl
   isLiked?: boolean; // Add isLiked
   totalLikes?: number;
+  likes?:number;
 }
 
 @Injectable({

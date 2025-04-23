@@ -13,6 +13,7 @@ import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.EventLikeReposito
 import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.IEventRepository;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,5 +98,9 @@ public class EventLikeService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
         return eventLikeRepository.countByEventAndLikes(event, 1);
+    }
+
+    public List<EventLike> getAllEventLikes() {
+        return eventLikeRepository.findAll();
     }
 }

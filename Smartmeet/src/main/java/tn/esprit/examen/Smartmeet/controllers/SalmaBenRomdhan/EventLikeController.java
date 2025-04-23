@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.EventLikeService;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.EventLike;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/event-likes")
@@ -30,4 +33,11 @@ public class EventLikeController {
         long totalLikes = eventLikeService.getTotalLikes(eventId);
         return ResponseEntity.ok(totalLikes);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<EventLike>> getAllEventLikes() {
+        List<EventLike> eventLikes = eventLikeService.getAllEventLikes();
+        return ResponseEntity.ok(eventLikes);
+    }
+
 }

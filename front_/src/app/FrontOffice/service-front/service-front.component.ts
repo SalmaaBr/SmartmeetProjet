@@ -12,6 +12,8 @@ import { InteractivePublicationService } from 'src/app/services/interactive-publ
 import { InteractivePublication } from 'src/app/models/interactive-publication.model';
 import * as L from 'leaflet';
 import { MapRoutingService } from '../../services/map-routing.service';
+import { forkJoin } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export enum TypeIPublicationStatus {
   PUBLISHED = 'PUBLISHED',
@@ -86,24 +88,27 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   }
 
   loadLikeData(): void {
-    this.events.forEach((event, index) => {
-      // Get like status
-      this.eventLikeService.getLikeStatus(event.id).subscribe({
-        next: (status) => {
-          event.isLiked = status === 1;
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Error fetching like status:', err)
-      });
-
-      // Get total likes
-      this.eventLikeService.getTotalLikes(event.id).subscribe({
-        next: (total) => {
-          event.totalLikes = total;
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Error fetching total likes:', err)
-      });
+    const likeStatusObservables = this.events.map((event, index) =>
+      this.eventLikeService.getLikeStatus(event.id).pipe(
+        tap(status => {
+          this.events[index].isLiked = status === 1;
+        })
+      )
+    );
+  
+    const totalLikesObservables = this.events.map((event, index) =>
+      this.eventLikeService.getTotalLikes(event.id).pipe(
+        tap(total => {
+          this.events[index].totalLikes = total;
+        })
+      )
+    );
+  
+    forkJoin([...likeStatusObservables, ...totalLikesObservables]).subscribe({
+      complete: () => {
+        this.cdr.detectChanges(); // Appeler detectChanges une seule fois à la fin
+      },
+      error: (err) => console.error('Error fetching like data:', err)
     });
   }
 
@@ -113,19 +118,28 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
       this.snackBar.open('Please log in to like events', 'Close', { duration: 3000 });
       return;
     }
-
+  
     this.eventLikeService.toggleLike(eventId).subscribe({
       next: (message) => {
         this.snackBar.open(message, 'Close', { duration: 3000 });
-        // Update like status and total likes
-        this.events[index].isLiked = !this.events[index].isLiked;
-        this.events[index].totalLikes = this.events[index].isLiked
-          ? (this.events[index].totalLikes || 0) + 1
-          : (this.events[index].totalLikes || 0) - 1;
-        this.cdr.detectChanges();
+        // Recharger l'état du like et le nombre total de likes
+        forkJoin({
+          status: this.eventLikeService.getLikeStatus(eventId),
+          total: this.eventLikeService.getTotalLikes(eventId)
+        }).subscribe({
+          next: ({ status, total }) => {
+            this.events[index].isLiked = status === 1;
+            this.events[index].totalLikes = total;
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            console.error('Error refreshing like data:', err);
+            this.snackBar.open('Error refreshing like data', 'Close', { duration: 3000 });
+          }
+        });
       },
       error: (err) => {
-        this.snackBar.open(err.message, 'Close', { duration: 3000 });
+        this.snackBar.open(err.message || 'Error toggling like', 'Close', { duration: 3000 });
       }
     });
   }
@@ -204,7 +218,11 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   loadEvents(): void {
     this.eventService.getEvents().subscribe({
       next: (data) => {
-        this.events = data;
+        this.events = data.map(event => ({
+          ...event,
+          totalLikes: event.likes, // Mapper le champ `likes` à `totalLikes`
+          isLiked: false // Initialiser `isLiked` à false, sera mis à jour par `loadLikeData`
+        }));
         if (this.isAuthenticated && this.currentUserId) {
           this.loadLikeData();
         }

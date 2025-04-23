@@ -3,6 +3,8 @@ package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -29,6 +31,7 @@ public class EventLike implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"eventLikes", "events", "otherRelations"}) // Ignorer les relations problématiques
     private Users user;
 
     @ManyToOne
