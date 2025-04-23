@@ -19,9 +19,9 @@ public class EventLikeController {
         return ResponseEntity.ok(message);
     }
 
-    @GetMapping("/status/{userId}/{eventId}")
-    public ResponseEntity<Integer> getLikeStatus(@PathVariable Long userId, @PathVariable Long eventId) {
-        int status = eventLikeService.getLikeStatus(userId, eventId);
+    @GetMapping("/status/{eventId}")
+    public ResponseEntity<Integer> getLikeStatus( @PathVariable Long eventId) {
+        int status = eventLikeService.getLikeStatus(eventId);
         return ResponseEntity.ok(status);
     }
 

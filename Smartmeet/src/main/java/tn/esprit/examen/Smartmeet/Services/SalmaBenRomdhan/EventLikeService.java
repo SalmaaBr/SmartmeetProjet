@@ -73,16 +73,25 @@ public class EventLikeService {
         }
     }
 
-    public int getLikeStatus(Long userId, Long eventId) {
-        Users user = userRepository.findById(userId)
+    public int getLikeStatus(Long eventId) {
+        // Récupérer l'utilisateur authentifié
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Le nom d'utilisateur (souvent l'email)
+
+        // Récupérer l'entité User à partir du username
+        Users user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Récupérer l'événement
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
+        // Renvoyer le statut du like
         return eventLikeRepository.findByUserAndEvent(user, event)
                 .map(EventLike::getLikes)
                 .orElse(0);
     }
+
 
     public long getTotalLikes(Long eventId) {
         Event event = eventRepository.findById(eventId)

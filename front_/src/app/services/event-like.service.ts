@@ -19,12 +19,13 @@ export class EventLikeService {
     );
   }
 
-  // Get like status for an event (0 = unliked, 1 = liked)
-  getLikeStatus(userId: number, eventId: number): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/status/${userId}/${eventId}`).pipe(
-      catchError(this.handleError)
-    );
-  }
+// Get like status for an event (0 = unliked, 1 = liked)
+getLikeStatus(eventId: number): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/status/${eventId}`).pipe(
+    catchError(this.handleError)
+  );
+}
+
 
   // Get total likes for an event
   getTotalLikes(eventId: number): Observable<number> {

@@ -88,7 +88,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   loadLikeData(): void {
     this.events.forEach((event, index) => {
       // Get like status
-      this.eventLikeService.getLikeStatus(this.currentUserId!, event.id).subscribe({
+      this.eventLikeService.getLikeStatus(event.id).subscribe({
         next: (status) => {
           event.isLiked = status === 1;
           this.cdr.detectChanges();
