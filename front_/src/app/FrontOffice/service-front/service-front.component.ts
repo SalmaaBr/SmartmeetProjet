@@ -86,22 +86,20 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   }
 
   loadLikeData(): void {
-    if (!this.isAuthenticated || !this.currentUserId) return;
-  
     this.events.forEach((event, index) => {
       // Get like status
       this.eventLikeService.getLikeStatus(this.currentUserId!, event.id).subscribe({
         next: (status) => {
-          this.events[index].isLiked = status === 1;
+          event.isLiked = status === 1;
           this.cdr.detectChanges();
         },
         error: (err) => console.error('Error fetching like status:', err)
       });
-  
+
       // Get total likes
       this.eventLikeService.getTotalLikes(event.id).subscribe({
         next: (total) => {
-          this.events[index].totalLikes = total;
+          event.totalLikes = total;
           this.cdr.detectChanges();
         },
         error: (err) => console.error('Error fetching total likes:', err)
@@ -205,12 +203,14 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
 
   loadEvents(): void {
     this.eventService.getEvents().subscribe({
-      next: data => {
+      next: (data) => {
         this.events = data;
-        // Après avoir chargé les événements, charger les données de likes
-        this.loadLikeData();
+        if (this.isAuthenticated && this.currentUserId) {
+          this.loadLikeData();
+        }
+        this.cdr.detectChanges();
       },
-      error: err => console.error('Erreur :', err)
+      error: (err) => console.error('Error:', err)
     });
   }
 
