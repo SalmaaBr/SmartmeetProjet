@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { EventService, Event } from '../../services/event.service';
 import { RecutementService } from '../../services/recutement.service';
 import { UsercalenderService, EventUserCalendar } from '../../services/usercalender.service';
+import { EventLikeService } from '../../services/event-like.service';
 import * as AOS from 'aos';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InteractivePublicationService } from 'src/app/services/interactive-publication.service';
@@ -37,6 +38,8 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   publications: any[] = [];
   myEvents: Event[] = [];
   mapRefs: L.Map[] = [];
+  isAuthenticated: boolean = false; // Track authentication status
+  currentUserId: number | null = null; // Store current user ID
 
   TypeIPublicationStatus = TypeIPublicationStatus;
   TypeIPublicationVisibility = TypeIPublicationVisibility;
@@ -61,10 +64,12 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private mapRoutingService: MapRoutingService,
-    private usercalenderService: UsercalenderService
+    private usercalenderService: UsercalenderService,
+    private eventLikeService: EventLikeService
   ) {}
 
   ngOnInit(): void {
+    this.checkAuthentication();
     this.loadEvents();
     this.loadRecruitments();
     this.loadPublications();
@@ -72,6 +77,61 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
     this.loadUnifiedEventsForCalendar();
     setTimeout(() => AOS.init(), 0);
   }
+
+  checkAuthentication(): void {
+    // TODO: Implement actual authentication check
+    // This is a placeholder; replace with your auth service
+    this.isAuthenticated = true; // Assume user is authenticated
+    this.currentUserId = 1; // Replace with actual user ID from auth service
+  }
+
+  loadLikeData(): void {
+    if (!this.isAuthenticated || !this.currentUserId) return;
+  
+    this.events.forEach((event, index) => {
+      // Get like status
+      this.eventLikeService.getLikeStatus(this.currentUserId!, event.id).subscribe({
+        next: (status) => {
+          this.events[index].isLiked = status === 1;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error fetching like status:', err)
+      });
+  
+      // Get total likes
+      this.eventLikeService.getTotalLikes(event.id).subscribe({
+        next: (total) => {
+          this.events[index].totalLikes = total;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error fetching total likes:', err)
+      });
+    });
+  }
+
+
+  toggleLike(eventId: number, index: number): void {
+    if (!this.isAuthenticated || !this.currentUserId) {
+      this.snackBar.open('Please log in to like events', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.eventLikeService.toggleLike(eventId).subscribe({
+      next: (message) => {
+        this.snackBar.open(message, 'Close', { duration: 3000 });
+        // Update like status and total likes
+        this.events[index].isLiked = !this.events[index].isLiked;
+        this.events[index].totalLikes = this.events[index].isLiked
+          ? (this.events[index].totalLikes || 0) + 1
+          : (this.events[index].totalLikes || 0) - 1;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.snackBar.open(err.message, 'Close', { duration: 3000 });
+      }
+    });
+  }
+
 
   ngAfterViewInit(): void {
     this.mapContainers.changes.subscribe(() => {
@@ -145,7 +205,11 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
 
   loadEvents(): void {
     this.eventService.getEvents().subscribe({
-      next: data => this.events = data,
+      next: data => {
+        this.events = data;
+        // Après avoir chargé les événements, charger les données de likes
+        this.loadLikeData();
+      },
       error: err => console.error('Erreur :', err)
     });
   }
@@ -158,7 +222,9 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         console.error('Erreur:', err);
       }
     });
-  }
+  }  
+
+
 
   loadPublications(): void {
     this.publicationService.getAllPublications().subscribe({

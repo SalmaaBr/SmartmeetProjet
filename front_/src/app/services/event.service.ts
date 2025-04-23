@@ -19,7 +19,8 @@ export interface Event {
   maxParticipants: number;
   filePath?: string;  // Ajout de la propriété filePath
   imageUrl?: string;  // Ajout de la propriété imageUrl
-
+  isLiked?: boolean; // Add isLiked
+  totalLikes?: number;
 }
 
 @Injectable({
