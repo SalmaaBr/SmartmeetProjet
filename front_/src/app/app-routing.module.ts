@@ -60,7 +60,8 @@ const routes: Routes = [
       { path: 'edit-event/:id', component: EditEventComponent },
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
-      { path: 'notif', component: NotificationsComponent }
+      { path: 'notif', component: NotificationsComponent },
+      { path: 'profile/:id', component: ViewProfileComponent } // Route for viewing any user profile
     ]
   },
   {

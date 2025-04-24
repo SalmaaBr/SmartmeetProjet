@@ -3,12 +3,14 @@ package tn.esprit.examen.Smartmeet.Services;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.repositories.Users.BlacklistedTokenRepository;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -92,4 +94,18 @@ public class UserServiceImpl implements UserService {
     public Optional<Users> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public List<Users> recommendUsersWithCommonInterests(Users currentUser) {
+        Set<TypeTheme> currentUserInterests = currentUser.getInterests();
+        if (currentUserInterests.isEmpty()) {
+            return List.of(); // Aucun intérêt → aucune recommandation
+        }
+
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUserID().equals(currentUser.getUserID())) // éviter l'auto-reco
+                .filter(user -> user.getInterests().stream().anyMatch(currentUserInterests::contains))
+                .toList();
+    }
+
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.examen.Smartmeet.Services.IUsersServices;
 import tn.esprit.examen.Smartmeet.Services.UserService;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
+
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -82,4 +84,15 @@ public class UserController {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return ResponseEntity.ok(user.getInterests());
     }
+
+    @GetMapping("/me/recommendations")
+    public ResponseEntity<List<Users>> getUserRecommendations(Authentication authentication) {
+        String username = authentication.getName();
+        Users currentUser = userService.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        List<Users> recommendedUsers = userService.recommendUsersWithCommonInterests(currentUser);
+        return ResponseEntity.ok(recommendedUsers);
+    }
+
 }

@@ -51,4 +51,14 @@ export class UserService {
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`);
   }
+
+  getCurrentUserInterests(): Observable<Set<TypeTheme>> {
+    return this.http.get<Set<TypeTheme>>(`${this.apiUrl}/me/interests`);
+  }
+
+  getRecommendedUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/me/recommendations`);
+  }
+  
+  
 }

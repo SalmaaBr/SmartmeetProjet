@@ -1,5 +1,3 @@
-declare var bootstrap: any; // Ensure bootstrap is available
-
 import { Component, OnInit } from '@angular/core';
 import { User, TypeUserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -11,21 +9,30 @@ import { UserService } from '../../services/user.service';
 })
 export class UserComponent implements OnInit {
   users: User[] = [];
+  recommendedUsers: User[] = [];
   selectedUser: User = {} as User;
   isEditing = false;
   roles: TypeUserRole[] = [];
-  userToDelete: number | null = null; // Store ID of user to delete
+  userToDelete: number | null = null;
+  showDeleteModal: boolean = false; // Boolean to toggle delete modal
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadRecommendedUsers();
     this.roles = this.userService.getRoles();
   }
 
   loadUsers(): void {
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+    });
+  }
+
+  loadRecommendedUsers(): void {
+    this.userService.getRecommendedUsers().subscribe(recommendedUsers => {
+      this.recommendedUsers = recommendedUsers;
     });
   }
 
@@ -40,7 +47,6 @@ export class UserComponent implements OnInit {
 
   editUser(user: User): void {
     this.isEditing = true;
-    // Create a copy to avoid direct mutation
     this.selectedUser = { ...user };
   }
 
@@ -52,18 +58,12 @@ export class UserComponent implements OnInit {
       this.userService.createUser(this.selectedUser)
         .subscribe(() => this.loadUsers());
     }
-    // Reset the form using the initializer
     this.initNewUser();
   }
 
   confirmDelete(userId: number): void {
     this.userToDelete = userId;
-    // Programmatically show the delete modal
-    const modalElement = document.getElementById('deleteModal');
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
+    this.showDeleteModal = true; // Show the delete modal
   }
 
   deleteConfirmed(): void {
@@ -72,17 +72,7 @@ export class UserComponent implements OnInit {
         .subscribe(() => {
           this.loadUsers();
           this.userToDelete = null;
-          // Hide the modal programmatically
-          const modalElement = document.getElementById('deleteModal');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            if (modalInstance) {
-              modalInstance.hide();
-            } else {
-              const modal = new bootstrap.Modal(modalElement);
-              modal.hide();
-            }
-          }
+          this.showDeleteModal = false; // Hide the delete modal
         });
     }
   }
@@ -99,17 +89,10 @@ export class UserComponent implements OnInit {
     }
   }
 
-  // Utility method to close modals by ID
   closeModal(modalId: string): void {
-    const modalElement = document.getElementById(modalId);
-    if (modalElement) {
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      } else {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.hide();
-      }
+    if (modalId === 'deleteModal') {
+      this.showDeleteModal = false; // Hide the delete modal
+      this.userToDelete = null;
     }
   }
 }
