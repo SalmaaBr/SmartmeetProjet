@@ -5,6 +5,7 @@ package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -86,7 +87,7 @@ public class Event implements Serializable {
     private MonitoringRecruitment monitorungrecutement;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference(value = "event-eventLike") // Match with EventLike's back reference
     private Set<EventLike> eventLikes = new HashSet<>();
 
 }

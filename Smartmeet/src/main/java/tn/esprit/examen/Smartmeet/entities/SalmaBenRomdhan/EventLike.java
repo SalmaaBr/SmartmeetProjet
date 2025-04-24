@@ -31,11 +31,13 @@ public class EventLike implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"eventLikes", "events", "otherRelations"}) // Ignorer les relations problématiques
+    @JsonBackReference(value = "user-eventLike") // Add back reference for Users
+    @JsonIgnoreProperties({"eventLikes", "events", "otherRelations"})
     private Users user;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
+    @JsonBackReference(value = "event-eventLike") // Add back reference for Event
     private Event event;
 
     private int likes; // 0 for no like, 1 for liked

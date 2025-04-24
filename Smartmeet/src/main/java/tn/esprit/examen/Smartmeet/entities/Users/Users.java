@@ -95,7 +95,7 @@ public class Users implements Serializable {
     private List<Sponsor> sponsorsGeres;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-eventLike") // Match with EventLike's back reference
     private Set<EventLike> eventLikes = new HashSet<>();
 
 }
