@@ -12,6 +12,4 @@ public interface IMonitoringRecruitmentServices {
     MonitoringRecruitment getMonitoringRecruitmentById(Long id);
     List<MonitoringRecruitment> getAllMonitoringRecruitments();
     void AddAndAssignMonitoringRecruitmentToUser(Long userID, MonitoringRecruitment monitoringRecruitment);
-    void AddAndAssignRecruitmentToEvent(String title, MonitoringRecruitment monitoringRecruitment);
-
 }

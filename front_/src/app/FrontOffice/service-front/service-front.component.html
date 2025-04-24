@@ -1,79 +1,3 @@
-<h2 class="section-title">🎉 Upcoming Events</h2>
-
-<div *ngIf="events.length === 0" class="no-events">
-  <div class="no-events-icon">📅</div>
-  <p>No events available at the moment.</p>
-  <p class="subtext">Check back later for exciting events!</p>
-</div>
-
-<!-- Event List -->
-<div class="event-list">
-  <div *ngFor="let event of events; let i = index" class="event-card">
-    <div class="event-image-container">
-      <img [src]="event.imageUrl || 'assets/default-event.jpg'" 
-           (error)="event.imageUrl = 'assets/default-event.jpg'"
-           alt="Event Image" 
-           class="event-image">
-    </div>
-    
-    <div class="event-details">
-      <h3 class="event-title">{{ event.title }}</h3>
-      <div class="event-meta">
-        <span class="event-theme">⚙️{{ event.typeevent }}</span>
-        <span class="event-theme">🎭 {{ event.typetheme }}</span>
-        <span class="event-location">📍 {{ event.location }}</span>
-        <!-- Afficher le nombre de places restantes -->
-        <div class="event-location" *ngIf="event.maxParticipants > 0">
-          {{ event.maxParticipants }} place(s) restante(s)
-        </div>
-        <div class="complet" *ngIf="event.maxParticipants <= 0">
-          Événement complet
-        </div>
-      </div>
-      
-      <div class="event-dates">
-        <div class="date-item">
-          <span class="date-icon">🕒</span>
-          <span>{{ formatShortDate(event.startTime) }}</span>
-        </div>
-        <div class="date-item">
-          <span class="date-icon">⏳</span>
-          <span>{{ formatShortDate(event.endTime) }}</span>
-        </div>
-      </div>
-      
-      <button class="participate-button" (click)="participate(event.id, i)" [disabled]="event.maxParticipants <= 0">
-        <span *ngIf="event.maxParticipants > 0">Participate</span>
-        <span *ngIf="event.maxParticipants <= 0">Complet</span>
-        <svg *ngIf="event.maxParticipants > 0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-<h2>📢 Available Recruitments</h2>
-
-<div *ngIf="recrutements.length === 0" class="no-recruitments">
-  No recruitments available at the moment.
-</div>
-
-<!-- Recruitment List -->
-<div class="recruitment-list">
-  <div *ngFor="let recrutement of recrutements" class="recruitment-card">
-    <div class="recruitment-header">
-      <h3>{{ recrutement.title }}</h3>
-    </div>
-    <div class="recruitment-body">
-      <p><strong>Description:</strong> {{ recrutement.description }}</p>
-    </div>
-    <!-- Apply Button -->
-    <button class="participate-button">Apply</button>
-  </div>
-</div>
-
-
 <div class="container position-relative py-5">
   <div class="row justify-content-center">
     <div class="col-12 text-center mb-5">
@@ -93,14 +17,24 @@
               <label for="title" class="form-label fw-medium">Titre</label>
               <input type="text" id="title" class="form-control form-control-lg border-2"
                      [(ngModel)]="newPublication.title" name="title" required
-                     placeholder="Entrez un titre percutant">
+                     placeholder="Entrez un titre percutant"
+                     [class.is-invalid]="moderationErrors.title !== null"
+                     (blur)="checkContentModeration(newPublication.title, 'title')">
+              <div *ngIf="moderationErrors.title" class="invalid-feedback">
+                {{ moderationErrors.title }}
+              </div>
             </div>
 
             <div class="mb-4">
               <label for="description" class="form-label fw-medium">Description</label>
               <textarea id="description" class="form-control border-2" rows="4"
                         [(ngModel)]="newPublication.description" name="description" required
-                        placeholder="Décrivez votre publication en détail"></textarea>
+                        placeholder="Décrivez votre publication en détail"
+                        [class.is-invalid]="moderationErrors.description !== null"
+                        (blur)="checkContentModeration(newPublication.description, 'description')"></textarea>
+              <div *ngIf="moderationErrors.description" class="invalid-feedback">
+                {{ moderationErrors.description }}
+              </div>
             </div>
 
             <div class="row g-3 mb-4">
@@ -108,29 +42,37 @@
                 <label for="publicationStatus" class="form-label fw-medium">Statut</label>
                 <select id="publicationStatus" class="form-select border-2 py-2"
                         [(ngModel)]="newPublication.publicationStatus" name="publicationStatus" required>
-                  <option [value]="TypeIPublicationStatus.DRAFT">Brouillon</option>
-                  <option [value]="TypeIPublicationStatus.PUBLISHED">Publié</option>
-                  <option [value]="TypeIPublicationStatus.MODERATED">Modéré</option>
-                  <option [value]="TypeIPublicationStatus.ARCHIVED">Archivé</option>
+                  <option *ngFor="let status of TypeIPublicationStatus | keyvalue" [value]="status.value">
+                    {{ status.value }}
+                  </option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="publicationVisibility" class="form-label fw-medium">Visibilité</label>
                 <select id="publicationVisibility" class="form-select border-2 py-2"
                         [(ngModel)]="newPublication.publicationVisibility" name="publicationVisibility" required>
-                  <option [value]="TypeIPublicationVisibility.PUBLIC">Public</option>
-                  <option [value]="TypeIPublicationVisibility.PRIVATE">Privé</option>
-                  <option [value]="TypeIPublicationVisibility.RESTRICTED">Restreint</option>
+                  <option *ngFor="let visibility of TypeIPublicationVisibility | keyvalue" [value]="visibility.value">
+                    {{ visibility.value }}
+                  </option>
                 </select>
               </div>
+            </div>
+
+            <!-- Moderation warning -->
+            <div *ngIf="shouldFlagContent()" class="alert alert-warning mb-3">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <strong>Warning:</strong> Your content may violate our community guidelines.
+              It will be posted but flagged for review by our moderation team.
             </div>
 
             <div class="d-flex gap-2 justify-content-end border-top pt-4">
               <button *ngIf="isEditing" type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="cancelEdit()">
                 <i class="bi bi-x-circle me-2"></i>Annuler
               </button>
-              <button type="submit" class="btn btn-primary btn-lg px-4">
-                <i class="bi" [class.bi-save]="isEditing" [class.bi-plus-circle]="!isEditing"></i>
+              <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="loading.submitting || isCheckingModeration">
+                <span *ngIf="loading.submitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <span *ngIf="isCheckingModeration" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!loading.submitting" class="bi" [class.bi-save]="isEditing" [class.bi-plus-circle]="!isEditing"></i>
                 {{ isEditing ? 'Mettre à jour' : 'Créer Publication' }}
               </button>
             </div>
@@ -140,10 +82,31 @@
 
       <!-- Liste des publications -->
       <h3 class="h4 mb-4 text-center text-muted fw-normal">Publications Existantes</h3>
+
+      <!-- Error Message Display -->
+      <div *ngIf="errorMessage" class="alert alert-danger mb-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+      </div>
+
+      <!-- Loading indicator for publications -->
+      <div *ngIf="loading.publications && publications.length === 0" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Loading publications...</p>
+      </div>
+
+      <!-- No publications message -->
+      <div *ngIf="!loading.publications && publications.length === 0" class="text-center py-5 bg-light rounded">
+        <i class="bi bi-journal-text display-4 text-muted"></i>
+        <p class="mt-3 mb-0 text-muted">No publications found. Create your first publication above!</p>
+      </div>
+
       <div class="row g-4">
         <div *ngFor="let pub of publications" class="col-12">
           <div class="card shadow-sm h-100 hover-shadow-lg transition-all border-0">
             <div class="card-body">
+              <!-- Publication header -->
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="h5 card-title text-primary mb-0 fw-semibold">{{ pub.title }}</h3>
                 <span class="badge rounded-pill py-2 px-3"
@@ -161,25 +124,154 @@
                   {{ pub.publicationStatus | titlecase }}
                 </span>
               </div>
+
+              <!-- Publication content -->
               <p class="card-text text-muted mb-4">{{ pub.description }}</p>
 
+              <!-- Publication actions -->
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-2">
                   <span class="badge bg-info-subtle text-info-emphasis py-2">
                     <i class="bi bi-eye me-2"></i>{{ pub.publicationVisibility | titlecase }}
                   </span>
-                  <span class="badge bg-primary-subtle text-primary-emphasis py-2">
-                    <i class="bi bi-chat-dots me-2"></i>{{ pub.interactionCount }} interactions
-                  </span>
+
+                  <!-- Like button with loading state -->
+                  <button
+                    class="btn btn-sm position-relative"
+                    [class.btn-primary]="pub.userHasLiked"
+                    [class.btn-outline-primary]="!pub.userHasLiked"
+                    [disabled]="loading.likes[pub.ipublicationId]"
+                    (click)="toggleLike(pub)"
+                  >
+                    <span *ngIf="loading.likes[pub.ipublicationId]" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                    <i *ngIf="!loading.likes[pub.ipublicationId]" class="bi" [class.bi-heart-fill]="pub.userHasLiked" [class.bi-heart]="!pub.userHasLiked"></i>
+                    <span class="ms-1">{{ pub.likeCount }}</span>
+                  </button>
+
+                  <!-- Comment button with loading state -->
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                    [disabled]="loading.comments[pub.ipublicationId]"
+                    (click)="toggleComments(pub)"
+                  >
+                    <span *ngIf="loading.comments[pub.ipublicationId]" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                    <i *ngIf="!loading.comments[pub.ipublicationId]" class="bi bi-chat-dots me-1"></i>
+                    <span>{{ pub.comments.length }}</span>
+                  </button>
                 </div>
+
+                <!-- Edit/Delete actions -->
                 <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="editPublication(pub)">
+                  <button
+                    class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                    [disabled]="isPublicationLoading(pub.ipublicationId)"
+                    (click)="editPublication(pub)"
+                  >
                     <i class="bi bi-pencil me-2"></i>Modifier
                   </button>
-                  <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="deletePublication(pub.iPublicationId!)">
-                    <i class="bi bi-trash me-2"></i>Supprimer {{pub.iPublicationId}}
+                  <button
+                    class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                    [disabled]="isPublicationLoading(pub.ipublicationId)"
+                    (click)="deletePublication(pub.ipublicationId!)"
+                  >
+                    <i class="bi bi-trash me-2"></i>Supprimer
                   </button>
                 </div>
+              </div>
+
+              <!-- Comments section -->
+              <div *ngIf="pub.showComments" class="mt-3 pt-3 border-top">
+                <h6 class="mb-3 fw-semibold">Comments ({{ pub.commentCount }})</h6>
+
+                <!-- Comment loading indicator -->
+                <div *ngIf="loading.comments[pub.ipublicationId] && pub.comments.length === 0" class="text-center py-3">
+                  <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                  <p class="mt-2 mb-0 small text-muted">Loading comments...</p>
+                </div>
+
+                <!-- Comment list -->
+                <div class="comments-list">
+                  <div *ngFor="let comment of pub.comments" class="comment mb-3 p-3 bg-light rounded">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <div class="fw-semibold">{{ comment.user!.username || 'Anonymous' }}</div>
+                        <div class="text-muted small">{{ formatDate(comment.createdAt) }}</div>
+                      </div>
+                      <!-- Comment actions -->
+                      <div class="comment-actions" *ngIf="comment.userId === currentUserId">
+                        <button class="btn btn-sm btn-link text-secondary" *ngIf="!comment.isEditing" (click)="startEditComment(comment)">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-link text-danger" *ngIf="!comment.isEditing" (click)="deleteComment(pub, comment)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Comment content (normal view) -->
+                    <div *ngIf="!comment.isEditing" class="mt-2">
+                      {{ comment.content }}
+                      <div *ngIf="comment.updatedAt" class="text-muted small fst-italic mt-1">
+                        Edited on {{ formatDate(comment.updatedAt) }}
+                      </div>
+                    </div>
+
+                    <!-- Comment edit form -->
+                    <div *ngIf="comment.isEditing" class="mt-2">
+                      <form [formGroup]="editCommentForm">
+                        <div class="form-group">
+                          <textarea
+                            class="form-control form-control-sm mb-2"
+                            formControlName="content"
+                            rows="2"
+                          ></textarea>
+                          <div class="invalid-feedback" *ngIf="editCommentForm.get('content')?.invalid && editCommentForm.get('content')?.touched">
+                            Comment cannot be empty
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-2">
+                          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancelEditComment(comment)">
+                            Cancel
+                          </button>
+                          <button type="button" class="btn btn-sm btn-primary" (click)="saveComment(comment)" [disabled]="editCommentForm.invalid || loading.comments[pub.ipublicationId]">
+                            <span *ngIf="loading.comments[pub.ipublicationId]" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                            Save
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- No comments message -->
+                <div *ngIf="!loading.comments[pub.ipublicationId] && pub.comments && pub.comments.length === 0" class="text-center py-3 text-muted">
+                  <i class="bi bi-chat-dots me-2"></i> No comments yet. Be the first to comment!
+                </div>
+
+                <!-- Add comment form -->
+                <form [formGroup]="commentForm" (ngSubmit)="addComment(pub)" class="mt-3">
+                  <div class="form-group">
+                    <textarea
+                      class="form-control"
+                      formControlName="content"
+                      rows="2"
+                      placeholder="Write a comment..."
+                      [class.is-invalid]="commentForm.get('content')?.invalid && commentForm.get('content')?.touched || errorMessage"
+                    ></textarea>
+                    <div class="invalid-feedback" *ngIf="commentForm.get('content')?.invalid && commentForm.get('content')?.touched">
+                      Comment cannot be empty
+                    </div>
+                    <div class="invalid-feedback" *ngIf="errorMessage">
+                      {{ errorMessage }}
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end mt-2">
+                    <button type="submit" class="btn btn-primary" [disabled]="commentForm.invalid || loading.comments[pub.ipublicationId] || isCheckingModeration">
+                      <span *ngIf="loading.comments[pub.ipublicationId] || isCheckingModeration" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                      Post Comment
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -192,7 +284,51 @@
 
 
 
+<div class="event-container">
+  <h2>🎉 Upcoming Events</h2>
 
-<!-- Calendar for Events I'm Participating In And Calendar for User Calendar Events -->
-<h2 class="section-title mt-5">📆 My Events and Calendar</h2>
-<full-calendar [options]="unifiedCalendarOptions" class="shadow-sm rounded"></full-calendar>
+  <div *ngIf="events.length === 0" class="no-events">
+    No events available at the moment.
+  </div>
+
+  <!-- Event List -->
+  <div class="event-list">
+    <div *ngFor="let event of events" class="event-card">
+      <div class="event-header">
+        <h3>{{ event.title }}</h3>
+        <span class="event-type">{{ event.typeevent }}</span>
+      </div>
+      <p class="event-theme">🎭 <strong>Theme:</strong> {{ event.typetheme }}</p>
+      <p class="event-description">📖 {{ event.description }}</p>
+      <p>📍 <strong>Location:</strong> {{ event.location }}</p>
+      <p>🌤️ <strong>Expected Weather:</strong> {{ event.typeweather }}</p>
+      <p>🕒 <strong>Start:</strong> {{ event.startTime }}</p>
+      <p>⏳ <strong>End:</strong> {{ event.endTime }}</p>
+      <p>👥 <strong>Max Participants:</strong> {{ event.maxParticipants }}</p>
+      <!-- Participate Button -->
+      <button class="participate-button">Participate</button>
+    </div>
+  </div>
+</div>
+
+<div class="recruitment-container">
+  <h2>📢 Available Recruitments</h2>
+
+  <div *ngIf="recrutements.length === 0" class="no-recruitments">
+    No recruitments available at the moment.
+  </div>
+
+  <!-- Recruitment List -->
+  <div class="recruitment-list">
+    <div *ngFor="let recrutement of recrutements" class="recruitment-card">
+      <div class="recruitment-header">
+        <h3>{{ recrutement.title }}</h3>
+      </div>
+      <div class="recruitment-body">
+        <p><strong>Description:</strong> {{ recrutement.description }}</p>
+      </div>
+      <!-- Apply Button -->
+      <button class="participate-button">Apply</button>
+    </div>
+  </div>
+</div>

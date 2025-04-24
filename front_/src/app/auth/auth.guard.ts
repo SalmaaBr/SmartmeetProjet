@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.authService.getToken() && localStorage.getItem("roles") === "ADMIN") {
+    if (this.authService.getToken() && localStorage.getItem("roles")?.includes('ADMIN')) {
       return true;
     } else {
       this.router.navigate(['/login']);

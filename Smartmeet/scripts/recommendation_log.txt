@@ -1,0 +1,91 @@
+2025-04-23 19:34:28,297 - INFO - Loading document and likes data.
+2025-04-23 19:34:28,304 - INFO - Loading precomputed embeddings.
+2025-04-23 19:35:10,459 - INFO - Loading document and likes data.
+2025-04-23 19:35:10,462 - INFO - Loading precomputed embeddings.
+2025-04-23 21:40:54,010 - INFO - Loading document and likes data.
+2025-04-23 21:40:54,020 - INFO - Loading precomputed embeddings.
+2025-04-23 21:40:54,021 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 21:40:54,021 - INFO - Generating recommendations for user ID: 1
+2025-04-23 21:43:27,048 - INFO - Loading document and likes data.
+2025-04-23 21:43:27,054 - INFO - Loading precomputed embeddings.
+2025-04-23 21:43:27,054 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 21:43:27,054 - INFO - Generating recommendations for user ID: 1
+2025-04-23 21:48:31,083 - INFO - Loading document and likes data.
+2025-04-23 21:48:31,089 - INFO - Loading precomputed embeddings.
+2025-04-23 21:48:31,089 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 21:48:31,089 - INFO - Generating recommendations for user ID: 1
+2025-04-23 21:49:49,562 - INFO - Loading document and likes data.
+2025-04-23 21:49:49,565 - INFO - Loading precomputed embeddings.
+2025-04-23 21:49:49,567 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 21:49:49,567 - INFO - Generating recommendations for user ID: 1
+2025-04-23 23:02:08,563 - INFO - Loading document and likes data.
+2025-04-23 23:02:08,598 - INFO - Loading precomputed embeddings.
+2025-04-23 23:02:08,599 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 23:02:08,599 - INFO - Generating recommendations for user ID: 1
+2025-04-23 23:02:08,603 - WARNING - User has not liked any documents.
+2025-04-23 23:57:51,601 - INFO - Loading document and likes data.
+2025-04-23 23:57:51,666 - INFO - Loading precomputed embeddings.
+2025-04-23 23:57:51,667 - INFO - Loaded embeddings for 1 documents.
+2025-04-23 23:57:51,668 - INFO - Generating recommendations for user ID: 1
+2025-04-23 23:57:51,668 - INFO - Computing user profile by averaging embeddings of liked documents.
+2025-04-23 23:57:51,669 - INFO - Computing cosine similarity between user profile and all documents.
+2025-04-24 13:12:20,026 - INFO - Loading document and likes data.
+2025-04-24 13:12:20,050 - INFO - Loading precomputed embeddings.
+2025-04-24 13:12:20,058 - INFO - Loaded embeddings for 1 documents.
+2025-04-24 18:54:29,750 - INFO - Loading document and likes data.
+2025-04-24 18:54:29,783 - INFO - Loading precomputed embeddings.
+2025-04-24 18:54:29,793 - INFO - Loaded embeddings for 1 documents.
+2025-04-24 18:55:31,226 - INFO - Loading document and likes data.
+2025-04-24 18:55:31,232 - INFO - Loading precomputed embeddings.
+2025-04-24 18:55:31,233 - INFO - Loaded embeddings for 1 documents.
+2025-04-24 18:55:31,233 - INFO - Generating recommendations for user ID: 1
+2025-04-24 18:55:31,237 - INFO - Computing user profile by averaging embeddings of liked documents.
+2025-04-24 18:55:31,237 - INFO - Computing cosine similarity between user profile and all documents.
+2025-04-24 18:59:40,225 - INFO - Loading document and likes data.
+2025-04-24 18:59:40,227 - INFO - Loading precomputed embeddings.
+2025-04-24 18:59:40,233 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:01:23,483 - INFO - Loading document and likes data.
+2025-04-24 19:01:23,486 - INFO - Loading precomputed embeddings.
+2025-04-24 19:01:23,487 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:01:23,489 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:01:23,489 - INFO - Generating recommendations for user ID: 1
+2025-04-24 19:01:23,491 - INFO - Computing user profile by averaging embeddings of liked documents.
+2025-04-24 19:01:23,491 - INFO - Computing cosine similarity between user profile and all documents.
+2025-04-24 19:01:23,495 - INFO - Selecting top 3 recommendations.
+2025-04-24 19:01:23,498 - INFO - Recommendations generated successfully.
+2025-04-24 19:03:18,809 - INFO - Loading document and likes data.
+2025-04-24 19:03:18,812 - INFO - Loading precomputed embeddings.
+2025-04-24 19:03:18,814 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:03:18,814 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:03:18,814 - INFO - Generating recommendations for user ID: 2
+2025-04-24 19:03:18,815 - WARNING - User has not liked any documents. Recommending popular documents.
+2025-04-24 19:08:43,004 - INFO - Loading document and likes data.
+2025-04-24 19:08:43,012 - INFO - Loading precomputed embeddings.
+2025-04-24 19:08:43,025 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:08:43,027 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:08:43,028 - INFO - Generating recommendations for user ID: 2
+2025-04-24 19:08:43,029 - WARNING - User has not liked any documents. Recommending popular documents.
+2025-04-24 19:09:48,578 - INFO - Loading document and likes data.
+2025-04-24 19:09:48,582 - INFO - Loading precomputed embeddings.
+2025-04-24 19:09:48,582 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:09:48,583 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:09:48,583 - INFO - Generating recommendations for user ID: 2
+2025-04-24 19:09:48,583 - WARNING - User has not liked any documents. Recommending popular documents.
+2025-04-24 19:14:14,871 - INFO - Loading document and likes data.
+2025-04-24 19:14:14,871 - INFO - Loading precomputed embeddings.
+2025-04-24 19:14:14,871 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:14:14,871 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:14:14,876 - INFO - Generating recommendations for user ID: 1
+2025-04-24 19:14:14,876 - INFO - Computing user profile by averaging embeddings of liked documents.
+2025-04-24 19:14:14,876 - INFO - Computing cosine similarity between user profile and all documents.
+2025-04-24 19:14:14,876 - INFO - Selecting top 3 recommendations.
+2025-04-24 19:14:14,876 - INFO - Recommendations generated successfully.
+2025-04-24 19:24:39,606 - INFO - Loading document and likes data.
+2025-04-24 19:24:39,614 - INFO - Loading precomputed embeddings.
+2025-04-24 19:24:39,626 - INFO - Loaded embeddings for 4 documents.
+2025-04-24 19:24:39,629 - INFO - Aligned document embeddings shape: (4, 768)
+2025-04-24 19:24:39,629 - INFO - Generating recommendations for user ID: 3
+2025-04-24 19:24:39,631 - INFO - Computing user profile by averaging embeddings of liked documents.
+2025-04-24 19:24:39,631 - INFO - Computing cosine similarity between user profile and all documents.
+2025-04-24 19:24:39,635 - INFO - Selecting top 3 recommendations.
+2025-04-24 19:24:39,637 - INFO - Recommendations generated successfully.

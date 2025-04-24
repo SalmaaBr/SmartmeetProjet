@@ -1,5 +1,8 @@
+import { PublicationComment } from './publication-comment.model';
+import { PublicationLike } from './publication-like.model';
+
 export class InteractivePublication {
-  iPublicationId!: number;
+  ipublicationId!: number;
   title!: string;
   description!: string;
   publicationStatus!: string;
@@ -10,4 +13,12 @@ export class InteractivePublication {
   scheduledPublishTime!: string;
   recommendationScore!: number;
   userId!: number;
+
+  // New fields for likes and comments
+  likeCount: number = 0;
+  commentCount: number = 0;
+  userHasLiked: boolean = false;
+  comments: PublicationComment[] = [];
+  likes: PublicationLike[] = [];
+  showComments: boolean = false;
 }

@@ -10,149 +10,80 @@
         <div class="mb-3">
           <label class="form-label">Nom de l'événement :</label>
           <input type="text" class="form-control border-primary" id="title" formControlName="title">
-          <div *ngIf="isFormSubmitted && form.controls['title'].invalid" class="text-danger">
-            <div *ngIf="form.controls['title'].errors?.['required']">Le nom est requis.</div>
-          </div>
+          <span *ngIf="form.controls['title'].errors?.['required']" class="text-danger">Le nom est requis.</span>
         </div>
 
         <!-- Description -->
         <div class="mb-3">
           <label class="form-label">Description :</label>
           <textarea class="form-control border-primary" id="description" formControlName="description"></textarea>
-          <div *ngIf="isFormSubmitted && form.controls['description'].invalid" class="text-danger">
-            <div *ngIf="form.controls['description'].errors?.['required']">La description est requise.</div>
-          </div>
+          <span *ngIf="form.controls['description'].errors?.['required']" class="text-danger">La description est requise.</span>
         </div>
 
-
-        <!-- Localisation avec OpenStreetMap -->
+        <!-- Localisation -->
         <div class="mb-3">
           <label class="form-label">Localisation :</label>
-          <div class="input-group">
-            <input type="text" class="form-control border-primary" id="location" 
-                   formControlName="location" (input)="searchLocation()">
-            <button class="btn btn-outline-primary" type="button" (click)="searchLocation()">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-          
-          <!-- Search results dropdown -->
-          <div class="position-relative">
-            <div class="list-group position-absolute w-100 z-index-1" *ngIf="showSearchResults && searchResults.length">
-              <a href="#" class="list-group-item list-group-item-action" 
-                 *ngFor="let result of searchResults" 
-                 (click)="selectSearchResult(result); $event.preventDefault()">
-                {{ result.display_name }}
-              </a>
-            </div>
-          </div>
-          
-          <div *ngIf="isFormSubmitted && form.controls['location'].invalid" class="text-danger">
-            <div *ngIf="form.controls['location'].errors?.['required']">La localisation est requise.</div>
-          </div>
+          <input type="text" class="form-control border-primary" id="location" formControlName="location">
+          <span *ngIf="form.controls['location'].errors?.['required']" class="text-danger">La localisation est requise.</span>
         </div>
 
-        
-
-        <!-- Carte OpenStreetMap -->
-        <div class="mb-3">
-          <div id="map" style="height: 300px; width: 100%;"></div>
-          <small class="text-muted">Cliquez sur la carte pour sélectionner un emplacement</small>
-        </div>
-
-        <!-- Hidden latitude/longitude fields -->
-        <input type="hidden" formControlName="latitude">
-        <input type="hidden" formControlName="longitude">
-
-        <!-- Types dans la même ligne -->
         <div class="row">
           <!-- Type d'événement -->
           <div class="col-md-4 mb-3">
             <label class="form-label">Type d'événement :</label>
-            <select class="form-control border-primary" formControlName="typeevent">
+            <select class="form-select border-primary" id="typeevent" formControlName="typeevent">
               <option *ngFor="let type of typeevent" [value]="type">{{ type }}</option>
             </select>
-            <div *ngIf="isFormSubmitted && form.controls['typeevent'].invalid" class="text-danger">
-              <div *ngIf="form.controls['typeevent'].errors?.['required']">Le type d'événement est requis.</div>
-            </div>
           </div>
 
-          <!-- Type de thème -->
+          <!-- Thème -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Type de thème :</label>
-            <select class="form-control border-primary" formControlName="typetheme">
+            <label class="form-label">Thème :</label>
+            <select class="form-select border-primary" id="typetheme" formControlName="typetheme">
               <option *ngFor="let theme of typetheme" [value]="theme">{{ theme }}</option>
             </select>
-            <div *ngIf="isFormSubmitted && form.controls['typetheme'].invalid" class="text-danger">
-              <div *ngIf="form.controls['typetheme'].errors?.['required']">Le type de thème est requis.</div>
-            </div>
           </div>
 
-          <!-- Type de météo -->
+          <!-- Météo -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Type de météo :</label>
-            <select class="form-control border-primary" formControlName="typeweather">
+            <label class="form-label">Météo :</label>
+            <select class="form-select border-primary" id="typeweather" formControlName="typeweather">
               <option *ngFor="let weather of typeweather" [value]="weather">{{ weather }}</option>
             </select>
-            <div *ngIf="isFormSubmitted && form.controls['typeweather'].invalid" class="text-danger">
-              <div *ngIf="form.controls['typeweather'].errors?.['required']">Le type de météo est requis.</div>
-            </div>
           </div>
         </div>
 
-        <!-- Dates dans la même ligne -->
         <div class="row">
-          <!-- Heure de début -->
+          <!-- Date et heure de début -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Heure de début :</label>
+            <label class="form-label">Date et heure de début :</label>
             <input type="datetime-local" class="form-control border-primary" id="startTime" formControlName="startTime">
-            <div *ngIf="isFormSubmitted && form.controls['startTime'].invalid" class="text-danger">
-              <div *ngIf="form.controls['startTime'].errors?.['required']">L'heure de début est requise.</div>
+            <div *ngIf="form.controls['startTime'].touched && form.controls['startTime'].errors?.['required']" class="text-danger">
+              La date de début est requise.
             </div>
           </div>
 
-          <!-- Heure de fin -->
+          <!-- Date et heure de fin -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Heure de fin :</label>
+            <label class="form-label">Date et heure de fin :</label>
             <input type="datetime-local" class="form-control border-primary" id="endTime" formControlName="endTime">
-            <div *ngIf="isFormSubmitted && form.controls['endTime'].invalid" class="text-danger">
-              <div *ngIf="form.controls['endTime'].errors?.['required']">L'heure de fin est requise.</div>
+            <div *ngIf="dateError" class="text-danger">
+              La date de fin doit être après la date de début.
             </div>
-                              <!-- Afficher erreur de date -->
-          <div *ngIf="dateError" class="text-danger mb-3">
-            La date de fin doit être après la date de début.
-           </div>
           </div>
-
         </div>
-
 
         <!-- Nombre maximal de participants -->
         <div class="mb-3">
           <label class="form-label">Nombre maximal de participants :</label>
           <input type="number" class="form-control border-primary" id="maxParticipants" formControlName="maxParticipants">
-          <div *ngIf="isFormSubmitted && form.controls['maxParticipants'].invalid" class="text-danger">
-            <div *ngIf="form.controls['maxParticipants'].errors?.['required']">Le nombre de participants est requis.</div>
-            <div *ngIf="form.controls['maxParticipants'].errors?.['min']">Le nombre de participants doit être supérieur ou égal à 1.</div>
-          </div>
+          <span *ngIf="form.controls['maxParticipants'].errors?.['required']" class="text-danger">Le nombre de participants est requis.</span>
+          <span *ngIf="form.controls['maxParticipants'].errors?.['min']" class="text-danger">Le nombre doit être au moins 1.</span>
         </div>
-
-
-                <!-- Upload d'image avec prévisualisation -->
-                <div class="mb-3">
-                  <label for="file" class="form-label">Image de l'événement :</label>
-                  <input type="file" (change)="onFileSelected($event)" class="form-control" id="file" accept="image/*" required>
-                  
-                  <!-- Prévisualisation de l'image -->
-                  <div *ngIf="previewUrl" class="mt-3">
-                      <img [src]="previewUrl" alt="Preview" class="img-thumbnail" style="max-height: 200px;">
-                  </div>
-              </div>
-      
 
         <!-- Boutons -->
         <div class="d-flex justify-content-between">
-          <button type="submit" class="btn btn-primary btn-sm w-45">Créer l'événement</button>
+          <button type="submit" class="btn btn-primary btn-sm w-45" [disabled]="form.invalid || dateError">Créer l'événement</button>
           <a routerLink="/admin/events" class="btn btn-secondary btn-sm w-45">Annuler</a>
         </div>
       </form>

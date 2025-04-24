@@ -41,13 +41,13 @@ public class DataInitializer implements CommandLineRunner {    private final Use
 
 
         // Ensure admin user exists
-        Optional<Users> existingAdmin = userRepository.findByUsername("salma123456");
+        Optional<Users> existingAdmin = userRepository.findByUsername("salma12345");
 
         if (existingAdmin.isEmpty()) {
             Users adminUser = new Users();
-            adminUser.setUsername("salma123456");
-            adminUser.setEmail("salma123456@esprit.tn");
-            adminUser.setPassword(passwordEncoder.encode("#Salma123456")); // Encrypt password
+            adminUser.setUsername("salma12345");
+            adminUser.setEmail("salma12345@esprit.tn");
+            adminUser.setPassword(passwordEncoder.encode("#Salma12345")); // Encrypt password
             // Add the admin role
             Set<TypeUserRole> roles = new HashSet<>();
             roles.add(TypeUserRole.ADMIN); // Set admin role here

@@ -1,0 +1,83 @@
+<div class="container-fluid">
+    <div class="row vh-100">
+      <div class="col-md-10 p-4 d-flex flex-column align-items-center">
+        <h2 class="management-title">Document Management</h2>
+  
+        <div class="form-group">
+          <label for="document-name">Name:</label>
+          <input [(ngModel)]="currentDocument.name" id="document-name" type="text" class="form-control mb-2" placeholder="Enter document name" />
+        </div>
+        <div class="form-group">
+          <label for="document-description">Description:</label>
+          <input [(ngModel)]="currentDocument.description" id="document-description" type="text" class="form-control mb-2" placeholder="Enter document description" />
+        </div>
+       
+  
+        <div class="form-group">
+          <label for="document-type">Type:</label>
+          <select [(ngModel)]="currentDocument.documentType" id="document-type" class="form-control mb-2">
+            <option *ngFor="let type of typeDocument" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="document-visibility">Visibility:</label>
+          <select [(ngModel)]="currentDocument.documentVisibility" id="document-visibility" class="form-control mb-2">
+            <option *ngFor="let visibility of typeDocumentVisibility" [value]="visibility">{{ visibility }}</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="document-access-level">Access Level:</label>
+          <select [(ngModel)]="currentDocument.documentAccessLevel" id="document-access-level" class="form-control mb-2">
+            <option *ngFor="let access of typeAccessLevelDocument" [value]="access">{{ access }}</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="document-theme">Theme:</label>
+          <select [(ngModel)]="currentDocument.documentTheme" id="document-theme" class="form-control mb-2">
+            <option *ngFor="let theme of typeDocumentTheme" [value]="theme">{{ theme }}</option>
+          </select>
+        </div>
+  
+        <div class="action-buttons">
+          <button class="btn btn-primary me-2" (click)="saveDocument()">💾 Save</button>
+          <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+        </div>
+  
+        <div class="table-responsive">
+          <table class="document-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+  
+                <th>Type</th>
+                <th>Visibility</th>
+                <th>Access Level</th>
+                <th>Theme</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of documents">
+                <td>{{ doc.name }}</td>
+                <td>{{ doc.description }}</td>
+                <td><span class="badge bg-info">{{ doc.documentType }}</span></td>
+                <td><span class="badge" [ngClass]="getVisibilityClass(doc.documentVisibility)">{{ doc.documentVisibility }}</span></td>
+                <td><span class="badge bg-warning">{{ doc.documentAccessLevel }}</span></td>
+                <td><span class="badge bg-success">{{ doc.documentTheme }}</span></td>
+                <td>{{ doc.createdAt | date:'dd/MM/yyyy ' }}</td>
+                <td>
+                  <button class="btn btn-outline-primary btn-sm me-2" (click)="editDocument(doc.id)">✏️</button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteDocument(doc.id)">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

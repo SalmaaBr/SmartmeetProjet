@@ -1,2 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~ngx-toastr/toastr.css';
+@import "~flatpickr/dist/flatpickr.min.css";
+@import "~flatpickr/dist/themes/material_blue.css";
+
+/* Custom styles for disabled dates */
+.flatpickr-day.disabled {
+  color: #ccc;
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.flatpickr-day.disabled:hover {
+  background-color: #f0f0f0;
+}

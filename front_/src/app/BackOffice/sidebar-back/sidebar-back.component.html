@@ -1,4 +1,3 @@
-
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
   <!-- Logo Section -->
   <div class="app-brand demo">
@@ -12,7 +11,7 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="#7367F0"/>
         </svg>
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">SmartMeet</span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
     </a>
   </div>
 
@@ -32,6 +31,12 @@
         <div>Resource Management</div>
       </a>
     </li>
+    <li class="menu-item">
+      <a routerLink="/admin/documents" class="menu-link" routerLinkActive="active">
+        <i class="menu-icon tf-icons bx bx-file"></i> 
+        <div>Document Management</div>
+      </a>
+    </li>
 
     <!-- Resource Reservation Management -->
     <li class="menu-item">
@@ -40,21 +45,54 @@
         <div>Resource Reservation Management</div>
       </a>
     </li>
-    <!-- Events and Recruitement -->
+
+    <!-- Resource Maintenance Configuration -->
     <li class="menu-item">
-      <a routerLink="/admin/events" class="menu-link" routerLinkActive="active">
-        <i class="menu-icon tf-icons bx bx-briefcase-alt"></i>
-          <div data-i18n="Tables">Events and Recruitement</div>
+      <a routerLink="/admin/resource-maintenance" class="menu-link" routerLinkActive="active">
+        <i class="menu-icon tf-icons bx bx-wrench"></i>
+        <div>Resource Maintenance</div>
       </a>
     </li>
 
-              <!-- Calender-->
-              <li class="menu-item">
-                <a routerLink="/admin/cal" class="menu-link" routerLinkActive="active">
-                  <i class="menu-icon tf-icons bx bx-table"></i>
-                  <div data-i18n="Tables">Calender</div>
-                </a>
-              </li>
+    <!-- Maintenance Notifications -->
+    <li class="menu-item">
+      <a routerLink="/admin/maintenance-notifications" class="menu-link" routerLinkActive="active">
+        <i class="menu-icon tf-icons bx bx-bell"></i>
+        <div>Maintenance Notifications</div>
+      </a>
+    </li>
+
+    <!-- Events and Recruitement -->
+    <li class="menu-item">
+      <a href="/admin/events" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-table"></i>
+        <div data-i18n="Tables">Events and Recruitement</div>
+      </a>
+    </li>
+    <!-- Feedback -->
+    <!-- Feedback -->
+    <li class="menu-item">
+      <a href="/admin/feedback" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-comment"></i>
+        <div data-i18n="Tables">Feedback</div>
+      </a>
+    </li>
+
+    <!-- Mental-health -->
+    <li class="menu-item">
+      <a href="/admin/mental-health" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-brain"></i>
+        <div data-i18n="Tables">Mental Health</div>
+      </a>
+    </li>
+
+    <!-- Reservation Statistics -->
+    <li class="menu-item">
+      <a routerLink="/admin/resource-reservation-statistics" class="menu-link" routerLinkActive="active">
+        <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
+        <div>Reservation Statistics</div>
+      </a>
+    </li>
 
   </ul>
 

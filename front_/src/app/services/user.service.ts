@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TypeUserRole, User } from '../models/user.model';
-import {TypeTheme} from '../models/event/createevent/createevent/event.enums';
-
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +18,6 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
-  
   getUserByEmail(email: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/by-email`, {
       params: { email }
@@ -41,14 +38,5 @@ export class UserService {
 
   getRoles(): TypeUserRole[] {
     return ['USER', 'ADMIN', 'PARTICIPANT', 'SPEAKER', 'TRAINER', 'SPONSOR', 'COMPANY'];
-  }
-
-  getInterests(): string[] {
-    return Object.values(TypeTheme);
-  }
-
-  // Ajoutez cette nouvelle méthode pour l'utilisateur connecté
-  getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 }

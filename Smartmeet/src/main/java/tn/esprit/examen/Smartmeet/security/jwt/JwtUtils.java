@@ -3,15 +3,12 @@ package tn.esprit.examen.Smartmeet.security.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import tn.esprit.examen.Smartmeet.security.services.UserDetailsImpl;
-
-import org.springframework.util.StringUtils;
 
 
 import java.security.Key;
@@ -50,8 +47,26 @@ public class JwtUtils {
 
   public boolean validateJwtToken(String authToken) {
     try {
-      Jwts.parser().setSigningKey(key()).build().parse(authToken);
+      Jws<Claims> claims = Jwts.parser()
+              .setSigningKey(key())
+              .build()
+              .parseClaimsJws(authToken);
+      
+      // Check if token is expired
+      if (claims.getBody().getExpiration().before(new Date())) {
+        logger.error("JWT token is expired");
+        return false;
+      }
+      
+      // Check if token is blacklisted
+      if (isTokenBlacklisted(authToken)) {
+        logger.error("JWT token is blacklisted");
+        return false;
+      }
+      
       return true;
+    } catch (SignatureException e) {
+      logger.error("Invalid JWT signature: {}", e.getMessage());
     } catch (MalformedJwtException e) {
       logger.error("Invalid JWT token: {}", e.getMessage());
     } catch (ExpiredJwtException e) {
@@ -61,20 +76,12 @@ public class JwtUtils {
     } catch (IllegalArgumentException e) {
       logger.error("JWT claims string is empty: {}", e.getMessage());
     }
-
     return false;
   }
 
-  // Ajoutez ces méthodes à votre classe existante
-  public String getJwtFromHeader(HttpServletRequest request) {
-    String headerAuth = request.getHeader("Authorization");
-
-    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-      return headerAuth.substring(7);
-    }
-    return null;
+  private boolean isTokenBlacklisted(String token) {
+    // Implement token blacklist check here
+    // You can use the BlacklistedTokenRepository to check if the token is blacklisted
+    return false; // Placeholder - implement actual check
   }
-
-
-
 }

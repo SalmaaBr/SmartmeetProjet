@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class RecutementService {
 
   // URL de base
-  private apiUrl = 'http://localhost:8082/monitoringRecruitment';
+  private apiUrl = 'http://localhost:8082/MonitoringRecruitment';
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +20,7 @@ export class RecutementService {
 
     // Fonction pour récupérer tous les recrutements
     getAllMonitoringRecruitments(): Observable<any[]> {
-      const url = `${this.apiUrl}/getrecutement`;  // Route pour récupérer la liste des recrutements
+      const url = `${this.apiUrl}/ReadAll`;  // Route pour récupérer la liste des recrutements
       return this.http.get<any[]>(url);  // Retourne un Observable contenant la liste des recrutements
     }
 
@@ -31,18 +31,13 @@ export class RecutementService {
 
     // Récupérer un recrutement par ID
     getMonitoringRecruitmentById(id: number): Observable<any> {
-      return this.http.get(`${this.apiUrl}/getrecutement/${id}`);
+      return this.http.get(`${this.apiUrl}/getbyRecutementId/${id}`);
     }
-  
+
     // Mettre à jour un recrutement
     updateMonitoringRecruitment(id: number, title: string, description: string): Observable<any> {
       return this.http.put(`${this.apiUrl}/updateRecutement/${id}`,  { title, description });
     }
 
-      // Ajouter cette méthode au service RecutementService
-  assignRecruitmentToEvent(title: string, monitoringRecruitment: any): Observable<any> {
-    const url = `${this.apiUrl}/assign-to-event/${title}`;
-    return this.http.post<any>(url, monitoringRecruitment);
-  }
 
 }

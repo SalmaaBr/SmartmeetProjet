@@ -10,6 +10,6 @@ public interface IEventServices {
     void deleteEvent(Long id);
     Event getEventById(Long id);
     List<Event> getAllEvents();
-    int addAndAssignEventToUser(Long eventId);
+    void addAndAssignEventToUser(Long userId, Long eventId);
 
 }

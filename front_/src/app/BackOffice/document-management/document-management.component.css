@@ -1,0 +1,215 @@
+/* Centrer et styliser le contenu */
+.d-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem; /* Espacement vertical entre les éléments */
+  }
+  
+  /* Styliser les badges avec des couleurs pastel */
+  .badge {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  
+  .badge.bg-success { background-color: #e1f5fe !important; color: #0288d1; }
+  .badge.bg-warning { background-color: #e1f5fe !important; color: #0288d1; }
+  .badge.bg-info { background-color: #e1f5fe !important; color: #0288d1; }
+  .badge.bg-danger { background-color: #e1f5fe !important; color: #0288d1; }
+  
+  /* Champs de formulaire */
+  .form-group {
+    margin-bottom: 0.1rem; /* Augmentation de l'espacement */
+    width: 100%;
+    max-width: 1000px; /* Largeur augmentée */
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #9fa8da;
+    box-shadow: 0 0 0 3px rgba(159, 168, 218, 0.2);
+  }
+  
+  /* Upload de fichiers */
+  input[type="file"] {
+    border: 2px dashed #9fa8da;
+    padding: 1.5rem;
+    background: #f8f9ff;
+    color: #6c63ff;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  input[type="file"]:hover {
+    background: #f0f2ff;
+    border-color: #7986cb;
+  }
+  
+  /* Tableau de documents */
+  .table-responsive {
+    margin-top: 2.5rem; /* Espace avant la liste */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px #5a52e0(0, 0, 0, 0.05);
+  }
+  
+  /* Modal */
+  .modal-overlay {
+    background: rgba(241, 243, 244, 0.95); /* Fond plus léger */
+  }
+  
+  .modal-content {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px #5a52e0(0, 0, 0, 0.1);
+    width: 500px;
+    border: 1px solid #f0f0f0;
+  }
+  
+  /* Boutons */
+  .btn-primary {
+    background: #6c63ff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: #5a52e0;
+    transform: translateY(-1px);
+  }
+  
+  /* Espacement supplémentaire */
+  .action-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  
+  /* Couleurs de fond alternatives */
+  .document-card {
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+  }
+  
+  .document-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px#5a52e0(0, 0, 0, 0.05);
+  }
+  /* Titre "Document Management" */
+  .management-title {
+    color: #6c63ff;
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  /* Style unifié pour le tableau */
+  .document-table {
+    border: 2px dashed #9fa8da;
+    background-color: #f8f9ff;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+  
+  .document-table th {
+    background-color: #f8f9ff;
+    color: #5a52e0;
+    border-bottom: 2px dashed #9fa8da;
+    padding: 1rem;
+    font-weight: 600;
+  }
+  
+  .document-table td {
+    padding: 1rem;
+    background-color: white;
+    border-bottom: 1px solid #e0e0ff;
+    color: #5a52e0;
+  }
+  
+  .document-table tr:hover td {
+    background-color: #f3f2ff;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Adaptation des boutons pour correspondre */
+  .action-buttons button {
+    background: #5a52e0;
+    color: white;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    padding: 5px 15px;
+  }
+  
+  .action-buttons button:hover {
+    background: #6c63ff;
+    border-style: solid;
+  }
+  /* Style unifié pour tous les labels */
+  .form-label,
+  .table-header-label,
+  .action-label,
+  .filter-label {
+    color: #6c63ff !important;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  /* Application aux différents composants */
+  /* Formulaires */
+  .form-group label {
+    color: #6c63ff;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+  }
+  
+  /* En-têtes de tableau */
+  .document-table th {
+    color: #6c63ff;
+    background-color: #f8f9ff;
+    border-bottom: 2px solid #6c63ff33; /* 20% de transparence */
+  }
+  
+  /* Boutons et badges */
+  .filter-buttons button,
+  .action-buttons button {
+    color: #6c63ff;
+    border: 1px solid #6c63ff33;
+    background-color: #f8f9ff;
+  }
+  
+  /* Hover states */
+  .filter-buttons button:hover,
+  .action-buttons button:hover {
+    background-color: #6c63ff;
+    color: white;
+  }
+  
+  /* Inputs */
+  .form-control:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 3px #6c63ff33;
+  }
+  
+  
+  

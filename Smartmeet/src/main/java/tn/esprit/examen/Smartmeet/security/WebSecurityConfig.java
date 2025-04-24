@@ -1,6 +1,5 @@
 package tn.esprit.examen.Smartmeet.security;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,41 +12,29 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tn.esprit.examen.Smartmeet.security.jwt.AuthEntryPointJwt;
 import tn.esprit.examen.Smartmeet.security.jwt.AuthTokenFilter;
 import tn.esprit.examen.Smartmeet.security.jwt.JwtUtils;
 import tn.esprit.examen.Smartmeet.security.services.UserDetailsServiceImpl;
 
-import java.util.Arrays;
-
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
-
-//@EnableWebSecurity
 @EnableMethodSecurity
-
-//(securedEnabled = true,
-//jsr250Enabled = true,
-//prePostEnabled = true) // by default
-
 public class WebSecurityConfig {
 
   private final JwtUtils jwtUtils;
-
   private final UserDetailsServiceImpl userDetailsService;
-
   private final AuthEntryPointJwt unauthorizedHandler;
+  private final CorsConfigurationSource corsConfigurationSource;
 
   public WebSecurityConfig(JwtUtils jwtUtils,
                            UserDetailsServiceImpl userDetailsService,
-                           AuthEntryPointJwt unauthorizedHandler) {
+                           AuthEntryPointJwt unauthorizedHandler,
+                           CorsConfigurationSource corsConfigurationSource) {
     this.jwtUtils = jwtUtils;
     this.userDetailsService = userDetailsService;
     this.unauthorizedHandler = unauthorizedHandler;
+    this.corsConfigurationSource = corsConfigurationSource;
   }
 
   @Bean
@@ -76,41 +63,20 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-            .cors(withDefaults())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/**"
-                    ).permitAll()
-                    /*.requestMatchers("/api/auth/**",
-                            "/InteractivePublication/**",
-                            "/api/test/**",
-                            "/event/createevent",
-                            "/login",
-                            "/admin"
-                            ).permitAll()*/
-//                    .requestMatchers("/dashboard/**").authenticated()
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/test/**").permitAll()
+                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/register").permitAll()
+                    .requestMatchers("/api/mentalhealth/submit-for-current-user").authenticated()
+                    .requestMatchers("/api/users/**").authenticated()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                     .anyRequest().authenticated());
     http.authenticationProvider(authenticationProvider());
-
-    // ✅ Correction ici : on utilise `authenticationJwtTokenFilter()` sans paramètres
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
     return http.build();
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    // Utilisez Arrays.asList si vous préférez (mais List.of est meilleur pour Java 9+)
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-    configuration.setExposedHeaders(Arrays.asList("Authorization"));
-    configuration.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
   }
 }

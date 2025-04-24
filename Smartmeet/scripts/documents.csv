@@ -1,0 +1,5 @@
+name,id,description,createdAt,documentType,documentVisibility,documentAccessLevel,documentTheme,documentLikes
+bbbbb,1,gvec,2025-04-21,ARTICLE,PUBLIC,READ,TECHNOLOGY,"[{'likeId': 1, 'createdAt': '2025-04-21T00:00:00', 'documentId': 1, 'user_userid': 1}]"
+salma,2,gvec,2025-04-23,ARTICLE,PUBLIC,READ,SCIENCES,"[{'likeId': 6, 'createdAt': '2025-04-24T11:49:52', 'documentId': 2, 'user_userid': 3}, {'likeId': 3, 'createdAt': '2025-04-23T00:00:00', 'documentId': 2, 'user_userid': 1}]"
+salma,3,gvec,2025-04-23,ARTICLE,PUBLIC,READ,SCIENCES,"[{'likeId': 4, 'createdAt': '2025-04-24T00:00:00', 'documentId': 3, 'user_userid': 1}]"
+salma,4,gvec,2025-04-23,ARTICLE,PUBLIC,READ,SCIENCES,"[{'likeId': 5, 'createdAt': '2025-04-24T00:00:00', 'documentId': 4, 'user_userid': 1}]"

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RecutementService } from '../../../services/recutement.service';
-import { EventService, Event } from '../../../services/event.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,79 +8,48 @@ import { Router } from '@angular/router';
   templateUrl: './create-recutement.component.html',
   styleUrls: ['./create-recutement.component.css']
 })
-export class CreateRecutementComponent implements OnInit {
-  recruitmentForm: FormGroup;
-  successMessage: string = '';
-  errorMessage: string = '';
-  events: Event[] = [];
-  eventHasRecruitment: boolean = false;
+export class CreateRecutementComponent {
+  recruitmentForm: FormGroup;  // Le formulaire réactif
+  successMessage: string = '';  // Message de succès après création
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private recutementService: RecutementService,
-    private eventService: EventService
-  ) {
+  constructor(private router: Router,private fb: FormBuilder, private recutementService: RecutementService) {
+    // Initialisation du formulaire avec des validations
     this.recruitmentForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      eventTitle: ['', Validators.required]
+      title: ['', Validators.required],      // Le titre est obligatoire
+      description: ['', Validators.required]  // La description est obligatoire
     });
   }
 
-  ngOnInit(): void {
-    this.loadEvents();
-  }
+  // Méthode pour envoyer le formulaire lorsque l'utilisateur clique sur "Créer"
+  onSubmit() {
+    if (this.recruitmentForm.valid) {
+      // Ajouter la date de création au modèle
+      const formData = {
+        ...this.recruitmentForm.value,    // Inclure les données du formulaire
+        createdAt: new Date().toISOString()  // Ajouter la date actuelle (au format ISO)
+      };
 
-  loadEvents(): void {
-    this.eventService.getEvents().subscribe(events => {
-      this.events = events;
-    });
-  }
-
-  onEventSelect(eventTitle: string) {
-    if (eventTitle) {
-      this.eventService.checkEventHasRecruitment(eventTitle).subscribe(hasRecruitment => {
-        this.eventHasRecruitment = hasRecruitment;
-        if (hasRecruitment) {
-          this.errorMessage = 'Cet événement possède déjà un recrutement.';
-        } else {
-          this.errorMessage = '';
+      // Appel du service pour envoyer les données à l'API
+      this.recutementService.createMonitoringRecruitment(formData).subscribe({
+        next: () => {
+          this.successMessage = 'Recrutement créé avec succès !';  // Affiche un message de succès
+          this.recruitmentForm.reset();  // Réinitialise le formulaire
+        },
+        error: (err) => {
+          console.error('Erreur lors de la création du recrutement:', err);
+          this.successMessage = 'Erreur lors de la création du recrutement.';  // Affiche un message d'erreur
         }
       });
+    } else {
+      this.successMessage = 'Veuillez remplir tous les champs.';
+
+            // Redirection vers la liste des événements après 2 secondes (optionnel)
+            setTimeout(() => {
+              this.router.navigate(['/admin/events']);
+            }, 20);
     }
   }
 
-  onSubmit() {
-    if (this.recruitmentForm.invalid) {
-      this.errorMessage = 'Veuillez remplir tous les champs.';
-      return;
-    }
 
-    if (this.eventHasRecruitment) {
-      this.errorMessage = 'Impossible d\'assigner un nouveau recrutement à cet événement.';
-      return;
-    }
 
-    const formData = {
-      ...this.recruitmentForm.value,
-      createdAt: new Date().toISOString()
-    };
-
-    const selectedEventTitle = this.recruitmentForm.value.eventTitle;
-
-    this.recutementService.assignRecruitmentToEvent(selectedEventTitle, formData).subscribe({
-      next: () => {
-        this.successMessage = 'Recrutement créé et associé avec succès !';
-        this.recruitmentForm.reset();
-        setTimeout(() => {
-          this.router.navigate(['/admin/events']);
-        }, 2000);
-      },
-      error: (err) => {
-        console.error('Erreur lors de l\'association du recrutement:', err);
-        this.errorMessage = 'Erreur lors de l\'association du recrutement.';
-      }
-    });
-  }
 }

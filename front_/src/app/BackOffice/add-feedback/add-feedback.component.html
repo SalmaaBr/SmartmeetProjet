@@ -1,0 +1,222 @@
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-header bg-primary text-white py-3">
+      <h2 class="mb-0 fw-normal">
+        <i class="bi bi-chat-square-text me-2"></i>
+        Feedback Management
+      </h2>
+    </div>
+
+    <div class="card-body p-4">
+      <div class="row g-4">
+        <!-- Formulaire -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm hover-card">
+            <div class="card-header bg-light py-3">
+              <h4 class="mb-0 text-primary">
+                <i class="bi me-2" [class.bi-pencil-square]="isEditing" [class.bi-plus-circle]="!isEditing"></i>
+                {{ isEditing ? 'Update Feedback' : 'New Feedback' }}
+              </h4>
+            </div>
+
+            <div class="card-body">
+              <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm">
+                <div class="row g-3">
+                  <!-- Événement -->
+                  <div class="col-12">
+                    <label for="event" class="form-label fw-medium">
+                      Événement <span class="text-danger">*</span>
+                    </label>
+                    <select
+                      id="event"
+                      [(ngModel)]="selectedEventId"
+                      name="event"
+                      required
+                      #event="ngModel"
+                      class="form-select form-select-lg border-2"
+                      [class.is-invalid]="event.invalid && event.touched">
+                      <option [ngValue]="null" disabled>Select an event</option>
+                      <option *ngFor="let event of events" [ngValue]="event.id">{{ event.title }}</option>
+                    </select>
+                    <div *ngIf="event.invalid && event.touched" class="invalid-feedback">
+                      Event selection is required
+                    </div>
+                  </div>
+
+                  <!-- Message -->
+                  <div class="col-12">
+                    <label for="message" class="form-label fw-medium">
+                      Message <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      id="message"
+                      type="text"
+                      [(ngModel)]="newFeedback.message"
+                      name="message"
+                      required
+                      #message="ngModel"
+                      class="form-control form-control-lg border-2"
+                      placeholder="Entrez votre message"
+                      [class.is-invalid]="message.invalid && message.touched">
+                    <div *ngIf="message.invalid && message.touched" class="invalid-feedback">
+                      Message is required
+                    </div>
+                  </div>
+
+                  <!-- Sentiment -->
+                  <div class="col-12">
+                    <label class="form-label fw-medium">
+                      Sentiment <span class="text-danger">*</span>
+                    </label>
+                    <div class="emoji-container">
+                      <span
+                        [class.selected]="newFeedback.feeling === 'EXCELLENT'"
+                        (click)="selectFeeling('EXCELLENT')"
+                        class="emoji">😍 EXCELLENT</span>
+                      <span
+                        [class.selected]="newFeedback.feeling === 'GOOD'"
+                        (click)="selectFeeling('GOOD')"
+                        class="emoji">😃 GOOD</span>
+                      <span
+                        [class.selected]="newFeedback.feeling === 'AVERAGE'"
+                        (click)="selectFeeling('AVERAGE')"
+                        class="emoji">😐 AVERAGE</span>
+                      <span
+                        [class.selected]="newFeedback.feeling === 'BAD'"
+                        (click)="selectFeeling('BAD')"
+                        class="emoji">😕 BAD</span>
+                      <span
+                        [class.selected]="newFeedback.feeling === 'TERRIBLE'"
+                        (click)="selectFeeling('TERRIBLE')"
+                        class="emoji">😡 TERRIBLE</span>
+                    </div>
+                    <input
+                      type="hidden"
+                      [(ngModel)]="newFeedback.feeling"
+                      name="feeling"
+                      required
+                      #feeling="ngModel"
+                      class="form-control">
+                    <div *ngIf="feeling.invalid && feeling.touched" class="invalid-feedback">
+                      Sentiment is required
+                    </div>
+                  </div>
+
+                  <!-- Date -->
+                  <div class="col-12">
+                    <label for="date" class="form-label fw-medium">
+                      Date <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      id="date"
+                      type="date"
+                      [(ngModel)]="newFeedback.date"
+                      name="date"
+                      required
+                      readonly
+                      #date="ngModel"
+                      class="form-control form-control-lg border-2"
+                      [class.is-invalid]="date.invalid && date.touched">
+                    <div *ngIf="date.invalid && date.touched" class="invalid-feedback">
+                      Date is required
+                    </div>
+                  </div>
+
+                  <!-- Boutons -->
+                  <div class="col-12">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end border-top pt-4">
+                      <button
+                        *ngIf="isEditing"
+                        type="button"
+                        class="btn btn-outline-danger btn-lg px-4"
+                        (click)="cancelEdit()">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        [disabled]="feedbackForm.invalid"
+                        class="btn btn-primary btn-lg px-4">
+                        <i class="bi me-2" [class.bi-save]="isEditing" [class.bi-plus-lg]="!isEditing"></i>
+                        {{ isEditing ? 'Update' : 'Confirm' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Liste des feedbacks -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light py-3">
+              <h4 class="mb-0 text-primary">
+                <i class="bi bi-list-task me-2"></i>
+                Current Feedbacks
+              </h4>
+            </div>
+
+            <div class="card-body">
+              <div class="list-group">
+                <div
+                  *ngFor="let feedback of feedbacks"
+                  class="list-group-item list-group-item-action rounded-3 mb-3 shadow-sm border-0 hover-item">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div class="w-75">
+                      <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-primary rounded-pill me-2">
+                          #{{ feedback.idFeedback }}
+                        </span>
+                        <small class="text-muted">
+                          <i class="bi bi-clock-history me-1"></i>
+                          {{ feedback.date | date:'mediumDate' }}
+                        </small>
+                      </div>
+                      <div class="mb-2">
+                        <span class="badge bg-info-subtle text-info-emphasis me-2">
+                          <i class="bi bi-chat-square-text me-1"></i>
+                          {{ feedback.message }}
+                        </span>
+                        <span class="badge bg-success-subtle text-success-emphasis">
+                          <i class="bi bi-emoji-smile me-1"></i>
+                          <span [ngSwitch]="feedback.feeling">
+                            <span *ngSwitchCase="'EXCELLENT'">😍 EXCELLENT</span>
+                            <span *ngSwitchCase="'GOOD'">😃 GOOD</span>
+                            <span *ngSwitchCase="'AVERAGE'">😐 AVERAGE</span>
+                            <span *ngSwitchCase="'BAD'">😕 BAD</span>
+                            <span *ngSwitchCase="'TERRIBLE'">😡 TERRIBLE</span>
+                            <span *ngSwitchDefault>{{ feedback.feeling }}</span>
+                          </span>
+                        </span>
+                      </div>
+                      <div>
+                        <span class="badge bg-warning-subtle text-warning-emphasis">
+                          <i class="bi bi-calendar-event me-1"></i>
+                          {{ feedback.eventTitle || 'Non spécifié' }} <!-- Correction ici -->
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button (click)="editFeedback(feedback)" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-pencil me-2"></i>Update
+                      </button>
+                      <button (click)="deleteFeedback(feedback.idFeedback)" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                        <i class="bi bi-trash me-2"></i>Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="feedbacks.length === 0" class="text-center py-5 bg-light rounded-3">
+                  <i class="bi bi-inbox text-muted display-6 mb-3"></i>
+                  <p class="text-muted mb-0">No feedbacks found</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

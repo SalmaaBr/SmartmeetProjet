@@ -1,0 +1,118 @@
+<div class="container my-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Maintenance Notification Manager</h4>
+    </div>
+
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success">Notifications sent successfully!</div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loading">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="resourceId" class="form-label">Resource</label>
+            <select id="resourceId" formControlName="resourceId" class="form-select"
+                    [class.is-invalid]="form.get('resourceId')?.invalid && form.get('resourceId')?.touched">
+              <option [ngValue]="null" disabled>Select a resource</option>
+              <option *ngFor="let resource of resources" [value]="resource.idResource">
+                {{ resource.name }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="form.get('resourceId')?.invalid && form.get('resourceId')?.touched">
+              Please select a resource.
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="daysInAdvance" class="form-label">Days in Advance</label>
+            <input type="number" id="daysInAdvance" formControlName="daysInAdvance" class="form-control"
+                   [class.is-invalid]="form.get('daysInAdvance')?.invalid && form.get('daysInAdvance')?.touched">
+            <div class="invalid-feedback" *ngIf="form.get('daysInAdvance')?.invalid && form.get('daysInAdvance')?.touched">
+              Please enter a valid number of days (1-30).
+            </div>
+            <small class="text-muted">Number of days in advance to notify users about upcoming maintenance.</small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="startDate" class="form-label">Maintenance Start Date</label>
+            <input type="date" id="startDate" formControlName="startDate" class="form-control"
+                   [class.is-invalid]="form.get('startDate')?.invalid && form.get('startDate')?.touched">
+            <div class="invalid-feedback" *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched">
+              Please select a start date.
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="endDate" class="form-label">Maintenance End Date</label>
+            <input type="date" id="endDate" formControlName="endDate" class="form-control"
+                   [class.is-invalid]="form.get('endDate')?.invalid && form.get('endDate')?.touched">
+            <div class="invalid-feedback" *ngIf="form.get('endDate')?.invalid && form.get('endDate')?.touched">
+              Please select an end date.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button type="button" class="btn btn-outline-primary me-2" (click)="checkAffectedReservations()"
+                  [disabled]="!form.get('resourceId')?.value || !form.get('startDate')?.value || !form.get('endDate')?.value">
+            Check Affected Reservations
+          </button>
+
+          <button type="submit" class="btn btn-primary me-2" [disabled]="form.invalid">
+            Send Notifications
+          </button>
+
+          <button type="button" class="btn btn-warning" (click)="triggerAllNotifications()">
+            Send Notifications For All Resources
+          </button>
+        </div>
+      </form>
+
+      <!-- Affected Reservations -->
+      <div *ngIf="showAffectedReservations && affectedReservations.length > 0" class="mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5>Affected Reservations ({{ affectedReservations.length }})</h5>
+          <button class="btn btn-sm btn-outline-secondary" (click)="hideAffectedReservations()">
+            <i class="fa fa-times"></i> Close
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Reservation ID</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reservation of affectedReservations">
+                <td>{{ reservation.reservationId }}</td>
+                <td>{{ reservation.userName }}</td>
+                <td>{{ reservation.userEmail }}</td>
+                <td>{{ reservation.startDate }}</td>
+                <td>{{ reservation.endDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf="showAffectedReservations && affectedReservations.length === 0" class="alert alert-info mt-4">
+        No reservations will be affected by this maintenance period.
+      </div>
+    </div>
+  </div>
+</div>

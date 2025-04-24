@@ -1,8 +1,5 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -49,14 +46,7 @@ public class Event implements Serializable {
     private LocalDateTime endTime;
 
     private int maxParticipants;
-
-    private String filePath;
-
-    private Double latitude;
-    private Double longitude;
-
-    @ManyToMany
-    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<Users> users;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="events")
@@ -75,8 +65,9 @@ public class Event implements Serializable {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EventSponsor> eventSponsors = new ArrayList<>();
 
-    @OneToOne
-    @JsonIgnoreProperties("event")
-    private MonitoringRecruitment monitorungrecutement;
+
+
+
+
 
 }

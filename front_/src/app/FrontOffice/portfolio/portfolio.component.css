@@ -1,0 +1,160 @@
+/* Portfolio Section */
+.portfolio.section {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 60px 0;
+  }
+  
+  /* Section Title */
+  .section-title h2 {
+    color: #007bff; /* Bootstrap primary blue */
+    margin-bottom: 10px;
+  }
+  .bi-heart-fill {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .text-danger {
+    color: #dc3545 !important;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .section-title p {
+    font-size: 1.1rem;
+  }
+  
+  /* Search Input */
+  .search-input {
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  /* Portfolio Card */
+  .portfolio-card {
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Button Styles */
+  .btn {
+    border-radius: 20px;
+    padding: 8px 20px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Like Button and Icon */
+  .btn-primary i.fas.fa-heart {
+    margin-right: 8px; /* Space between the heart icon and button text */
+    font-size: 1rem; /* Match the icon size to the button */
+    transition: color 0.3s ease; /* Smooth color transition */
+  }
+  
+  .btn-primary i.fas.fa-heart.liked {
+    color: #dc3545; /* Red color when liked (matches .text-danger) */
+  }
+  
+  /* Adjust button padding for small buttons */
+  .btn-sm {
+    padding: 6px 16px; /* Slightly smaller padding for btn-sm */
+    font-size: 0.9rem; /* Smaller font size */
+  }
+  
+  /* Card Title and Text */
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  
+  .card-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Badges */
+  .badge {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  /* Image Container */
+  .image-container img {
+    max-height: 150px; /* Limit image height */
+    object-fit: cover; /* Ensure image fits nicely */
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-container img:hover {
+    opacity: 0.9;
+  }
+  
+  /* Details Button */
+  .details-link {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  .details-link:hover {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Transition Hover */
+  .transition-hover {
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .portfolio-card {
+        margin-bottom: 20px;
+    }
+  
+    .search-input {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+  
+    .card-title {
+        font-size: 1.1rem;
+    }
+  
+    .details-link {
+        font-size: 0.85rem;
+    }
+  
+    /* Adjust Like button and icon for smaller screens */
+    .btn-sm {
+        padding: 5px 12px; /* Even smaller padding */
+        font-size: 0.85rem; /* Smaller font */
+    }
+  
+    .btn-primary i.fas.fa-heart {
+        font-size: 0.9rem; /* Slightly smaller icon */
+        margin-right: 6px; /* Adjust spacing */
+    }
+  }

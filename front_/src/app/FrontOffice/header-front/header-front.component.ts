@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./header-front.component.css']
 })
 export class HeaderFrontComponent {
-isAuth = localStorage.getItem('auth_token')
+isAuth = localStorage.getItem('auth-token')
 username = localStorage.getItem("username")
 roles = localStorage.getItem("roles")
 
@@ -16,7 +16,7 @@ roles = localStorage.getItem("roles")
   logout(){
     localStorage.removeItem("roles")
     localStorage.removeItem("username")
-    localStorage.removeItem("auth_token")
+    localStorage.removeItem("auth-token")
     this.router.navigate(['login']);
   }
 }

@@ -4,4 +4,11 @@ export interface Resource {
   name: string;
   typeResource: string;
   typeResourceStatus: string;
+
+  // Maintenance-related fields
+  maintenanceEnabled?: boolean;
+  maintenancePeriodMonths?: number;
+  maintenanceDurationDays?: number;
+  initialMaintenanceDate?: string;
+  nextMaintenanceDate?: string;
 }
