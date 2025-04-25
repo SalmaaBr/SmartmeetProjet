@@ -1,0 +1,7 @@
+<div *ngIf="meetingName">
+    <h2>Réunion : {{ meetingName }}</h2>
+    <div id="jitsi-container"></div>
+  </div>
+  <div *ngIf="!meetingName">
+    <p>Chargement de la réunion...</p>
+  </div>

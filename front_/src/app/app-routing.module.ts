@@ -27,6 +27,8 @@ import {EditRecruitmentComponent } from './models/recutement/edit-recruitment/ed
 import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
 import { CalendarComponent } from './models/calendar/calendar.component';
 import { NotificationsComponent } from './models/notifications/notifications.component';
+import { JitsiMeetingComponent } from './models/jitsi-meeting/jitsi-meeting.component';
+import { CreateMeetingComponent } from './models/create-meeting/create-meeting.component';
 
 
 const routes: Routes = [
@@ -40,7 +42,9 @@ const routes: Routes = [
       {path: 'portfolio', component:PortfolioComponent},
       {path: 'contact', component:ContactComponent},
       { path: 'profile', component: ProfileComponent  },
-      { path: 'profile/me', component: ViewProfileComponent }
+      { path: 'profile/me', component: ViewProfileComponent },
+      {path: 'meeting/:id', component: JitsiMeetingComponent},
+      { path: 'create-meeting', component: CreateMeetingComponent }
     ]
   },
   {

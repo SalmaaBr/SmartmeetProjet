@@ -48,6 +48,8 @@ import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.com
 import { CalendarComponent } from './models/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NotificationsComponent } from './models/notifications/notifications.component';
+import { JitsiMeetingComponent } from './models/jitsi-meeting/jitsi-meeting.component';
+import { CreateMeetingComponent } from './models/create-meeting/create-meeting.component';
 
 
 
@@ -89,7 +91,9 @@ import { NotificationsComponent } from './models/notifications/notifications.com
     EditRecruitmentComponent,
     ViewProfileComponent,
     CalendarComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    JitsiMeetingComponent,
+    CreateMeetingComponent
       ],
   imports: [
     ReactiveFormsModule ,
