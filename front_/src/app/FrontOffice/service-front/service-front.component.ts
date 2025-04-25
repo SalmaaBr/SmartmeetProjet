@@ -6,6 +6,7 @@ import { EventService, Event } from '../../services/event.service';
 import { RecutementService } from '../../services/recutement.service';
 import { UsercalenderService, EventUserCalendar, Meeting } from '../../services/usercalender.service';
 import { EventLikeService } from '../../services/event-like.service';
+import { AuthService } from '../../auth/auth.service';
 import * as AOS from 'aos';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InteractivePublicationService } from 'src/app/services/interactive-publication.service';
@@ -19,19 +20,19 @@ export enum TypeIPublicationStatus {
   PUBLISHED = 'PUBLISHED',
   DRAFT = 'DRAFT',
   MODERATED = 'MODERATED',
-  ARCHIVED = 'ARCHIVED'
+  ARCHIVED = 'ARCHIVED',
 }
 
 export enum TypeIPublicationVisibility {
   PUBLIC = 'PUBLIC',
   PRIVATE = 'PRIVATE',
-  RESTRICTED = 'RESTRICTED'
+  RESTRICTED = 'RESTRICTED',
 }
 
 @Component({
   selector: 'app-service-front',
   templateUrl: './service-front.component.html',
-  styleUrls: ['./service-front.component.css']
+  styleUrls: ['./service-front.component.css'],
 })
 export class ServiceFrontComponent implements OnInit, AfterViewInit {
   events: Event[] = [];
@@ -67,7 +68,8 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private mapRoutingService: MapRoutingService,
     private usercalenderService: UsercalenderService,
-    private eventLikeService: EventLikeService
+    private eventLikeService: EventLikeService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -81,16 +83,20 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   }
 
   checkAuthentication(): void {
-    const token = localStorage.getItem('jwt_token');
-    this.isAuthenticated = !!token;
-    // Supposons que l'ID utilisateur est récupéré via un service d'authentification ou décodé du token
-    this.currentUserId = 1; // Remplacez par la logique réelle pour extraire l'ID utilisateur
+    // TODO: Implement actual authentication check
+    // This is a placeholder; replace with your auth service
+    this.isAuthenticated = true; // Assume user is authenticated
+    this.currentUserId = 1; // Replace with actual user ID from auth service
   }
 
   loadLikeData(): void {
+    if (!this.isAuthenticated || !this.currentUserId) {
+      return; // Skip if not authenticated
+    }
+
     const likeStatusObservables = this.events.map((event, index) =>
       this.eventLikeService.getLikeStatus(event.id).pipe(
-        tap(status => {
+        tap((status) => {
           this.events[index].isLiked = status === 1;
         })
       )
@@ -98,7 +104,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
 
     const totalLikesObservables = this.events.map((event, index) =>
       this.eventLikeService.getTotalLikes(event.id).pipe(
-        tap(total => {
+        tap((total) => {
           this.events[index].totalLikes = total;
         })
       )
@@ -108,7 +114,10 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
       complete: () => {
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error fetching like data:', err)
+      error: (err) => {
+        console.error('Error fetching like data:', err);
+        this.snackBar.open('Error loading like data', 'Close', { duration: 3000 });
+      },
     });
   }
 
@@ -123,7 +132,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         this.snackBar.open(message, 'Close', { duration: 3000 });
         forkJoin({
           status: this.eventLikeService.getLikeStatus(eventId),
-          total: this.eventLikeService.getTotalLikes(eventId)
+          total: this.eventLikeService.getTotalLikes(eventId),
         }).subscribe({
           next: ({ status, total }) => {
             this.events[index].isLiked = status === 1;
@@ -133,12 +142,13 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
           error: (err) => {
             console.error('Error refreshing like data:', err);
             this.snackBar.open('Error refreshing like data', 'Close', { duration: 3000 });
-          }
+          },
         });
       },
       error: (err) => {
+        console.error('Error toggling like:', err);
         this.snackBar.open(err.message || 'Error toggling like', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
