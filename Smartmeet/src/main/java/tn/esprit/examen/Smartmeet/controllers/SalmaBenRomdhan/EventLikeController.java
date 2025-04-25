@@ -13,6 +13,7 @@ import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.EventLikeReposito
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/event-likes")
 @RequiredArgsConstructor
