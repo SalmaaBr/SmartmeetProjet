@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { User, TypeUserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service'; // Importez le AuthService
+
+
+
 
 @Component({
   selector: 'app-user',
@@ -16,7 +22,8 @@ export class UserComponent implements OnInit {
   userToDelete: number | null = null;
   showDeleteModal: boolean = false; // Boolean to toggle delete modal
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,private http: HttpClient,private router: Router,    private authService: AuthService // Injectez le AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -95,4 +102,33 @@ export class UserComponent implements OnInit {
       this.userToDelete = null;
     }
   }
+
+// Dans votre composant Angular
+sendInterview(user: User): void {
+  // Récupérer l'ID de l'utilisateur connecté (peut être null/undefined si non connecté)
+  const organizerId = this.authService.getCurrentUserId();
+  
+  const meetingRequest = {
+    meetingName: `Entretien avec ${user.username}`,
+    participantId: user.userID,
+    durationMinutes: 5
+  };
+
+  // Envoyer la requête avec ou sans organizerId
+  this.http.post<any>('http://localhost:8082/api/meetings/interview', meetingRequest, {
+    headers: { 
+      'X-User-ID': organizerId ? organizerId.toString() : '0' // 0 pour les utilisateurs non connectés
+    }
+  }).subscribe(
+    (response) => {
+      this.router.navigate([`/meeting/${response.id}`]);
+      alert(`Réunion programmée pour le ${new Date(response.startTime).toLocaleString()}`);
+    },
+    (error) => {
+      console.error('Erreur lors de la création de la réunion', error);
+      alert('Erreur lors de la planification de la réunion');
+    }
+  );
+}
+  
 }

@@ -1,9 +1,9 @@
 package tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import tn.esprit.examen.Smartmeet.entities.Users.Users;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Meeting {
@@ -12,6 +12,16 @@ public class Meeting {
     private Long id;
     private String meetingName;
     private String meetingLink;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "organizer_id")
+    private Users organizer;
+
+    @ManyToOne
+    @JoinColumn(name = "participant_id")
+    private Users participant;
 
     // Getters et Setters
     public Long getId() { return id; }
@@ -20,4 +30,12 @@ public class Meeting {
     public void setMeetingName(String meetingName) { this.meetingName = meetingName; }
     public String getMeetingLink() { return meetingLink; }
     public void setMeetingLink(String meetingLink) { this.meetingLink = meetingLink; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+    public Users getOrganizer() { return organizer; }
+    public void setOrganizer(Users organizer) { this.organizer = organizer; }
+    public Users getParticipant() { return participant; }
+    public void setParticipant(Users participant) { this.participant = participant; }
 }

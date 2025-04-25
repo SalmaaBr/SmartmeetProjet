@@ -74,4 +74,16 @@ export class AuthService {
       { responseType: 'text' }
     );
   }
+
+  getCurrentUserId(): number {
+    // Implémentation basique - à adapter selon votre système d'authentification
+    // Par exemple, si vous stockez les infos utilisateur dans le localStorage
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user.userID || 0; // Retourne l'ID ou 0 si non trouvé
+    }
+    return 0; // Retourne 0 si non connecté
+  }
+  
 }

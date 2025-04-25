@@ -105,7 +105,7 @@ public class WebSecurityConfig {
     // Utilisez Arrays.asList si vous préférez (mais List.of est meilleur pour Java 9+)
     configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+    configuration.setAllowedHeaders(Arrays.asList("X-Username","x-user-id","Authorization", "Content-Type"));
     configuration.setExposedHeaders(Arrays.asList("Authorization"));
     configuration.setAllowCredentials(true);
 

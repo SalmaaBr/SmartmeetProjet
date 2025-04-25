@@ -2,6 +2,7 @@ package tn.esprit.examen.Smartmeet.controllers.Users;
 
 
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,4 +207,13 @@ public class AuthController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 			}
 		}
+
+	//recuperer user connecter
+	@GetMapping("/me")
+	public ResponseEntity<Users> getCurrentUser(Authentication authentication) {
+		String username = authentication.getName();
+		Users user = userService.findByUsername(username)
+				.orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+		return ResponseEntity.ok(user);
+	}
 	}

@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { EventService, Event } from '../../services/event.service';
 import { RecutementService } from '../../services/recutement.service';
-import { UsercalenderService, EventUserCalendar } from '../../services/usercalender.service';
+import { UsercalenderService, EventUserCalendar, Meeting } from '../../services/usercalender.service';
 import { EventLikeService } from '../../services/event-like.service';
 import * as AOS from 'aos';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -40,8 +40,8 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   publications: any[] = [];
   myEvents: Event[] = [];
   mapRefs: L.Map[] = [];
-  isAuthenticated: boolean = false; // Track authentication status
-  currentUserId: number | null = null; // Store current user ID
+  isAuthenticated: boolean = false;
+  currentUserId: number | null = null;
 
   TypeIPublicationStatus = TypeIPublicationStatus;
   TypeIPublicationVisibility = TypeIPublicationVisibility;
@@ -81,10 +81,10 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
   }
 
   checkAuthentication(): void {
-    // TODO: Implement actual authentication check
-    // This is a placeholder; replace with your auth service
-    this.isAuthenticated = true; // Assume user is authenticated
-    this.currentUserId = 1; // Replace with actual user ID from auth service
+    const token = localStorage.getItem('jwt_token');
+    this.isAuthenticated = !!token;
+    // Supposons que l'ID utilisateur est récupéré via un service d'authentification ou décodé du token
+    this.currentUserId = 1; // Remplacez par la logique réelle pour extraire l'ID utilisateur
   }
 
   loadLikeData(): void {
@@ -95,7 +95,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         })
       )
     );
-  
+
     const totalLikesObservables = this.events.map((event, index) =>
       this.eventLikeService.getTotalLikes(event.id).pipe(
         tap(total => {
@@ -103,26 +103,24 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         })
       )
     );
-  
+
     forkJoin([...likeStatusObservables, ...totalLikesObservables]).subscribe({
       complete: () => {
-        this.cdr.detectChanges(); // Appeler detectChanges une seule fois à la fin
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error fetching like data:', err)
     });
   }
-
 
   toggleLike(eventId: number, index: number): void {
     if (!this.isAuthenticated || !this.currentUserId) {
       this.snackBar.open('Please log in to like events', 'Close', { duration: 3000 });
       return;
     }
-  
+
     this.eventLikeService.toggleLike(eventId).subscribe({
       next: (message) => {
         this.snackBar.open(message, 'Close', { duration: 3000 });
-        // Recharger l'état du like et le nombre total de likes
         forkJoin({
           status: this.eventLikeService.getLikeStatus(eventId),
           total: this.eventLikeService.getTotalLikes(eventId)
@@ -143,7 +141,6 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
 
   ngAfterViewInit(): void {
     this.mapContainers.changes.subscribe(() => {
@@ -220,8 +217,8 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
       next: (data) => {
         this.events = data.map(event => ({
           ...event,
-          totalLikes: event.likes, // Mapper le champ `likes` à `totalLikes`
-          isLiked: false // Initialiser `isLiked` à false, sera mis à jour par `loadLikeData`
+          totalLikes: event.likes,
+          isLiked: false
         }));
         if (this.isAuthenticated && this.currentUserId) {
           this.loadLikeData();
@@ -240,9 +237,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         console.error('Erreur:', err);
       }
     });
-  }  
-
-
+  }
 
   loadPublications(): void {
     this.publicationService.getAllPublications().subscribe({
@@ -270,7 +265,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         end: event.endTime,
         description: event.description,
         location: event.location,
-        color: 'blue' // Couleur pour les événements participés
+        color: 'blue'
       }));
 
       // Charger les événements du calendrier utilisateur
@@ -280,12 +275,29 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
             title: event.name,
             start: event.startDate,
             end: event.endDate,
-            color: 'green' // Couleur pour les événements du calendrier
+            color: 'green'
           }));
 
-          // Fusionner les deux listes d'événements
-          this.unifiedCalendarOptions.events = [...myEventsMapped, ...userEventsMapped];
-          this.cdr.detectChanges();
+          // Charger les réunions de l'utilisateur
+          this.usercalenderService.getUserMeetings().subscribe({
+            next: (meetings: Meeting[]) => {
+              const meetingsMapped = meetings.map((meeting: Meeting) => ({
+                title: meeting.meetingName,
+                start: meeting.startTime,
+                end: meeting.endTime,
+                color: 'red', // Couleur différente pour les réunions
+                url: meeting.meetingLink // Lien cliquable vers la réunion
+              }));
+
+              // Fusionner les trois listes d'événements
+              this.unifiedCalendarOptions.events = [...myEventsMapped, ...userEventsMapped, ...meetingsMapped];
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              console.error('Erreur lors de la récupération des réunions :', err);
+              this.snackBar.open('Erreur lors du chargement des réunions', 'Fermer', { duration: 3000 });
+            }
+          });
         },
         error: (err) => {
           console.error('Erreur lors de la récupération des événements utilisateur :', err);
@@ -380,7 +392,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
         this.events[index].maxParticipants = Math.max(0, this.events[index].maxParticipants - 1);
         this.loadEvents();
         this.loadMyEvents();
-        this.loadUnifiedEventsForCalendar(); // Recharger le calendrier unifié
+        this.loadUnifiedEventsForCalendar();
       },
       error: (err) => {
         console.error('Erreur lors de la participation:', err);

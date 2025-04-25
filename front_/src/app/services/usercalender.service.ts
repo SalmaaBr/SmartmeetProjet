@@ -8,14 +8,23 @@ export interface EventUserCalendar {
   createdDate: string;
   startDate: string;
   endDate?: string;
-  // Add other properties as needed
+}
+
+export interface Meeting {
+  id?: number;
+  meetingName: string;
+  meetingLink: string;
+  startTime: string;
+  endTime: string;
+  organizer?: { username: string };
+  participant?: { username: string };
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsercalenderService {
-  private apiUrl = 'http://localhost:8082/usercalendar'; // Backend URL
+  private apiUrl = 'http://localhost:8082'; // Base URL
 
   constructor(private http: HttpClient) {}
 
@@ -25,7 +34,7 @@ export class UsercalenderService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-    return this.http.post(`${this.apiUrl}/addeventcalendar`, event, { headers });
+    return this.http.post(`${this.apiUrl}/usercalendar/addeventcalendar`, event, { headers });
   }
 
   getUserEventsCalender(): Observable<EventUserCalendar[]> {
@@ -34,6 +43,16 @@ export class UsercalenderService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<EventUserCalendar[]>(`${this.apiUrl}/events`, { headers });
+    return this.http.get<EventUserCalendar[]>(`${this.apiUrl}/usercalendar/events`, { headers });
+  }
+
+  // Nouvelle méthode pour récupérer les réunions
+  getUserMeetings(): Observable<Meeting[]> {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Meeting[]>(`${this.apiUrl}/api/meetings/user-meetings`, { headers });
   }
 }
