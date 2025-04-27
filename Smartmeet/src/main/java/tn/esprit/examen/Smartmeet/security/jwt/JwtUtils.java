@@ -3,11 +3,13 @@ package tn.esprit.examen.Smartmeet.security.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import tn.esprit.examen.Smartmeet.security.services.UserDetailsImpl;
 
 
@@ -80,8 +82,13 @@ public class JwtUtils {
   }
 
   private boolean isTokenBlacklisted(String token) {
-    // Implement token blacklist check here
-    // You can use the BlacklistedTokenRepository to check if the token is blacklisted
-    return false; // Placeholder - implement actual check
+    return false;
+  }
+  public String getJwtFromHeader(HttpServletRequest request) {
+    String authHeader = request.getHeader("Authorization");
+    if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+      return authHeader.substring(7);
+    }
+    return null;
   }
 }

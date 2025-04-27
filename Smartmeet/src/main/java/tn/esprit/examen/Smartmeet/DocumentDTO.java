@@ -10,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+
 public class DocumentDTO {
     @NotBlank(message = "Name is required")
     private String name;

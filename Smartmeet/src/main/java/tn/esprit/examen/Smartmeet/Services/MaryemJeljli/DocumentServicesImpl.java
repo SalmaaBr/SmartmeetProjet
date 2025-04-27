@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.examen.Smartmeet.DocumentDTO;
 import tn.esprit.examen.Smartmeet.DocumentLikeDTO;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
@@ -16,6 +18,7 @@ import tn.esprit.examen.Smartmeet.repositories.MaryemJeljli.DocumentLikeReposito
 import tn.esprit.examen.Smartmeet.repositories.MaryemJeljli.IDocumentRepository;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +33,7 @@ import jakarta.persistence.EntityNotFoundException;
 
     public class DocumentServicesImpl implements IDocumentServices {
         private final UserRepository userRepository;
+        private FileStorageService fileStorageService;
         private final IDocumentRepository documentRepository;
         private final DocumentLikeRepository documentLikeRepository;
         private static final Logger log = LoggerFactory.getLogger(DocumentServicesImpl.class);
@@ -42,9 +46,35 @@ import jakarta.persistence.EntityNotFoundException;
 
             document.setUsers(user);
             document.setDocumentLikes(new HashSet<>());
+
             return documentRepository.save(document);
 
         }
+
+       /* @Override
+       /* public Document addDocument(Document document, MultipartFile pdfFile, MultipartFile imageFile) throws IOException {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = userDetails.getUsername();
+            Users user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+
+            document.setUsers(user);
+            document.setDocumentLikes(new HashSet<>());
+
+            // Handle PDF upload
+            if (pdfFile != null && !pdfFile.isEmpty()) {
+                String pdfPath = fileStorageService.storeFile(pdfFile, "pdf");
+                document.setPdfPath(pdfPath);
+            }
+
+            // Handle image upload
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imagePath = fileStorageService.storeFile(imageFile, "image");
+                document.setImagePath(imagePath);
+            }
+
+            return documentRepository.save(document);
+        }*/
 
         @Override
         public List<DocumentDTO> retrieveAllDocuments() {

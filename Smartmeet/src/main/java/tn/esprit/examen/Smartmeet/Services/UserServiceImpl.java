@@ -9,6 +9,7 @@ import tn.esprit.examen.Smartmeet.repositories.Users.BlacklistedTokenRepository;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -105,5 +106,10 @@ public class UserServiceImpl implements UserService {
     public Users getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+    }
+
+    @Override
+    public Optional<Users> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

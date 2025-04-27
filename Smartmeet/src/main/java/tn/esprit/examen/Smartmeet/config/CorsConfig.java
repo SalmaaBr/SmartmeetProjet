@@ -1,6 +1,8 @@
 package tn.esprit.examen.Smartmeet.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,5 +18,9 @@ public class CorsConfig implements WebMvcConfigurer {
                 .exposedHeaders("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With")
                 .allowCredentials(true)
                 .maxAge(3600); // Cache preflight requests for 1 hour
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

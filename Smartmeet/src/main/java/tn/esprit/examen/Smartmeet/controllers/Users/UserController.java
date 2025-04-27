@@ -1,13 +1,17 @@
 package tn.esprit.examen.Smartmeet.controllers.Users;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.Smartmeet.Services.UserService;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.security.jwt.JwtUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -54,4 +58,14 @@ public class UserController {
         Users user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
+    @GetMapping("/current_user")
+    public ResponseEntity<Users> getCurrentUser(Authentication authentication) {
+        String username = authentication.getName();
+        Users user = userService.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+        return ResponseEntity.ok(user);
+    }
+
+
+
 }

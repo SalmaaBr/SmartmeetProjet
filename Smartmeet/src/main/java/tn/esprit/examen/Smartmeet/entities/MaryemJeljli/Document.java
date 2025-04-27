@@ -19,7 +19,6 @@ import java.util.Set;
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Entity
 
-//hellloooooooooo
 public class Document {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -27,7 +26,8 @@ public class Document {
     private String name;
     private String description;
     private LocalDate createdAt;
-
+    //private String pdfPath;
+    //private String imagePath;
 
     @Enumerated(EnumType.STRING)
     private TypeAccessLevelDocument documentAccessLevel;
