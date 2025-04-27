@@ -121,11 +121,11 @@
             <td>{{ user.userID }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.interests ? user.interests.join(', ') : 'None' }}</td>
+            <td>{{ user.interests ? user.interests.join(', ') : 'None' }}</td>  
+
             <td>
               <button class="btn btn-sm btn-primary" (click)="sendInterview(user)">Envoyer un entretien</button>
-            </td>
-            
+            </td>     
           </tr>
           <tr *ngIf="recommendedUsers.length === 0">
             <td colspan="5" class="text-center">No recommended users available.</td>

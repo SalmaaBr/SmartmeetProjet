@@ -10,9 +10,14 @@ import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.repositories.SalmaBenRomdhan.MeetingRepository;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
+import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class MeetingService {
