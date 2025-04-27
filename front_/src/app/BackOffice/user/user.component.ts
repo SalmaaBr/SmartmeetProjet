@@ -21,7 +21,6 @@ export class UserComponent implements OnInit {
   roles: TypeUserRole[] = [];
   userToDelete: number | null = null;
   showDeleteModal: boolean = false; // Boolean to toggle delete modal
-  selectedFile: File | null = null;
 
   constructor(private userService: UserService,private http: HttpClient,private router: Router,    private authService: AuthService // Injectez le AuthService
   ) {}
@@ -131,12 +130,5 @@ sendInterview(user: User): void {
     }
   );
 }
-
-
-  // Méthode pour gérer la sélection du fichier
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-  }
-
   
 }
