@@ -128,11 +128,20 @@ sendInterview(user: User): void {
 
   // Envoyer la requête avec ou sans organizerId
   this.http.post<any>('http://localhost:8082/api/meetings/interview', meetingRequest, {
-    headers: { 
-      'X-User-ID': organizerId ? organizerId.toString() : '0' // 0 pour les utilisateurs non connectés
+    headers: {
+      'X-User-ID': organizerId ? organizerId.toString() : '0'
     }
   }).subscribe(
     (response) => {
+      if (user.userID) {
+        this.userService.getMeetingsByUserId(user.userID).subscribe(meetings => {
+          const userIndex = this.recommendedUsers.findIndex(u => u.userID === user.userID);
+          if (userIndex !== -1) {
+            this.recommendedUsers[userIndex].meetings = meetings;
+            this.recommendedUsers = [...this.recommendedUsers];
+          }
+        });
+      }
       this.router.navigate([`/meeting/${response.id}`]);
       alert(`Réunion programmée pour le ${new Date(response.startTime).toLocaleString()}`);
     },
@@ -207,6 +216,17 @@ generateRapport(): void {
       alert('Erreur lors de la génération du rapport');
     }
   );
+}
+
+closeModalReport(modalId: string): void {
+  if (modalId === 'deleteModal') {
+    this.showDeleteModal = false; // Hide the delete modal
+    this.userToDelete = null;
+  } else if (modalId === 'rapportModal') {
+    this.showRapportModal = false; // Hide the rapport modal
+    this.selectedMeeting = null;
+    this.rawReportText = ''; // Optionnel: vider le texte du rapport
+  }
 }
 
   

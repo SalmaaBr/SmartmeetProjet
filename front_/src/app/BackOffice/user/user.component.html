@@ -130,10 +130,10 @@
                     Générer Rapport
                   </button>
                   <button class="btn btn-sm btn-info me-1" (click)="goToMeeting(meeting.meetingLink)">
-                    {{ meeting.meetingName }} ({{ meeting.startTime | date:'short' }})
+                     ({{ meeting.startTime | date:'short' }})
                   </button>
                   <button *ngIf="user.userID" class="btn btn-sm btn-danger" (click)="deleteMeeting(meeting.id, user.userID)">
-                    Supprimer
+                    delete
                   </button>
                 </div>
               </div>
@@ -142,7 +142,7 @@
               </ng-template>
             </td>
             <td>
-              <button class="btn btn-sm btn-primary" (click)="sendInterview(user)">Envoyer un entretien</button>
+              <button class="btn btn-sm btn-primary" (click)="sendInterview(user)">send</button>
             </td>
           </tr>
           <tr *ngIf="recommendedUsers.length === 0">
@@ -159,16 +159,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Générer Rapport</h5>
-        <button type="button" class="close" (click)="closeModal('rapportModal')">
-          <span>&times;</span>
-        </button>
+        <h5 class="modal-title">Generate Report</h5>
+        <button type="button" class="btn-close" (click)="closeModalReport('rapportModal')" aria by-label="Close"></button>
       </div>
       <div class="modal-body">
         <textarea class="form-control" [(ngModel)]="rawReportText" placeholder="Entrez le résumé de l'entretien..." rows="5"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal('rapportModal')">Annuler</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModalReport('rapportModal')">Annuler</button>
         <button type="button" class="btn btn-success" (click)="generateRapport()">Générer</button>
       </div>
     </div>
