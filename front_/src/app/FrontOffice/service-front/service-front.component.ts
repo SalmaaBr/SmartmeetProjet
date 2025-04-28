@@ -58,6 +58,7 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
     weekends: true,
     events: [],
     dateClick: this.handleDateClick.bind(this),
+    eventClick: this.handleEventClick.bind(this), // Add eventClick handler
   };
 
   constructor(
@@ -410,4 +411,12 @@ export class ServiceFrontComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  // Add this new method to handle event clicks
+handleEventClick(info: any): void {
+  if (info.event.url) {
+    info.jsEvent.preventDefault(); // Prevent default FullCalendar behavior (opening in same tab)
+    window.open(info.event.url, '_blank'); // Open URL in new tab
+  }
+}
 }
