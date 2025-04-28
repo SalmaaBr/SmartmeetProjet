@@ -40,6 +40,14 @@ export class UserComponent implements OnInit {
   loadRecommendedUsers(): void {
     this.userService.getRecommendedUsers().subscribe(recommendedUsers => {
       this.recommendedUsers = recommendedUsers;
+      // Pour chaque utilisateur recommandé, récupérer ses réunions
+      this.recommendedUsers.forEach(user => {
+        if (user.userID) {
+          this.userService.getMeetingsByUserId(user.userID).subscribe(meetings => {
+            user.meetings = meetings;
+          });
+        }
+      });
     });
   }
 
@@ -130,5 +138,12 @@ sendInterview(user: User): void {
     }
   );
 }
+
+
+// Nouvelle méthode pour naviguer vers une réunion
+goToMeeting(meetingLink: string): void {
+  window.open(meetingLink, '_blank'); // Ouvre le lien dans un nouvel onglet
+}
+
   
 }

@@ -31,7 +31,7 @@ public class RapportMeetingService {
     }
 
     public Mono<byte[]> genererRapportMeeting(String rawReport) {
-        String prompt = "Améliore et structure ce compte-rendu de réunion en un texte bien organisé avec des sections claires :\n\n" + rawReport;
+        String prompt = "je veux que tu me me creer un rapport a partir du paragraphe que je vais te la donner cette paragraphe resume ce qui c'est passé dans l'entretient entre rh et user :\n\n" + rawReport;
 
         return generateStructuredText(prompt)
                 .flatMap(this::generatePdf);

@@ -59,6 +59,9 @@ export class UserService {
   getRecommendedUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/me/recommendations`);
   }
-  
+
+  getMeetingsByUserId(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8082/api/meetings/user/${userId}`);
+  }
   
 }

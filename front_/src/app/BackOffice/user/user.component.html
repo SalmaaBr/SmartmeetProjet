@@ -113,6 +113,7 @@
             <th>Username</th>
             <th>Email</th>
             <th>Interests</th>
+            <th>Meetings</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -123,12 +124,23 @@
             <td>{{ user.email }}</td>
             <td>{{ user.interests ? user.interests.join(', ') : 'None' }}</td>
             <td>
+              <div *ngIf="user.meetings && user.meetings.length > 0; else noMeetings">
+                <button *ngFor="let meeting of user.meetings" 
+                        class="btn btn-sm btn-info me-1 mb-1" 
+                        (click)="goToMeeting(meeting.meetingLink)">
+                  {{ meeting.meetingName }} ({{ meeting.startTime | date:'short' }})
+                </button>
+              </div>
+              <ng-template #noMeetings>
+                <span>No meetings available</span>
+              </ng-template>
+            </td>
+            <td>
               <button class="btn btn-sm btn-primary" (click)="sendInterview(user)">Envoyer un entretien</button>
             </td>
-            
           </tr>
           <tr *ngIf="recommendedUsers.length === 0">
-            <td colspan="5" class="text-center">No recommended users available.</td>
+            <td colspan="6" class="text-center">No recommended users available.</td>
           </tr>
         </tbody>
       </table>

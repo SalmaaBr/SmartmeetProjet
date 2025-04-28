@@ -45,4 +45,9 @@ public class MeetingController {
     public List<Meeting> getUserMeetings() {
         return meetingService.getUserMeetings();
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Meeting> getMeetingsByUserId(@PathVariable Long userId) {
+        return meetingService.getMeetingsByUserId(userId);
+    }
 }

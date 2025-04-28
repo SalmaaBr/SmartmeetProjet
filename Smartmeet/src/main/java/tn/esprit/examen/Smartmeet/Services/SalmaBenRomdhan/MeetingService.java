@@ -91,4 +91,10 @@ public class MeetingService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return meetingRepository.findByOrganizerOrParticipant(user, user);
     }
+
+    public List<Meeting> getMeetingsByUserId(Long userId) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return meetingRepository.findByOrganizerOrParticipant(user, user);
+    }
 }
