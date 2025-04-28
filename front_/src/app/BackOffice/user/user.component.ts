@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { User, TypeUserRole } from '../../models/user.model';
+import { User, TypeUserRole , Meeting} from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { RapportService } from '../../services/rapport.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service'; // Importez le AuthService
@@ -21,8 +22,11 @@ export class UserComponent implements OnInit {
   roles: TypeUserRole[] = [];
   userToDelete: number | null = null;
   showDeleteModal: boolean = false; // Boolean to toggle delete modal
+  showRapportModal: boolean = false; // Pour afficher le modal de génération de rapport
+  rawReportText: string = ''; // Texte saisi pour le rapport
+  selectedMeeting: Meeting | null = null; // Réunion sélectionnée pour le rapport
 
-  constructor(private userService: UserService,private http: HttpClient,private router: Router,    private authService: AuthService // Injectez le AuthService
+  constructor(private userService: UserService,private http: HttpClient,private router: Router,private rapportService: RapportService,    private authService: AuthService // Injectez le AuthService
   ) {}
 
   ngOnInit(): void {
@@ -143,6 +147,66 @@ sendInterview(user: User): void {
 // Nouvelle méthode pour naviguer vers une réunion
 goToMeeting(meetingLink: string): void {
   window.open(meetingLink, '_blank'); // Ouvre le lien dans un nouvel onglet
+}
+
+// Nouvelle méthode pour supprimer une réunion
+deleteMeeting(meetingId: number, userId: number | undefined): void {
+  if (!userId) {
+    console.error('User ID is undefined');
+    alert('Erreur : utilisateur non valide');
+    return;
+  }
+
+  if (confirm('Êtes-vous sûr de vouloir supprimer cette réunion ?')) {
+    this.userService.deleteMeeting(meetingId).subscribe(
+      () => {
+        // Recharger les réunions de l'utilisateur après suppression
+        this.userService.getMeetingsByUserId(userId).subscribe(meetings => {
+          const user = this.recommendedUsers.find(u => u.userID === userId);
+          if (user) {
+            user.meetings = meetings;
+          }
+        });
+        alert('Réunion supprimée avec succès');
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression de la réunion', error);
+        alert('Erreur lors de la suppression de la réunion');
+      }
+    );
+  }
+}
+
+openRapportModal(meeting: Meeting): void {
+  this.selectedMeeting = meeting;
+  this.rawReportText = '';
+  this.showRapportModal = true;
+}
+
+generateRapport(): void {
+  if (!this.selectedMeeting || !this.selectedMeeting.id) {
+    alert('Erreur : réunion non valide');
+    return;
+  }
+
+  this.rapportService.generateRapport(this.selectedMeeting.id, this.rawReportText).subscribe(
+    (blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rapport-meeting-${this.selectedMeeting!.id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      alert('Rapport généré et téléchargé avec succès');
+      this.closeModal('rapportModal');
+    },
+    (error: any) => {
+      console.error('Erreur lors de la génération du rapport', error);
+      alert('Erreur lors de la génération du rapport');
+    }
+  );
 }
 
   

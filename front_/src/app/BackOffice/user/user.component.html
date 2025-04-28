@@ -125,11 +125,17 @@
             <td>{{ user.interests ? user.interests.join(', ') : 'None' }}</td>
             <td>
               <div *ngIf="user.meetings && user.meetings.length > 0; else noMeetings">
-                <button *ngFor="let meeting of user.meetings" 
-                        class="btn btn-sm btn-info me-1 mb-1" 
-                        (click)="goToMeeting(meeting.meetingLink)">
-                  {{ meeting.meetingName }} ({{ meeting.startTime | date:'short' }})
-                </button>
+                <div *ngFor="let meeting of user.meetings" class="d-flex align-items-center mb-1">
+                  <button class="btn btn-sm btn-success me-1" (click)="openRapportModal(meeting)">
+                    Générer Rapport
+                  </button>
+                  <button class="btn btn-sm btn-info me-1" (click)="goToMeeting(meeting.meetingLink)">
+                    {{ meeting.meetingName }} ({{ meeting.startTime | date:'short' }})
+                  </button>
+                  <button *ngIf="user.userID" class="btn btn-sm btn-danger" (click)="deleteMeeting(meeting.id, user.userID)">
+                    Supprimer
+                  </button>
+                </div>
               </div>
               <ng-template #noMeetings>
                 <span>No meetings available</span>
@@ -147,3 +153,25 @@
     </div>
   </div>
 </div>
+
+<!-- Modal pour saisir le résumé du rapport -->
+<div *ngIf="showRapportModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Générer Rapport</h5>
+        <button type="button" class="close" (click)="closeModal('rapportModal')">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-control" [(ngModel)]="rawReportText" placeholder="Entrez le résumé de l'entretien..." rows="5"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal('rapportModal')">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="generateRapport()">Générer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showRapportModal" class="modal-backdrop fade show"></div>

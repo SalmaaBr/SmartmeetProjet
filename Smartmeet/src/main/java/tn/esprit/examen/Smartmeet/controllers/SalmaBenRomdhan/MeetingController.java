@@ -50,4 +50,9 @@ public class MeetingController {
     public List<Meeting> getMeetingsByUserId(@PathVariable Long userId) {
         return meetingService.getMeetingsByUserId(userId);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteMeeting(@PathVariable Long id) {
+        meetingService.deleteMeeting(id);
+    }
 }

@@ -97,4 +97,10 @@ public class MeetingService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return meetingRepository.findByOrganizerOrParticipant(user, user);
     }
+
+    public void deleteMeeting(Long id) {
+        Meeting meeting = meetingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Meeting not found with id: " + id));
+        meetingRepository.delete(meeting);
+    }
 }

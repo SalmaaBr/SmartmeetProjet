@@ -63,5 +63,9 @@ export class UserService {
   getMeetingsByUserId(userId: number): Observable<any[]> {
     return this.http.get<any[]>(`http://localhost:8082/api/meetings/user/${userId}`);
   }
+
+  deleteMeeting(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8082/api/meetings/${id}`);
+  }
   
 }
