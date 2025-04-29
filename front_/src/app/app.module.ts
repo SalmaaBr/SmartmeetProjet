@@ -54,6 +54,10 @@ import { NotificationComponent } from './components/notification/notification.co
 import { DocumentManagementComponent } from 'src/app/BackOffice/document-management/document-management.component';
 import { DocumentService } from './services/document.service';
 import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
+import { RecommendationService } from './services/RecommendationService.service';
+import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
+import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
+import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +102,9 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
     MaintenanceNotificationAdminComponent,
     DocumentManagementComponent,
     DocumentFilterPipe,
+    MessageComposeComponent,
+    MessageInboxComponent,
+    MessageSentComponent,
     
   ],
   imports: [
@@ -120,6 +127,7 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
     ReservationService,
     ResourceService,
     DocumentService,
+    RecommendationService,
     DatePipe,
     provideAnimations(),
     provideToastr(),

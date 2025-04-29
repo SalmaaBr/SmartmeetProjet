@@ -31,7 +31,9 @@ import { ResourceReservationStatisticsComponent } from './BackOffice/resource-re
 import { NotificationComponent } from './components/notification/notification.component';
 import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
 import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
-
+import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
+import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
+import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component'; 
 const routes: Routes = [
   {
     path: 'front',
@@ -47,8 +49,15 @@ const routes: Routes = [
         path: 'notifications',
         component: NotificationComponent,
       },
-    ]
-  },
+   ]},
+   {
+    path: 'messages',
+    children: [
+      { path: 'compose', component: MessageComposeComponent },
+      { path: 'inbox', component: MessageInboxComponent },
+      { path: 'sent', component: MessageSentComponent },
+]
+},
   {
     path: 'admin',
     component: AllTemplateBackComponent,

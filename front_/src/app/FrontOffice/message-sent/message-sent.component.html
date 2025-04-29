@@ -1,0 +1,41 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Sent Messages</h2>
+  
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading messages...</span>
+      </div>
+      <p>Loading messages...</p>
+    </div>
+  
+    <!-- Messages Table -->
+    <div *ngIf="!loading">
+      <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Receiver</th>
+            <th scope="col">Content</th>
+            <th scope="col">Sent At</th>
+            <th scope="col">Attachments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let message of messages">
+            <td>{{ message.receiver.username }}</td>
+            <td>{{ message.content }}</td>
+            <td>{{ message.sentAt | date:'medium' }}</td>
+            <td>
+              <div *ngFor="let attachment of message.documents">
+                <a [href]="attachment.filePath" target="_blank">{{ attachment.name }}</a>
+              </div>
+              <span *ngIf="!message.documents || message.documents.length === 0">No attachments</span>
+            </td>
+          </tr>
+          <tr *ngIf="messages.length === 0">
+            <td colspan="4" class="text-center text-muted">No messages found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

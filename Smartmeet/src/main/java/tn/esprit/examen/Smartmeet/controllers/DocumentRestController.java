@@ -15,10 +15,13 @@ import tn.esprit.examen.Smartmeet.Services.MaryemJeljli.IDocumentServices;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.*;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,7 +34,7 @@ public class DocumentRestController {
 
     private final IDocumentServices documentServices;
     private final UserRepository userRepository;
-
+    private static final Logger logger = LoggerFactory.getLogger(DocumentRestController.class);
     @GetMapping("/getAllDocumentLikes")
     public ResponseEntity<List<DocumentLikeDTO>> getAllDocumentLikes() {
         try {
@@ -148,7 +151,7 @@ public class DocumentRestController {
     }
 
     @PostMapping("/like/{id}")
-    public ResponseEntity<DocumentDTO> likeDocument(@PathVariable Integer id) {
+    public ResponseEntity<?> likeDocument(@PathVariable Integer id) {
         try {
             // Call the service method, which returns a Document
             Document document = documentServices.likeDocument(id);
@@ -178,17 +181,17 @@ public class DocumentRestController {
             return ResponseEntity.ok(dto);
         } catch (IllegalStateException e) {
             // Handle case where user has already liked the document
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(null);
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "User has already liked this document");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            // Handle unexpected errors
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "An error occurred while liking the document: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-
-
     }}
+
 
 
     /*@PostMapping("/AddDocument")

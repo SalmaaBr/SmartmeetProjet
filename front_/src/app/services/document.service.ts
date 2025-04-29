@@ -29,18 +29,19 @@ export class DocumentService {
     });
 }
 
-  likeDocument(id: number): Observable<Document> {
-    return this.http.post<Document>(`${this.apiUrl}/like/${id}`, {}, { headers: this.getHeaders() }).pipe(
-      catchError(err => {
-        if (err.status === 401) {
-          this.authService.logout();
-        } else if (err.status === 409) {
-          return throwError(() => new Error('Document already liked by this user'));
-        }
-        return throwError(() => new Error('Error liking document: ' + err.message));
-      })
-    );
-  }
+likeDocument(documentId: number): Observable<Document> {
+  const token = this.authService.getToken();
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+  return this.http.post<Document>(`${this.apiUrl}/like/${documentId}`, null, { headers }).pipe(
+    catchError(this.handleError)
+  );
+}
+private handleError(error: any): Observable<never> {
+  console.error('An error occurred:', error);
+  return throwError(() => error);
+}
   // Handle token expiration
   private handleTokenExpiration() {
     localStorage.removeItem('auth_token');

@@ -1,0 +1,31 @@
+
+<div class="container mt-4">
+    <h2>Compose Message</h2>
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <div class="mb-3">
+            <label for="receiverUsername" class="form-label">To (Username):</label>
+            <input type="text" class="form-control" id="receiverUsername" [(ngModel)]="receiverUsername" name="receiverUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Message:</label>
+            <textarea class="form-control" id="content" [(ngModel)]="content" name="content" rows="5" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Attach Documents:</label>
+            <div *ngIf="loading">Loading documents...</div>
+            <div *ngIf="!loading">
+              <div *ngFor="let doc of documents" class="form-check">
+                <input type="checkbox" class="form-check-input" [id]="'doc-' + doc.id" [value]="doc.id" (change)="toggleDocumentSelection(doc.id)">
+                <label class="form-check-label" [for]="'doc-' + doc.id">{{ doc.name }}</label>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="sendMessage()" [disabled]="loading">
+            {{ loading ? 'Sending...' : 'Send Message' }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>

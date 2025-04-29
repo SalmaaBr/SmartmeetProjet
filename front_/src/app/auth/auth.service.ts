@@ -19,7 +19,8 @@ export class AuthService {
   private refreshTokenInterval: any;
   private refreshTokenSubject = new BehaviorSubject<boolean>(false);
   private currentUser: User | null = null; // Propriété pour stocker l'utilisateur
-
+  private authStatusSubject = new BehaviorSubject<boolean>(this.isAuthenticated()); // Added for authStatus$
+  authStatus$ = this.authStatusSubject.asObservable();
   constructor(
     private http: HttpClient,
     private router: Router
@@ -46,6 +47,7 @@ export class AuthService {
         this.currentUser = response.user as User; // Stocker l'utilisateur
         localStorage.setItem(this.userKey, JSON.stringify(this.currentUser)); // Sauvegarder dans localStorage
         this.startRefreshTokenInterval();
+        this.authStatusSubject.next(true); // Emit auth status change
       })
     );
   }
@@ -62,6 +64,7 @@ export class AuthService {
   logout(): void {
     this.clearAuthData();
     this.currentUser = null; // Réinitialiser l'utilisateur
+    this.authStatusSubject.next(false); // Emit auth status change
     this.router.navigate(['/login']);
   }
 
@@ -80,12 +83,15 @@ export class AuthService {
         this.refreshTokenSubject.next(false);
         this.clearAuthData();
         this.currentUser = null; // Réinitialiser l'utilisateur
+        this.authStatusSubject.next(false); // Emit auth status change
         this.router.navigate(['/login']);
         throw error;
       })
     );
   }
-
+getUsername(): string | null {
+  return this.currentUser ? this.currentUser.username : null;
+}
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }

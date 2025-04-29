@@ -43,6 +43,7 @@ export class DocumentManagementComponent implements OnInit {
           console.log('Détails du premier document :', {
             id: docs[0].id,
             name: docs[0].name,
+            filePath:docs[0].filePath,
             documentType: docs[0].documentType,
             documentVisibility: docs[0].documentVisibility,
             documentAccessLevel: docs[0].documentAccessLevel,
@@ -73,6 +74,7 @@ export class DocumentManagementComponent implements OnInit {
     const documentToSave: Partial<Document> = {
       id: this.isEditing ? this.currentDocument.id : 0,
       name: this.currentDocument.name,
+      filePath:this.currentDocument.filePath,
       description: this.currentDocument.description,
       createdAt: this.isEditing ? this.currentDocument.createdAt : new Date(), // Conserve la date existante si édition
       documentType: this.currentDocument.documentType ?? TypeDocument.ARTICLE,
@@ -158,6 +160,7 @@ export class DocumentManagementComponent implements OnInit {
       id: 0,
       name: '',
       description: '',
+      filePath:'',
       createdAt: new Date(),
       documentType: TypeDocument.ARTICLE,
       documentVisibility: TypeDocumentVisibility.PUBLIC,

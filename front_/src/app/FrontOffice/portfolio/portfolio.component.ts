@@ -4,19 +4,33 @@ import { ToastrService } from 'ngx-toastr';
 import { Document,DocumentLike } from 'src/app/models/document'; 
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
+import { MessageService } from 'src/app/services/message.service';
+import { RecommendationService } from 'src/app/services/RecommendationService.service';
+interface RecommendedDocument extends Document {
+  score: number;
+}
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
-  documents:Document[] = [];;
+  documents:Document[] = [];
+  recommendedDocuments: RecommendedDocument[] = [];
   likedDocuments: Set<number> = new Set();
   searchTerm: string = '';
   errorMessage: string | null = null;
   loading: boolean = false;
   isLoggedIn: boolean = false;
   currentUserId: number | null = null;
+  showRecommendations: boolean = false;
+  availableUsers: User[] = [];
+  selectedDocument: Document | null = null;
+  selectedUser: string | null = null;
+  messageContent: string = '';
+  showModal: boolean = false;
   logId(id: number) {
     console.log('Navigating to document ID:', id);
   }
@@ -24,6 +38,9 @@ export class PortfolioComponent implements OnInit {
   constructor(private documentService: DocumentService,
     private authService: AuthService,
     private toastr: ToastrService,
+    private userService: UserService,
+    private messageService: MessageService,
+    private recommendationService: RecommendationService,
     private router: Router 
   ) {}
 
@@ -32,8 +49,117 @@ export class PortfolioComponent implements OnInit {
     const user = this.authService.getCurrentUser();
     this.currentUserId = user?.userID ?? null;
     this.loadDocuments()
+    this.loadAvailableUsers();
+  }
+  loadAvailableUsers() {
+    this.userService.getAvailableUsers().subscribe({
+      next: (users) => {
+        this.availableUsers = users;
+      },
+      error: (err) => {
+        if (err.message.includes('Session expired')) {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }
+        this.toastr.error('Error loading users: ' + (err.message || 'Unknown error'));
+      }
+    });
   }
 
+  openShareModal(document: Document) {
+    this.selectedDocument = document;
+    this.selectedUser = null;
+    this.messageContent = '';
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedDocument = null;
+    this.selectedUser = null;
+    this.messageContent = '';
+  }
+
+  shareDocument() {
+    if (!this.selectedUser || !this.messageContent) {
+      this.toastr.error('Please select a user and enter a message.');
+      return;
+    }
+    if (!this.selectedDocument) {
+      this.toastr.error('No document selected.');
+      return;
+    }
+
+    this.loading = true;
+    this.messageService.sendMessage(this.selectedUser, this.messageContent, [this.selectedDocument.id]).subscribe({
+      next: () => {
+        this.toastr.success('Document shared successfully!');
+        this.closeModal();
+        this.loading = false;
+      },
+      error: (err) => {
+        if (err.message.includes('Session expired')) {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }
+        this.toastr.error('Failed to share document: ' + (err.message || 'Unknown error'));
+        this.loading = false;
+      }
+    });
+  }
+  loadRecommendedDocuments() {
+    if (!this.isLoggedIn) {
+      this.toastr.error('Veuillez vous connecter pour voir les recommandations.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const token = this.authService.getToken();
+    if (!token) {
+      this.toastr.error('Aucun token trouvé. Veuillez vous reconnecter.');
+      this.authService.logout();
+      return;
+    }
+
+    this.loading = true;
+    this.recommendationService.getRecommendationsForCurrentUser(token).subscribe({
+      next: (recommendations) => {
+        console.log('Recommandations reçues:', recommendations);
+        this.recommendedDocuments = [];
+        recommendations.forEach((rec: any) => {
+          const doc = this.documents.find(d => d.id === rec.id);
+          if (doc) {
+            const recommendedDoc: RecommendedDocument = { ...doc, score: rec.score };
+            this.recommendedDocuments.push(recommendedDoc);
+          }
+        });
+        // Explicitly type the parameters as RecommendedDocument
+        this.recommendedDocuments.sort((a: RecommendedDocument, b: RecommendedDocument) => b.score - a.score);
+        this.showRecommendations = true;
+        this.loading = false;
+        this.toastr.success('Recommandations chargées avec succès !');
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des recommandations:', err);
+        if (err.message.includes('401')) {
+          this.errorMessage = 'Session expirée. Veuillez vous reconnecter.';
+          this.toastr.error('Session expirée. Veuillez vous reconnecter.');
+        } else {
+          this.errorMessage = 'Erreur lors de la récupération des recommandations.';
+          this.toastr.error('Erreur lors de la récupération des recommandations.');
+        }
+        this.loading = false;
+      }
+    });
+  }
+
+  toggleRecommendations() {
+    if (!this.showRecommendations) {
+      this.loadRecommendedDocuments();
+    } else {
+      this.showRecommendations = false;
+    }
+  }
 
  /* loadUserDetails(): void {
     this.documentService.getCurrentUser().subscribe({
@@ -80,16 +206,26 @@ export class PortfolioComponent implements OnInit {
   
     likeDocument(id: number) {
       if (!this.isLoggedIn) {
-        this.errorMessage = 'Vous devez être connecté pour aimer un document.';
-        this.toastr.error('Veuillez vous connecter.');
+        this.errorMessage = 'You must be logged in to like a document.';
+        this.toastr.error('Please log in.');
         this.authService.logout();
+        this.router.navigate(['/login']);
+        return;
+      }
+  
+      const token = this.authService.getToken();
+      if (!token) {
+        this.errorMessage = 'Session expired or token missing. Please log in again.';
+        this.toastr.error('Session expired. Please log in again.');
+        this.authService.logout();
+        this.router.navigate(['/login']);
         return;
       }
   
       if (!id || isNaN(id)) {
         console.error('Invalid document ID:', id);
-        this.errorMessage = 'ID du document invalide.';
-        this.toastr.error('ID du document invalide.');
+        this.errorMessage = 'Invalid document ID.';
+        this.toastr.error('Invalid document ID.');
         return;
       }
   
@@ -102,16 +238,21 @@ export class PortfolioComponent implements OnInit {
             this.documents[index] = updatedDoc;
           }
           this.likedDocuments.add(id);
-          this.toastr.success('Document aimé !');
-          this.loadDocuments(); // Recharger pour mettre à jour l'état
+          this.toastr.success('Document liked!');
+          this.loadDocuments();
         },
         error: (err) => {
           console.error('Like failed:', err);
-          if (err.message.includes('already liked')) {
-            this.toastr.warning('Vous avez déjà aimé ce document.');
+          if (err.status === 400 && err.error?.error === 'User has already liked this document') {
+            this.toastr.warning('You have already liked this document.');
+          } else if (err.status === 401) {
+            this.errorMessage = 'Session expired or unauthorized. Please log in again.';
+            this.toastr.error('Session expired. Please log in again.');
+            this.authService.logout();
+            this.router.navigate(['/login']);
           } else {
-            this.errorMessage = 'Échec de l\'action Like : ' + (err.message || 'Erreur inconnue');
-            this.toastr.error('Échec de l\'action Like : ' + (err.message || 'Erreur inconnue'));
+            this.errorMessage = 'Failed to like document: ' + (err.error?.error || 'Unknown error');
+            this.toastr.error('Failed to like document: ' + (err.error?.error || 'Unknown error'));
           }
         }
       });
