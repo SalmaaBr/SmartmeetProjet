@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import tn.esprit.examen.Smartmeet.email.EmailService;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Meeting;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MeetingRequest;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
@@ -23,22 +24,26 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final AvailabilityService availabilityService;
     private final UserRepository userRepository;
+    private final EmailService emailService; // Ajout de EmailService
 
     public MeetingService(MeetingRepository meetingRepository,
                           AvailabilityService availabilityService,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          EmailService emailService) {
         this.meetingRepository = meetingRepository;
         this.availabilityService = availabilityService;
         this.userRepository = userRepository;
+        this.emailService = emailService; // Injection de EmailService
     }
 
     public Meeting createInterview(MeetingRequest request) {
-        // Récupérer l'utilisateur connecté
+        // Récupérer l'utilisateur connecté comme organisateur
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Users organizer = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Organizer not found"));
 
+        // Récupérer le participant seulement
         Users participant = userRepository.findById(request.getParticipantId())
                 .orElseThrow(() -> new RuntimeException("Participant not found"));
 
@@ -57,10 +62,26 @@ public class MeetingService {
         meeting.setMeetingLink(meetingLink);
         meeting.setStartTime(startTime);
         meeting.setEndTime(endTime);
-        meeting.setOrganizer(organizer);
+        meeting.setOrganizer(organizer); // L'organisateur est toujours l'utilisateur connecté
         meeting.setParticipant(participant);
 
-        return meetingRepository.save(meeting);
+        // Sauvegarder la réunion
+        Meeting savedMeeting = meetingRepository.save(meeting);
+
+        // Envoyer l'e-mail d'invitation au participant
+        String formattedStartTime = startTime.toString(); // Vous pouvez formater selon vos besoins
+        emailService.sendMeetingInvitationEmail(
+                participant.getEmail(), // Adresse e-mail du participant
+                participant.getUsername(),
+                meeting.getMeetingName(),
+                organizer.getUsername(),
+                participant.getUsername(),
+                formattedStartTime,
+                duration,
+                meetingLink
+        );
+
+        return savedMeeting;
     }
 
     public Meeting getMeeting(Long id) {

@@ -103,9 +103,22 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.findAll().stream()
-                .filter(user -> !user.getUserID().equals(currentUser.getUserID())) // éviter l'auto-reco
-                .filter(user -> user.getInterests().stream().anyMatch(currentUserInterests::contains))
+                .filter(user -> !user.getUserID().equals(currentUser.getUserID())) // Éviter l'auto-recommandation
+                .filter(user -> !user.getInterests().isEmpty()) // Exclure les utilisateurs sans intérêts
+                .map(user -> {
+                    // Calculer le nombre d'intérêts communs
+                    long commonInterestsCount = user.getInterests().stream()
+                            .filter(currentUserInterests::contains)
+                            .count();
+                    return new UserWithCommonInterests(user, commonInterestsCount);
+                })
+                .filter(pair -> pair.commonInterestsCount > 0) // Ne garder que ceux avec des intérêts communs
+                .sorted((pair1, pair2) -> Long.compare(pair2.commonInterestsCount, pair1.commonInterestsCount)) // Trier par ordre décroissant
+                .map(pair -> pair.user) // Récupérer uniquement l'utilisateur
                 .toList();
     }
+
+    // Classe interne pour stocker l'utilisateur et le nombre d'intérêts communs
+    private record UserWithCommonInterests(Users user, long commonInterestsCount) {}
 
 }

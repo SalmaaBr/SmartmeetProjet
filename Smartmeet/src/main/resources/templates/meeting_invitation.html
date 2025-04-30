@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Invitation à une réunion</title>
+</head>
+<body>
+<h2>Invitation à une réunion</h2>
+<p>Bonjour <span th:text="${username}"></span>,</p>
+<p>Vous êtes invité à une réunion organisée par <span th:text="${organizer}"></span>.</p>
+<h3>Détails de la réunion :</h3>
+<ul>
+    <li><strong>Nom de la réunion :</strong> <span th:text="${meetingName}"></span></li>
+    <li><strong>Date et heure :</strong> <span th:text="${startTime}"></span></li>
+    <li><strong>Durée :</strong> <span th:text="${duration}"></span> minutes</li>
+    <li><strong>Participant :</strong> <span th:text="${participant}"></span></li>
+    <li><strong>Lien de la réunion :</strong> <a th:href="${meetingLink}" th:text="${meetingLink}"></a></li>
+</ul>
+<p>Merci de confirmer votre présence en rejoignant la réunion à l'heure indiquée.</p>
+<p>Cordialement,</p>
+<p>L'équipe Smartmeet</p>
+</body>
+</html>

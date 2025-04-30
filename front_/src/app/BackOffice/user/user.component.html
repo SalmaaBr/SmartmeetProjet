@@ -127,7 +127,7 @@
               <div *ngIf="user.meetings && user.meetings.length > 0; else noMeetings">
                 <div *ngFor="let meeting of user.meetings" class="d-flex align-items-center mb-1">
                   <button class="btn btn-sm btn-success me-1" (click)="openRapportModal(meeting)">
-                    Générer Rapport
+                    Report
                   </button>
                   <button class="btn btn-sm btn-info me-1" (click)="goToMeeting(meeting.meetingLink)">
                      ({{ meeting.startTime | date:'short' }})

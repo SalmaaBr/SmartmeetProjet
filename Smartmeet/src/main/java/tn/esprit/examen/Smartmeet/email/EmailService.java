@@ -91,5 +91,42 @@ public class EmailService {
         }
     }
 
+    @Async
+    public void sendMeetingInvitationEmail(String to, String username, String meetingName, String organizer,
+                                           String participant, String startTime, int duration, String meetingLink) {
+        try {
+            if (to == null) {
+                LOGGER.error("Error sending meeting invitation email: recipient address is null");
+                return;
+            }
+
+            Context context = new Context();
+            context.setVariable("username", username);
+            context.setVariable("meetingName", meetingName);
+            context.setVariable("organizer", organizer);
+            context.setVariable("participant", participant);
+            context.setVariable("startTime", startTime);
+            context.setVariable("duration", duration);
+            context.setVariable("meetingLink", meetingLink);
+
+            // Process Thymeleaf template
+            String htmlContent = templateEngine.process("meeting_invitation", context);
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            helper.setTo(to);
+            helper.setFrom("sps2022noreply@gmail.com");
+            helper.setSubject("Invitation à la réunion : " + meetingName);
+            helper.setText(htmlContent, true); // true = HTML content
+
+            mailSender.send(mimeMessage);
+            LOGGER.info("Meeting invitation email sent successfully to {}", to);
+
+        } catch (Exception e) {
+            LOGGER.error("Error sending meeting invitation email to {}: {}", to, e.getMessage());
+        }
+    }
+
 
 }
