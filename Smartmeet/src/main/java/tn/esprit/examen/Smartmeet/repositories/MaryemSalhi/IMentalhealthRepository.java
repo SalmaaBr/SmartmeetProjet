@@ -7,5 +7,8 @@ import tn.esprit.examen.Smartmeet.entities.Users.Users;
 import java.util.List;
 
 public interface IMentalhealthRepository extends JpaRepository<MentalHealth,Long> {
-    List<MentalHealth> findByUser(Users user);
+    //List<MentalHealth> findByUser(Users user);
+    List<MentalHealth> findTop3ByUserUserIDOrderBySubmissionDateDesc(Long userId);
+    //List<MentalHealth> getLastThreeSubmissionsByUser(Long userId);
+
 }

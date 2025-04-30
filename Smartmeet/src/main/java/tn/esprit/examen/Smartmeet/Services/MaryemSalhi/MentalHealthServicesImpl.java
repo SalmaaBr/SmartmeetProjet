@@ -26,13 +26,32 @@ import java.util.Optional;
 @Service
 
 public class MentalHealthServicesImpl implements IMentalHealthServices {
+    @Autowired
     private final IMentalhealthRepository mentalhealthRepository;
     private final UserRepository usersRepository;
     private final UserRepository userRepository; // Déjà injecté pour addMentalHealthAndAssignToUser
 
 
+
     @Override
     public MentalHealth addMentalhealth(MentalHealth mentalhealth) {
+        // Récupérer l'utilisateur connecté
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+
+        // Récupérer l'utilisateur depuis la base de données
+        Optional<Users> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) {
+            log.error("Utilisateur avec le nom d'utilisateur {} non trouvé", username);
+            throw new IllegalArgumentException("Utilisateur non trouvé");
+        }
+
+        Users user = userOptional.get();
+
+        // Associer l'utilisateur à l'enregistrement MentalHealth
+        mentalhealth.setUser(user);
+
+        // Sauvegarder l'enregistrement
         return mentalhealthRepository.save(mentalhealth);
     }
 
@@ -72,10 +91,14 @@ public class MentalHealthServicesImpl implements IMentalHealthServices {
         return mentalhealthRepository.findAll();
     }
 
+    @Override
+    public MentalHealth addMentalHealthForCurrentUser(MentalHealth mentalHealth) {
+        return null;
+    }
 
 
     // Nouvelle méthode pour ajouter un formulaire avec l’utilisateur connecté
-    public MentalHealth addMentalHealthForCurrentUser(MentalHealth mentalHealth) {
+    /*public MentalHealth addMentalHealthForCurrentUser(MentalHealth mentalHealth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -87,7 +110,7 @@ public class MentalHealthServicesImpl implements IMentalHealthServices {
         System.out.println(notification); // Pour tester
 
         return savedMentalHealth;
-    }
+    }*/
 
     public byte[] generateQRCode(Long mentalHealthId, int width, int height) throws WriterException, IOException {
         MentalHealth mentalHealth = getMentalhealthById(mentalHealthId); // Replace with your actual method to fetch MentalHealth
@@ -114,6 +137,11 @@ public class MentalHealthServicesImpl implements IMentalHealthServices {
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
         return pngOutputStream.toByteArray();
+    }
+
+    // Nouvelle méthode pour récupérer les trois derniers formulaires
+    public List<MentalHealth> getLastThreeSubmissionsByUser(Long userId) {
+        return mentalhealthRepository.findTop3ByUserUserIDOrderBySubmissionDateDesc(userId);
     }
 }
 

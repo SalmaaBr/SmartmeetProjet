@@ -11,4 +11,5 @@ public interface IMentalHealthServices {
     MentalHealth getMentalhealthById(Long id);
     List<MentalHealth> getAllMentalhealths();
     MentalHealth addMentalHealthForCurrentUser(MentalHealth mentalHealth);
+    List<MentalHealth> getLastThreeSubmissionsByUser(Long userId); // Nouvelle méthode
 }
