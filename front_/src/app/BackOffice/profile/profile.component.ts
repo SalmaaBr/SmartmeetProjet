@@ -16,6 +16,13 @@ export class ProfileComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   successMessage = '';
+
+  // Propriétés pour la prédiction
+  showPrediction = false;
+  predictionData: any = null;
+  predictionStatus = '';
+  predictionProbability = '';
+
   email =localStorage.getItem("email")
   userId?:number;
   constructor(
@@ -26,6 +33,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.loadUserProfile();
+    this.checkForPrediction();
+
   }
 
   initializeForm(): void {
@@ -60,6 +69,25 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+  }
+  checkForPrediction(): void {
+    // Vérifier le localStorage
+    const storedPrediction = localStorage.getItem('mentalHealthPrediction');
+    if (storedPrediction) {
+      try {
+        this.displayPrediction(JSON.parse(storedPrediction));
+      } catch (e) {
+        console.error('Error parsing prediction data:', e);
+        localStorage.removeItem('mentalHealthPrediction');
+      }
+    }
+  }
+  displayPrediction(prediction: any): void {
+    this.showPrediction = true;
+    this.predictionData = prediction;
+    this.predictionStatus = prediction.crisis_detected ?
+      'Potential Crisis Detected' : 'No Crisis Detected';
+    this.predictionProbability = (prediction.crisis_probability * 100).toFixed(1) + '%';
   }
 
   togglePasswordFields(): void {

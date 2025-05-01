@@ -1,0 +1,109 @@
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-header bg-primary text-white py-3">
+      <h2 class="mb-0 fw-normal">
+        <i class="bi bi-list-task me-2"></i>
+        Feedback Management
+      </h2>
+    </div>
+
+    <div class="card-body p-4">
+      <!-- Filtre : Dropdown liste pour événements -->
+      <div class="mb-4">
+        <label for="eventFilter" class="form-label fw-medium">
+          Filter by event
+        </label>
+        <select
+          id="eventFilter"
+          [(ngModel)]="selectedEventTitle"
+          name="eventFilter"
+          class="form-select form-select-lg border-2"
+          (change)="filterFeedbacks()">
+          <option *ngFor="let event of events" [ngValue]="event.title">{{ event.title }}</option>
+        </select>
+      </div>
+
+      <!-- Graphique des sentiments -->
+      <div class="chart-container mb-4">
+        <h4 class="text-primary mb-3">
+          <i class="bi bi-bar-chart me-2"></i>Sentiment Distribution (%)
+        </h4>
+        <canvas
+          baseChart
+          [data]="sentimentChartData"
+          [type]="'bar'"
+          [options]="chartOptions"
+          *ngIf="sentimentChartData.datasets[0].data.length > 0; else noStats"
+        ></canvas>
+        <ng-template #noStats>
+          <div class="text-center py-3 bg-light rounded-3">
+            <i class="bi bi-info-circle text-muted display-6 mb-3"></i>
+            <p class="text-muted mb-0">No sentiment statistics available</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Tableau -->
+      <table mat-table [dataSource]="feedbacks" class="mat-elevation-z8 w-100">
+        <ng-container matColumnDef="idFeedback">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.idFeedback || 'N/A' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="eventTitle">
+          <th mat-header-cell *matHeaderCellDef>Event</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.eventTitle || 'Not specified' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="feeling">
+          <th mat-header-cell *matHeaderCellDef>Rating</th>
+          <td mat-cell *matCellDef="let feedback">
+            <span [ngSwitch]="feedback.feeling">
+              <span *ngSwitchCase="'EXCELLENT'">😍 EXCELLENT</span>
+              <span *ngSwitchCase="'GOOD'">😃 GOOD</span>
+              <span *ngSwitchCase="'AVERAGE'">😐 AVERAGE</span>
+              <span *ngSwitchCase="'BAD'">😕 BAD</span>
+              <span *ngSwitchCase="'TERRIBLE'">😡 TERRIBLE</span>
+              <span *ngSwitchDefault>{{ feedback.feeling }}</span>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="sentiment">
+          <th mat-header-cell *matHeaderCellDef>Sentiment</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.sentiment || 'NEUTRAL' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="message">
+          <th mat-header-cell *matHeaderCellDef>Message</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.message }}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.date | date:'mediumDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let feedback">
+            <button
+              class="btn btn-sm btn-outline-primary rounded-pill px-3 me-2"
+              (click)="editFeedback(feedback)"
+            >
+              <i class="bi bi-pencil me-2"></i>Edit
+            </button>
+            <button
+              *ngIf="feedback.idFeedback"
+              class="btn btn-sm btn-outline-danger rounded-pill px-3"
+              (click)="deleteFeedback(feedback.idFeedback)"
+            >
+              <i class="bi bi-trash me-2"></i>Delete
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div *ngIf="feedbacks.length === 0" class="text-center py-5 bg-light rounded-3 mt-3">
+        <i class="bi bi-inbox text-muted display-6 mb-3"></i>
+        <p class="text-muted mb-0">No feedback found</p>
+      </div>
+    </div>
+  </div>
+</div>

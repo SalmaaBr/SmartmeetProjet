@@ -33,7 +33,11 @@ import { MaintenanceNotificationAdminComponent } from './components/maintenance-
 import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
 import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
 import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
-import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component'; 
+import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
+import {FeedbackListComponent} from "./BackOffice/feedback-list/feedback-list.component";
+import {
+  MentalHealthListComponent
+} from "./BackOffice/mental-health-list/mental-health-list.component";
 const routes: Routes = [
   {
     path: 'front',
@@ -76,7 +80,11 @@ const routes: Routes = [
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
       { path: 'feedback', component: AddFeedbackComponent },
+      { path: 'add-feedback/:id', component: AddFeedbackComponent }, // Route pour l'édition
+      { path: 'feedback-list', component: FeedbackListComponent },
       { path: 'mental-health', component: MentalHealthComponent },
+      { path: 'mental-health-list', component: MentalHealthListComponent },
+      { path: '', redirectTo: '/mental-health', pathMatch: 'full' },
       { path: 'resource-reservation-statistics', component: ResourceReservationStatisticsComponent },
       { path: 'maintenance-notifications', component: MaintenanceNotificationAdminComponent },
       {

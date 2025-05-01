@@ -8,8 +8,7 @@ import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.IEventServices;
 
 import java.util.List;
-
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RequiredArgsConstructor
 @RequestMapping("/event")
 @RestController

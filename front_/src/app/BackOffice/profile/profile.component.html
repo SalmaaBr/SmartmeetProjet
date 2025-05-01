@@ -6,7 +6,19 @@
         <div class="card-header">
           <h3 class="mb-0">My Profile</h3>
         </div>
-
+        <!-- Section Prédiction -->
+        <div *ngIf="showPrediction" class="prediction-section mt-2 p-3">
+          <h5 class="text-primary mb-2">Mental Health Analysis</h5>
+          <p class="mb-1">
+            <strong>Status:</strong>
+            <span [class.text-danger]="predictionData?.crisis_detected"
+                  [class.text-success]="!predictionData?.crisis_detected">
+                {{ predictionStatus }}
+              </span>
+          </p>
+          <p class="mb-1"><strong>Probability:</strong> {{ predictionProbability }}</p>
+          <p class="mb-0"><strong>Recommendation:</strong> {{ predictionData?.message }}</p>
+        </div>
         <div class="card-body">
           <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
             <!-- Loading Spinner -->

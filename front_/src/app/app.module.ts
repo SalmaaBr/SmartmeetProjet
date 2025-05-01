@@ -28,10 +28,10 @@ import { PasswordComponent } from './User/password/password.component';
 import { PortfolioComponent } from './FrontOffice/portfolio/portfolio.component';
 import { ContactComponent } from './FrontOffice/contact/contact.component';
 import { ResourceManagementComponent } from './BackOffice/resource-management/resource-management.component';
-import { ResourceReservationManagementComponent} from "./BackOffice/resource-reservation-management/resource-reservation-management.component";
+import { ResourceReservationManagementComponent } from './BackOffice/resource-reservation-management/resource-reservation-management.component';
 import { ResourceMaintenanceComponent } from './BackOffice/resource-maintenance/resource-maintenance.component';
-import { ReservationService } from './services/reservation.service';  // Importation du service
-import { ResourceService} from "./services/resource.service";
+import { ReservationService } from './services/reservation.service';
+import { ResourceService } from './services/resource.service';
 import { AddInteractivePublicationComponent } from './FrontOffice/add-interactive-publication/add-interactive-publication.component';
 import { ActivateAccountComponent } from './User/activate-account/activate-account.component';
 import { ResetPasswordRequestComponent } from './User/reset-password-request/reset-password-request.component';
@@ -51,13 +51,17 @@ import { ResourceReservationStatisticsComponent } from './BackOffice/resource-re
 import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
 import { NotificationComponent } from './components/notification/notification.component';
-import { DocumentManagementComponent } from 'src/app/BackOffice/document-management/document-management.component';
+import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
 import { DocumentService } from './services/document.service';
-import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
+import { DocumentFilterPipe } from './filters/document-filter.pipe';
 import { RecommendationService } from './services/RecommendationService.service';
 import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
 import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
 import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
+import { FeedbackListComponent } from './BackOffice/feedback-list/feedback-list.component';
+import { MentalHealthListComponent } from './BackOffice/mental-health-list/mental-health-list.component';
+import { NgChartsModule } from 'ng2-charts';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -86,8 +90,8 @@ import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.co
     ResourceMaintenanceComponent,
     AddInteractivePublicationComponent,
     UserComponent,
-    ProfileComponent,  // Déclaration des composants
-    CreateeventComponent,
+    ProfileComponent,
+    CreateeventComponent, // Kept here, but verify it’s not declared elsewhere
     GeteventComponent,
     EditEventComponent,
     CreateRecutementComponent,
@@ -105,7 +109,8 @@ import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.co
     MessageComposeComponent,
     MessageInboxComponent,
     MessageSentComponent,
-    
+    FeedbackListComponent,
+    MentalHealthListComponent,
   ],
   imports: [
     BrowserModule,
@@ -121,7 +126,9 @@ import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.co
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    })
+    }),
+    NgChartsModule,
+    MatTableModule,
   ],
   providers: [
     ReservationService,
@@ -134,10 +141,10 @@ import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.co
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
