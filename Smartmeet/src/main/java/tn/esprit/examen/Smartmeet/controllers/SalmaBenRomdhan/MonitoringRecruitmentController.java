@@ -8,7 +8,6 @@ import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.IMonitoringRecruitmen
 
 import java.util.List;
 
-@CrossOrigin("*")
 @RequiredArgsConstructor
 @RequestMapping("monitoringRecruitment")
 @RestController

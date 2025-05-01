@@ -8,7 +8,6 @@ import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MeetingRequest;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/meetings")
 public class MeetingController {

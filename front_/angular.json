@@ -25,6 +25,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/FrontOffice/assets/vendor/bootstrap/css/bootstrap.min.css",
               "src/assets/FrontOffice/assets/css/main.css",
@@ -37,16 +38,14 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/boxicons/css/boxicons.min.css",
               "node_modules/leaflet/dist/leaflet.css"
-            
-
-
             ],
             "scripts": [
               "src/assets/FrontOffice/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
               "src/assets/FrontOffice/assets/vendor/aos/aos.js",
               "node_modules/aos/dist/aos.js",
               "src/assets/BackOffice/assets/js/main.js",
-              "src/assets/BackOffice/assets/vendor/js/helpers.js"
+              "src/assets/BackOffice/assets/vendor/js/helpers.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
           "configurations": {
@@ -107,6 +106,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []

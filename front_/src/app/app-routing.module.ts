@@ -29,6 +29,9 @@ import { CalendarComponent } from './models/calendar/calendar.component';
 import { NotificationsComponent } from './models/notifications/notifications.component';
 import { JitsiMeetingComponent } from './models/jitsi-meeting/jitsi-meeting.component';
 import { CreateMeetingComponent } from './models/create-meeting/create-meeting.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
+import { ResourceReservationStatisticsComponent } from './BackOffice/resource-reservation-statistics/resource-reservation-statistics.component';
 
 
 const routes: Routes = [
@@ -44,7 +47,11 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent  },
       { path: 'profile/me', component: ViewProfileComponent },
       {path: 'meeting/:id', component: JitsiMeetingComponent},
-      { path: 'create-meeting', component: CreateMeetingComponent }
+      { path: 'create-meeting', component: CreateMeetingComponent },
+      {
+        path: 'notifications',
+        component: NotificationComponent,
+      }
     ]
   },
   {
@@ -65,7 +72,13 @@ const routes: Routes = [
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
       { path: 'notif', component: NotificationsComponent },
-      { path: 'profile/:id', component: ViewProfileComponent } // Route for viewing any user profile
+      { path: 'profile/:id', component: ViewProfileComponent }, // Route for viewing any user profile
+      { path: 'resource-reservation-statistics', component: ResourceReservationStatisticsComponent },
+      { path: 'maintenance-notifications', component: MaintenanceNotificationAdminComponent },
+      {
+        path: 'notifications',
+        component: NotificationComponent,
+      },
     ]
   },
   {

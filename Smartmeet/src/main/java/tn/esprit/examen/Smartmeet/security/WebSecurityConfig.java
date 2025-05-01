@@ -41,13 +41,18 @@ public class WebSecurityConfig {
   private final UserDetailsServiceImpl userDetailsService;
 
   private final AuthEntryPointJwt unauthorizedHandler;
+  private final CorsConfigurationSource corsConfigurationSource;
+
 
   public WebSecurityConfig(JwtUtils jwtUtils,
                            UserDetailsServiceImpl userDetailsService,
-                           AuthEntryPointJwt unauthorizedHandler) {
+                           AuthEntryPointJwt unauthorizedHandler,
+                           CorsConfigurationSource corsConfigurationSource) {
     this.jwtUtils = jwtUtils;
     this.userDetailsService = userDetailsService;
     this.unauthorizedHandler = unauthorizedHandler;
+    this.corsConfigurationSource = corsConfigurationSource;
+
   }
 
   @Bean
@@ -76,41 +81,23 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-            .cors(withDefaults())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/**"
-                    ).permitAll()
-                    /*.requestMatchers("/api/auth/**",
-                            "/InteractivePublication/**",
-                            "/api/test/**",
-                            "/event/createevent",
-                            "/login",
-                            "/admin"
-                            ).permitAll()*/
-//                    .requestMatchers("/dashboard/**").authenticated()
+                    .requestMatchers("/**").permitAll()
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/event/**").permitAll()
+                    .requestMatchers("/api/test/**").permitAll()
+                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/register").permitAll()
+                    .requestMatchers("/api/mentalhealth/submit-for-current-user").authenticated()
+                    .requestMatchers("/api/users/**").authenticated()
                     .anyRequest().authenticated());
     http.authenticationProvider(authenticationProvider());
-
-    // ✅ Correction ici : on utilise `authenticationJwtTokenFilter()` sans paramètres
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
     return http.build();
   }
 
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    // Utilisez Arrays.asList si vous préférez (mais List.of est meilleur pour Java 9+)
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("X-Username","x-user-id","Authorization", "Content-Type"));
-    configuration.setExposedHeaders(Arrays.asList("Authorization"));
-    configuration.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
 }

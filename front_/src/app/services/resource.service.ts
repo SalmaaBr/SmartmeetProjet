@@ -3,10 +3,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Resource {
-  id?: number;
+  idResource?: number;
   name: string;
   typeResource: string;
   typeResourceStatus: string;
+
+  // Maintenance-related fields
+  maintenanceEnabled?: boolean;
+  maintenancePeriodMonths?: number;
+  maintenanceDurationDays?: number;
+  initialMaintenanceDate?: string;
+  nextMaintenanceDate?: string;
 }
 
 @Injectable({
@@ -52,5 +59,34 @@ export class ResourceService {
 
   updateResource(id: number, resource: Resource): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/update/${id}`, resource, { headers: this.getHeaders() });
+  }
+
+  // Maintenance-related methods
+  updateMaintenanceSettings(id: number, maintenanceConfig: {
+    maintenanceEnabled: boolean;
+    maintenancePeriodMonths: number;
+    maintenanceDurationDays: number;
+    initialMaintenanceDate: string;
+  }): Observable<Resource> {
+    // Create a deep copy of the config to avoid mutating the original object
+    const config = {
+      maintenanceEnabled: maintenanceConfig.maintenanceEnabled,
+      maintenancePeriodMonths: maintenanceConfig.maintenancePeriodMonths,
+      maintenanceDurationDays: maintenanceConfig.maintenanceDurationDays,
+      initialMaintenanceDate: maintenanceConfig.initialMaintenanceDate
+    };
+
+    console.log('Sending maintenance config to backend:', config);
+
+    return this.http.patch<Resource>(
+      `${this.apiUrl}/${id}/maintenance`,
+      config,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        }),
+        withCredentials: true
+      }
+    );
   }
 }

@@ -1,0 +1,35 @@
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-header {
+  font-weight: 500;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.table {
+  font-size: 0.9rem;
+}
+
+.table th {
+  font-weight: 600;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+.alert {
+  border-radius: 0.25rem;
+}

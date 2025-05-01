@@ -45,4 +45,6 @@ export class RecutementService {
     return this.http.post<any>(url, monitoringRecruitment);
   }
 
+  
+
 }

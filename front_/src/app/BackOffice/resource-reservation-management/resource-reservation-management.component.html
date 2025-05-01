@@ -30,7 +30,8 @@
                     <select formControlName="resourceId"
                             id="resource-id"
                             class="form-select form-select-lg border-2"
-                            [class.is-invalid]="reservationForm.get('resourceId')?.invalid && reservationForm.get('resourceId')?.touched">
+                            [class.is-invalid]="reservationForm.get('resourceId')?.invalid && reservationForm.get('resourceId')?.touched"
+                            (change)="onResourceSelected()">
                       <option value="" disabled selected>Select a resource</option>
                       <option *ngFor="let resource of resources"
                               [value]="resource.idResource">
@@ -43,52 +44,82 @@
                     </div>
                   </div>
 
-                  <!-- User Input -->
+                  <!-- User Selection -->
                   <div class="col-12">
                     <label for="user" class="form-label fw-medium">
                       User <span class="text-danger">*</span>
                     </label>
-                    <input formControlName="user"
+                    <select formControlName="userId"
                           id="user"
-                          type="text"
-                          class="form-control form-control-lg border-2"
-                          placeholder="Nom de l'utilisateur"
-                          [class.is-invalid]="reservationForm.get('user')?.invalid && reservationForm.get('user')?.touched">
-                    <div *ngIf="reservationForm.get('user')?.invalid && reservationForm.get('user')?.touched"
+                          class="form-select form-select-lg border-2"
+                          [class.is-invalid]="reservationForm.get('userId')?.invalid && reservationForm.get('userId')?.touched">
+                      <option value="" disabled selected>Select a user</option>
+                      <option *ngFor="let user of users"
+                              [value]="user.userID">
+                        {{ user.firstName || user.username }} {{ user.lastName || '' }}
+                      </option>
+                    </select>
+                    <div *ngIf="reservationForm.get('userId')?.invalid && reservationForm.get('userId')?.touched"
                          class="invalid-feedback">
-                      User name is required
+                      User selection is required
                     </div>
                   </div>
 
                   <!-- Start Date -->
                   <div class="col-md-6">
-                    <label for="start-date" class="form-label fw-medium">
-                      Booking Date <span class="text-danger">*</span>
+                    <label for="start-time" class="form-label fw-medium">
+                      Start Date <span class="text-danger">*</span>
                     </label>
-                    <input formControlName="startTime"
-                          id="start-date"
-                          type="date"
-                          class="form-control form-control-lg border-2"
-                          [class.is-invalid]="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched">
-                    <div *ngIf="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched"
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        id="start-time"
+                        class="form-control form-control-lg border-2"
+                        placeholder="Select start date"
+                        formControlName="startTime"
+                        [class.is-invalid]="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched"
+                        readonly
+                      >
+                      <span class="input-group-text bg-light">
+                        <i class="bi bi-calendar-date"></i>
+                      </span>
+                    </div>
+                    <div *ngIf="reservationForm.get('startTime')?.errors?.['required'] && reservationForm.get('startTime')?.touched"
                          class="invalid-feedback">
                       Start date is required
+                    </div>
+                    <div *ngIf="reservedDates.includes(reservationForm.get('startTime')?.value)"
+                         class="invalid-feedback d-block">
+                      This date is already reserved
                     </div>
                   </div>
 
                   <!-- End Date -->
                   <div class="col-md-6">
-                    <label for="end-date" class="form-label fw-medium">
-                      Return Date <span class="text-danger">*</span>
+                    <label for="end-time" class="form-label fw-medium">
+                      End Date <span class="text-danger">*</span>
                     </label>
-                    <input formControlName="endTime"
-                          id="end-date"
-                          type="date"
-                          class="form-control form-control-lg border-2"
-                          [class.is-invalid]="reservationForm.get('endTime')?.invalid && reservationForm.get('endTime')?.touched">
-                    <div *ngIf="reservationForm.get('endTime')?.invalid && reservationForm.get('endTime')?.touched"
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        id="end-time"
+                        class="form-control form-control-lg border-2"
+                        placeholder="Select end date"
+                        formControlName="endTime"
+                        [class.is-invalid]="reservationForm.get('endTime')?.invalid && reservationForm.get('endTime')?.touched"
+                        readonly
+                      >
+                      <span class="input-group-text bg-light">
+                        <i class="bi bi-calendar-date"></i>
+                      </span>
+                    </div>
+                    <div *ngIf="reservationForm.get('endTime')?.errors?.['required'] && reservationForm.get('endTime')?.touched"
                          class="invalid-feedback">
                       End date is required
+                    </div>
+                    <div *ngIf="reservedDates.includes(reservationForm.get('endTime')?.value)"
+                         class="invalid-feedback d-block">
+                      This date is already reserved
                     </div>
                   </div>
 
@@ -144,11 +175,11 @@
                       <div class="mb-2">
                         <span class="badge bg-info-subtle text-info-emphasis me-2">
                           <i class="bi bi-person me-1"></i>
-                          {{ reservation.user }}
+                          {{ reservation.user?.username }}
                         </span>
                         <span class="badge bg-success-subtle text-success-emphasis">
                           <i class="bi bi-box-seam me-1"></i>
-                         {{ reservation?.resources?.[0]?.name }}
+                         {{ reservation?.resource?.name }}
                         </span>
                       </div>
                     </div>

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -67,6 +68,25 @@ public class EmailService {
             LOGGER.error("Error sending email to {}: {}", to, e.getMessage());
         }
     }
+
+    public void sendSimpleMessage(String to, String subject, String text) {
+        try {
+            log.info("Sending email to: {}, subject: {}", to, subject);
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(text);
+
+            mailSender.send(message);
+
+            log.info("Email sent successfully to: {}", to);
+        } catch (Exception e) {
+            log.error("Failed to send email to {}: {}", to, e.getMessage(), e);
+            // Don't rethrow, just log the error to avoid breaking the caller's flow
+        }
+    }
+
     @Async
     public void sendEventUpdateEmail(String to, String username, String eventTitle) {
         try {

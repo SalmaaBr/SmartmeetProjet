@@ -1,9 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule ,CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -50,6 +52,11 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { NotificationsComponent } from './models/notifications/notifications.component';
 import { JitsiMeetingComponent } from './models/jitsi-meeting/jitsi-meeting.component';
 import { CreateMeetingComponent } from './models/create-meeting/create-meeting.component';
+import { DisableDatesDirective } from './directives/disable-dates.directive';
+import { ResourceReservationStatisticsComponent } from './BackOffice/resource-reservation-statistics/resource-reservation-statistics.component';
+import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
+import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 
 
@@ -93,13 +100,21 @@ import { CreateMeetingComponent } from './models/create-meeting/create-meeting.c
     CalendarComponent,
     NotificationsComponent,
     JitsiMeetingComponent,
-    CreateMeetingComponent
+    CreateMeetingComponent,
+    DisableDatesDirective,
+    ResourceReservationStatisticsComponent,
+    NotificationComponent,
+    NotificationBadgeComponent,
+    MaintenanceNotificationAdminComponent
       ],
   imports: [
     ReactiveFormsModule ,
     FormsModule,
     HttpClientModule,
+    CommonModule,
     BrowserModule,
+    RouterModule,
+    ReactiveFormsModule,
     CodeInputModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -123,6 +138,7 @@ import { CreateMeetingComponent } from './models/create-meeting/create-meeting.c
     provideToastr(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

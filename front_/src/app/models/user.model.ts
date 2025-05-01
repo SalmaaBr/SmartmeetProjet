@@ -7,6 +7,8 @@ export interface User {
   address?: string;
   enabled?: boolean;
   userRole: TypeUserRole[];
+  firstName?: string;
+  lastName?: string;
   interests?: string[];
   meetings?: Meeting[]; // Ajout de la propriété meetings
   

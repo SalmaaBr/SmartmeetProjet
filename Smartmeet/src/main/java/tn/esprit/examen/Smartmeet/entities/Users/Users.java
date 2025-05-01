@@ -10,6 +10,9 @@ import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Claim;
 import tn.esprit.examen.Smartmeet.entities.GhanemRidene.FoundItem;
 import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Sponsor;
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.InteractivePublication;
+import tn.esprit.examen.Smartmeet.entities.MaryemAbid.PublicationComment;
+import tn.esprit.examen.Smartmeet.entities.MaryemAbid.PublicationLike;
+import tn.esprit.examen.Smartmeet.entities.MaryemAbid.ResourceReservation;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.MentalHealth;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.*;
@@ -97,5 +100,17 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "user-eventLike") // Match with EventLike's back reference
     private Set<EventLike> eventLikes = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PublicationComment> comments = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ResourceReservation> resourceReservations = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PublicationLike> publicationLike = new ArrayList<>();
+
 
 }

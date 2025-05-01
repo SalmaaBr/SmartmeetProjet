@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
-@CrossOrigin("*")
 @RequiredArgsConstructor
 @RequestMapping("/event")
 @RestController

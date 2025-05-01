@@ -20,3 +20,174 @@
   padding: 0.75rem 1.5rem;
   font-size: 1.1rem;
 }
+
+/* Styles for disabled dates */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+input[type="date"].disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+/* Style for the form controls */
+.form-control.is-invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+}
+
+/* Calendar Styling Enhancements */
+.reservation-calendar {
+  position: relative;
+}
+
+input[type="date"] {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+input[type="date"]:hover {
+  box-shadow: 0 0 10px rgba(66, 133, 244, 0.3);
+}
+
+/* Style for calendar when there are reserved dates */
+input[type="date"].has-reserved-dates {
+  border-color: #dc3545;
+}
+
+/* Tooltip for reserved dates information */
+.reserved-dates-info {
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.reserved-dates-info i {
+  color: #dc3545;
+  cursor: pointer;
+}
+
+.reserved-dates-info .tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #dc3545;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.reserved-dates-info:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Style for disabled dates */
+.date-disabled {
+  position: relative;
+}
+
+.date-disabled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(220, 53, 69, 0.1);
+  pointer-events: none;
+}
+
+/* Reserved dates badge */
+.reserved-dates-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Indicates when there are reserved dates */
+.has-reserved-dates {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Flatpickr Customization */
+.flatpickr-input {
+  background-color: white !important;
+  cursor: pointer;
+}
+
+.flatpickr-calendar {
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 8px !important;
+  border: none !important;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+  text-decoration: line-through;
+  cursor: not-allowed !important;
+}
+
+.flatpickr-day.selected {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.flatpickr-day:hover {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+}
+
+.input-group .input-group-text {
+  cursor: pointer;
+}
+
+/* Reserved Dates Badge */
+.reserved-dates-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 99px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}

@@ -5,6 +5,7 @@ import { RapportService } from '../../services/rapport.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service'; // Importez le AuthService
+import * as bootstrap from 'bootstrap';
 
 
 
@@ -82,7 +83,12 @@ export class UserComponent implements OnInit {
 
   confirmDelete(userId: number): void {
     this.userToDelete = userId;
-    this.showDeleteModal = true; // Show the delete modal
+    // Programmatically show the delete modal
+    const modalElement = document.getElementById('deleteModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
   }
 
   deleteConfirmed(): void {
@@ -91,7 +97,17 @@ export class UserComponent implements OnInit {
         .subscribe(() => {
           this.loadUsers();
           this.userToDelete = null;
-          this.showDeleteModal = false; // Hide the delete modal
+          // Hide the modal programmatically
+          const modalElement = document.getElementById('deleteModal');
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+              modalInstance.hide();
+            } else {
+              const modal = new bootstrap.Modal(modalElement);
+              modal.hide();
+            }
+          }
         });
     }
   }
@@ -108,10 +124,17 @@ export class UserComponent implements OnInit {
     }
   }
 
+  // Utility method to close modals by ID
   closeModal(modalId: string): void {
-    if (modalId === 'deleteModal') {
-      this.showDeleteModal = false; // Hide the delete modal
-      this.userToDelete = null;
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.hide();
+      }
     }
   }
 

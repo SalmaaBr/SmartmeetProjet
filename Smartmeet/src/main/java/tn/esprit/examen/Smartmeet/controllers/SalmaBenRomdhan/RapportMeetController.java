@@ -13,7 +13,6 @@ import tn.esprit.examen.Smartmeet.Services.SalmaBenRomdhan.RapportMeetingService
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/rapport-meetings")
 public class RapportMeetController {

@@ -9,10 +9,9 @@ import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Notification;
 
 import java.util.List;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/notifications")
-public class NotificationController {
+public class NotificationEventController {
 
     @Autowired
     private NotificationService notificationService;
