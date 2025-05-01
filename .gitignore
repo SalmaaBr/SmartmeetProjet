@@ -22,3 +22,15 @@ front_/*.iml
 # 🚀 Ignorer les fichiers système
 .DS_Store
 Thumbs.db
+# Environnement Python
+venv/
+Smartmeet/AI-mariamsalhi/venv/
+
+**/venv/
+**/site-packages/
+
+# Ignorer les bibliothèques binaires lourdes
+*.dll
+*.lib
+*.so
+*.dylib
