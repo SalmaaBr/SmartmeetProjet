@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("MonitoringRecruitment")
 @RestController
-@CrossOrigin(origins = "*")
 @Tag(name="hello")
 
 public class MonitoringRecruitmentRestController {

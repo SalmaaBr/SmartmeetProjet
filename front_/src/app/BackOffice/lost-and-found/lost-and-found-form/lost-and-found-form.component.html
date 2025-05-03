@@ -1,0 +1,136 @@
+<div class="form-container">
+  <h2 class="form-heading">{{ isEditMode ? 'Edit' : 'Report' }} Lost & Found Item</h2>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5">
+    <div class="spinner-border text-primary me-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <span>{{ isEditMode ? 'Loading item...' : 'Initializing form...' }}</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Form -->
+  <div *ngIf="!loading && !errorMessage">
+    <form [formGroup]="lostAndFoundForm" (ngSubmit)="onSubmit()">
+      <div class="form-card">
+        <div class="card-header">
+          <i class="fas fa-info-circle me-2"></i>
+          Item Information
+        </div>
+        <div class="card-body">
+          <!-- Item Type -->
+          <div class="form-group">
+            <label class="form-label">Item Type</label>
+            <div class="d-flex flex-wrap gap-4">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" formControlName="type"
+                       id="lostOption" [value]="LostAndFoundType.LOST" required>
+                <label class="form-check-label" for="lostOption">
+                  <i class="fas fa-search me-1"></i> Lost Item
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" formControlName="type"
+                       id="foundOption" [value]="LostAndFoundType.FOUND" required>
+                <label class="form-check-label" for="foundOption">
+                  <i class="fas fa-check me-1"></i> Found Item
+                </label>
+              </div>
+            </div>
+            <div *ngIf="lostAndFoundForm.get('type')?.invalid && lostAndFoundForm.get('type')?.touched" class="error-message">
+              Please select an item type.
+            </div>
+          </div>
+
+          <!-- Item Title -->
+          <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title"
+                  formControlName="title" placeholder="Brief description of the item">
+            <div *ngIf="lostAndFoundForm.get('title')?.invalid && lostAndFoundForm.get('title')?.touched" class="error-message">
+              <span *ngIf="lostAndFoundForm.get('title')?.errors?.['required']">Title is required.</span>
+              <span *ngIf="lostAndFoundForm.get('title')?.errors?.['minlength']">Title must be at least 3 characters.</span>
+              <span *ngIf="lostAndFoundForm.get('title')?.errors?.['maxlength']">Title must not exceed 100 characters.</span>
+            </div>
+          </div>
+
+          <!-- Item Description -->
+          <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="4"
+                     formControlName="description" placeholder="Detailed description of the item, including distinctive features"></textarea>
+            <div *ngIf="lostAndFoundForm.get('description')?.invalid && lostAndFoundForm.get('description')?.touched" class="error-message">
+              <span *ngIf="lostAndFoundForm.get('description')?.errors?.['required']">Description is required.</span>
+              <span *ngIf="lostAndFoundForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters.</span>
+              <span *ngIf="lostAndFoundForm.get('description')?.errors?.['maxlength']">Description must not exceed 500 characters.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="card-header">
+          <i class="fas fa-map-marker-alt me-2"></i>
+          Location Details
+        </div>
+        <div class="card-body">
+          <!-- We'll assume there's a location field in the form -->
+          <div class="form-group">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location"
+                  placeholder="Where the item was lost or found">
+            <small class="form-text">Please be as specific as possible with the location.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="card-header">
+          <i class="fas fa-image me-2"></i>
+          Item Image
+        </div>
+        <div class="card-body">
+          <!-- Image Upload -->
+          <div class="form-group">
+            <div class="upload-preview" (click)="fileInput.click()">
+              <i class="fas fa-cloud-upload-alt upload-icon"></i>
+              <div class="upload-text">Click to upload an image of the item</div>
+              <small class="form-text mt-2">Accepted formats: JPG, PNG, GIF. Max size: 5MB</small>
+            </div>
+            <input type="file" class="file-upload-input" #fileInput
+                  accept="image/*" (change)="onFileSelected($event)">
+
+            <!-- Image Preview -->
+            <div *ngIf="previewUrl" class="image-preview mt-3">
+              <img [src]="previewUrl" alt="Selected image">
+
+              <div class="d-flex justify-content-between mt-2">
+                <small class="text-muted">Selected Image</small>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="selectedFile = null; previewUrl = null">
+                  <i class="fas fa-times"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-buttons">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="fas fa-arrow-left"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="submitting || lostAndFoundForm.invalid">
+          <i class="fas" [ngClass]="isEditMode ? 'fa-save' : 'fa-plus'"></i>
+          {{ isEditMode ? 'Update' : 'Submit' }} Item
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

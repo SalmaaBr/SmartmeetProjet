@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">{{ isEditMode ? 'Edit Sponsor' : 'Add New Sponsor' }}</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="sponsorForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <!-- Name Field -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sponsor Name</label>
+            <input type="text" class="form-control" formControlName="nom" 
+                   [class.is-invalid]="sponsorForm.get('nom')?.invalid && sponsorForm.get('nom')?.touched">
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('nom')?.errors?.['required']">
+              Name is required
+            </div>
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('nom')?.errors?.['minlength']">
+              Name must be at least 3 characters
+            </div>
+          </div>
+
+          <!-- Website Field -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Website URL</label>
+            <input type="url" class="form-control" formControlName="siteWeb"
+                   [class.is-invalid]="sponsorForm.get('siteWeb')?.invalid && sponsorForm.get('siteWeb')?.touched">
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('siteWeb')?.errors?.['required']">
+              Website URL is required
+            </div>
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('siteWeb')?.errors?.['pattern']">
+              Please enter a valid URL (starting with http:// or https://)
+            </div>
+          </div>
+
+          <!-- Description Field -->
+          <div class="col-12 mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" formControlName="description" rows="3"
+                      [class.is-invalid]="sponsorForm.get('description')?.invalid && sponsorForm.get('description')?.touched"></textarea>
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('description')?.errors?.['required']">
+              Description is required
+            </div>
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('description')?.errors?.['minlength']">
+              Description must be at least 10 characters
+            </div>
+          </div>
+
+          <!-- Image URL Field -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Logo URL</label>
+            <input type="url" class="form-control" formControlName="image"
+                   [class.is-invalid]="sponsorForm.get('image')?.invalid && sponsorForm.get('image')?.touched">
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('image')?.errors?.['required']">
+              Logo URL is required
+            </div>
+          </div>
+
+          <!-- Level Field -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sponsorship Level</label>
+            <select class="form-select" formControlName="niveau">
+              <option value="BRONZE">Bronze</option>
+              <option value="ARGENT">Silver</option>
+              <option value="OR">Gold</option>
+              <option value="PLATINE">Platinum</option>
+            </select>
+          </div>
+
+          <!-- Status Field -->
+          <div class="col-md-6 mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" formControlName="statut" id="statusSwitch">
+              <label class="form-check-label" for="statusSwitch">Active Sponsor</label>
+            </div>
+          </div>
+
+          <!-- Responsible User Field -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Responsible User</label>
+            <select class="form-select" formControlName="responsibleUserId"
+                    [class.is-invalid]="sponsorForm.get('responsibleUserId')?.invalid && sponsorForm.get('responsibleUserId')?.touched">
+              <option value="">Select a responsible user</option>
+              <option *ngFor="let user of users" [value]="user.userID">
+                {{ user.username }} ({{ user.email }})
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="sponsorForm.get('responsibleUserId')?.errors?.['required']">
+              Please select a responsible user
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="sponsorForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }} Sponsor
+          </button>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

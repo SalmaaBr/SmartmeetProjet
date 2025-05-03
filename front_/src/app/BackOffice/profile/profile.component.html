@@ -1,88 +1,208 @@
-
-<div class="container pb-3 mt-4">
+<div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="mb-0">My Profile</h3>
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white py-3">
+          <h3 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2"></i>My Profile</h3>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4">
           <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
             <!-- Loading Spinner -->
-            <div *ngIf="isLoading" class="text-center">
+            <div *ngIf="isLoading" class="position-absolute top-50 start-50 translate-middle">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
 
             <!-- Error/Success Messages -->
-            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-            <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-
-            <!-- Profile Fields -->
-            <div class="mb-3">
-              <label class="form-label">Username</label>
-              <input type="text" class="form-control" formControlName="username">
-              <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
-                   class="text-danger">
-                Username is required and must be at least 3 characters
-              </div>
+            <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+              <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+            <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+              <button type="button" class="btn-close" (click)="successMessage = ''"></button>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" formControlName="email">
-              <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
-                   class="text-danger">
-                Valid email is required
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" formControlName="phoneNumber">
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Address</label>
-              <textarea class="form-control" formControlName="address" rows="3"></textarea>
-            </div>
-
-            <!-- Password Update Section -->
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="changePassword"
-                     (change)="togglePasswordFields()">
-              <label class="form-check-label" for="changePassword">Change Password</label>
-            </div>
-
-            <div *ngIf="showPasswordFields" class="password-section">
-              <div class="mb-3">
-                <label class="form-label">Current Password</label>
-                <input type="password" class="form-control" formControlName="currentPassword">
+            <div class="row">
+              <!-- Profile Image Section -->
+              <div class="col-md-4 text-center mb-4">
+                <div class="profile-image-container">
+                  <img [src]="profileImageUrl || 'assets/images/default-profile.png'" 
+                       alt="Profile Image" 
+                       class="rounded-circle profile-image shadow mb-3"
+                       style="width: 200px; height: 200px; object-fit: cover;">
+                  <div class="image-upload-overlay">
+                    <label for="profile-image-input" class="btn btn-light btn-sm">
+                      <i class="bi bi-camera-fill"></i> Change Photo
+                    </label>
+                    <input id="profile-image-input"
+                           type="file" 
+                           class="d-none" 
+                           (change)="onFileSelected($event)"
+                           accept="image/*">
+                  </div>
+                </div>
+                <small class="text-muted d-block">Supported formats: JPG, PNG, GIF</small>
               </div>
 
-              <div class="mb-3">
-                <label class="form-label">New Password</label>
-                <input type="password" class="form-control" formControlName="newPassword">
-              </div>
+              <!-- Profile Details Section -->
+              <div class="col-md-8">
+                <div class="row g-3">
+                  <!-- Username Field -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input type="text" 
+                             class="form-control" 
+                             id="username"
+                             formControlName="username"
+                             placeholder="Username">
+                      <label for="username"><i class="bi bi-person me-1"></i>Username</label>
+                      <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
+                           class="text-danger small mt-1">
+                        <i class="bi bi-exclamation-circle me-1"></i>Username is required (min. 3 characters)
+                      </div>
+                    </div>
+                  </div>
 
-              <div class="mb-3">
-                <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" formControlName="confirmPassword">
-                <div *ngIf="profileForm.errors?.['mismatch']&&
-                           (profileForm.get('confirmPassword')?.touched ||
-                            profileForm.get('newPassword')?.touched)"
-                     class="text-danger">
-                  Passwords do not match
+                  <!-- Email Field -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input type="email" 
+                             class="form-control" 
+                             id="email"
+                             formControlName="email"
+                             placeholder="Email">
+                      <label for="email"><i class="bi bi-envelope me-1"></i>Email</label>
+                      <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                           class="text-danger small mt-1">
+                        <i class="bi bi-exclamation-circle me-1"></i>Valid email is required
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Phone Number Field -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input type="tel" 
+                             class="form-control" 
+                             id="phoneNumber"
+                             formControlName="phoneNumber"
+                             placeholder="Phone Number">
+                      <label for="phoneNumber"><i class="bi bi-telephone me-1"></i>Phone Number</label>
+                    </div>
+                  </div>
+
+                  <!-- Address Field -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <textarea class="form-control" 
+                                id="address"
+                                formControlName="address"
+                                placeholder="Address"
+                                style="height: 100px"></textarea>
+                      <label for="address"><i class="bi bi-geo-alt me-1"></i>Address</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="mt-4">
+                  <h5 class="mb-3"><i class="bi bi-tags me-2"></i>Interests</h5>
+                  <div class="d-flex flex-wrap gap-2">
+                    <div class="form-check" *ngFor="let interest of interests">
+                      <input class="form-check-input" 
+                             type="checkbox"
+                             [id]="'interest-' + interest"
+                             [checked]="selectedInterests.has(interest)"
+                             (change)="toggleInterest(interest)">
+                      <label class="form-check-label" [for]="'interest-' + interest">
+                        {{ interest }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="mt-4">
+                  <div class="password-header d-flex align-items-center gap-2 mb-3">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                    <h5 class="mb-0">Password</h5>
+                    <div class="ms-auto">
+                      <button type="button" 
+                              class="btn btn-link text-decoration-none change-password-btn" 
+                              (click)="togglePasswordFields()">
+                        Change Password
+                      </button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="showPasswordFields" class="password-section">
+                    <div class="password-fields">
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text bg-transparent border-end-0">
+                            <i class="bi bi-key text-muted"></i>
+                          </span>
+                          <input type="password" 
+                                 class="form-control border-start-0 ps-0" 
+                                 placeholder="Current Password"
+                                 formControlName="currentPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text bg-transparent border-end-0">
+                            <i class="bi bi-lock text-muted"></i>
+                          </span>
+                          <input type="password" 
+                                 class="form-control border-start-0 ps-0" 
+                                 placeholder="New Password"
+                                 formControlName="newPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text bg-transparent border-end-0">
+                            <i class="bi bi-shield-lock text-muted"></i>
+                          </span>
+                          <input type="password" 
+                                 class="form-control border-start-0 ps-0" 
+                                 placeholder="Confirm Password"
+                                 formControlName="confirmPassword">
+                        </div>
+                      </div>
+
+                      <div *ngIf="profileForm.errors?.['mismatch'] && 
+                                  (profileForm.get('confirmPassword')?.touched ||
+                                   profileForm.get('newPassword')?.touched)"
+                           class="password-mismatch-error">
+                        <i class="bi bi-exclamation-circle-fill me-1"></i>
+                        Passwords do not match
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary"
-                    [disabled]="profileForm.invalid || isLoading">
-              Update Profile
-            </button>
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button type="submit" 
+                      class="btn btn-primary btn-lg px-5"
+                      [disabled]="profileForm.invalid || isLoading"
+                      (click)="onSubmit()">
+                <i class="bi bi-check-circle me-2"></i>
+                <span *ngIf="!isLoading">Update Profile</span>
+                <span *ngIf="isLoading">
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Updating...
+                </span>
+              </button>
+            </div>
           </form>
         </div>
       </div>

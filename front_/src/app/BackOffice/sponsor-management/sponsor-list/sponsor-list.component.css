@@ -1,0 +1,447 @@
+/* Card Styles */
+.main-card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  background: #fff;
+}
+
+.card-header {
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  border-radius: 1rem 1rem 0 0;
+}
+
+/* Search Box Styles */
+.search-box .input-group {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.search-box .input-group-text {
+  background: #fff;
+  border-color: #e0e0e0;
+  color: #6c757d;
+}
+
+.search-box .form-control {
+  border-color: #e0e0e0;
+}
+
+.search-box .form-control:focus {
+  box-shadow: none;
+  border-color: #e0e0e0;
+}
+
+/* Table Styles */
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #495057;
+  padding: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Logo Styles */
+.logo-wrapper {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.sponsor-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sponsor-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Sponsor Info Styles */
+.sponsor-info {
+  max-width: 400px;
+}
+
+.sponsor-name {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.sponsor-description {
+  font-size: 0.875rem;
+  color: #6c757d;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Badge Styles */
+.badge {
+  padding: 0.5rem 0.75rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.badge-platinum {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.badge-gold {
+  background-color: #f1c40f;
+  color: #2c3e50;
+}
+
+.badge-silver {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}
+
+.badge-bronze {
+  background-color: #cd7f32;
+  color: white;
+}
+
+.badge-active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Button Styles */
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background-color: #e9ecef;
+}
+
+.btn-icon i {
+  font-size: 1.25rem;
+}
+
+/* Website Link Styles */
+.website-link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.website-link:hover {
+  color: #0056b3;
+}
+
+/* Empty State Styles */
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #6c757d;
+  opacity: 0.5;
+  display: block;
+}
+
+.empty-state h5 {
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.empty-state p {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+/* Hover Effects */
+.sponsor-row {
+  transition: background-color 0.2s ease;
+}
+
+.sponsor-row:hover {
+  background-color: rgba(0, 123, 255, 0.03);
+}
+
+/* Form Controls */
+.form-select {
+  border-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.table {
+  --bs-table-hover-bg: rgba(115, 103, 240, 0.04);
+}
+
+.btn-group .btn {
+  padding: 0.375rem 0.75rem;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.5rem;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none;
+}
+
+.form-control {
+  border-left: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}
+
+.form-select {
+  border-radius: 0.375rem;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Add these styles to your existing CSS */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  display: none;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  max-width: 600px;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.modal-header .modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  display: none;
+}
+
+.modal-backdrop.show {
+  display: block;
+}
+
+/* Style for the assignment button */
+.btn-primary.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Style for form elements */
+.form-label {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #e0e0e0;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  color: #6c757d;
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Style for the modal header */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Style for the modal footer */
+.modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+  border-color: #357abd;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  color: #2c3e50;
+}
+
+.btn-light:hover {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+/* File Upload Styles */
+.input-group {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.input-group-text {
+  cursor: pointer;
+}
+
+/* Alert Styles */
+.alert {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0;
+}
+
+.alert-info {
+  background-color: #e3f2fd;
+  border-color: #bbdefb;
+  color: #0d47a1;
+}
+
+/* Icon Styles */
+.bx {
+  font-size: 1.25rem;
+  vertical-align: middle;
+}
+
+/* Animation */
+.modal-dialog {
+  transform: translateY(-50px);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+} 

@@ -1,55 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { User, TypeUserRole } from '../models/user.model'; // Importer le modèle User
-
+import { HttpClient, HttpContext, HttpResponse } from '@angular/common/http';
+import { filter, map, Observable } from 'rxjs';
+import { RequestBuilder } from './request-builder';
+import { StrictHttpResponse } from './strict-http-response';
 export interface Confirm$Params {
   token: string;
 }
-
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private authUrl = 'http://localhost:8082/api/auth';
-  private tokenKey = 'auth-token';
-  private userKey = 'current-user'; // Clé pour stocker l'utilisateur dans localStorage
-  private refreshTokenInterval: any;
-  private refreshTokenSubject = new BehaviorSubject<boolean>(false);
-  private currentUser: User | null = null; // Propriété pour stocker l'utilisateur
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {
-    // Charger l'utilisateur depuis localStorage au démarrage
-    const userData = localStorage.getItem(this.userKey);
-    if (userData && typeof userData === 'string') {
-      try {
-        this.currentUser = JSON.parse(userData);
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
-        this.currentUser = null;
-        localStorage.removeItem(this.userKey);
-      }
-    } else {
-      this.currentUser = null;
-    }
+  constructor(private http: HttpClient) {}
+
+  login(credentials: { username: string; password: string }): Observable<any> {
+    // Ajout de l'URL complète avec une meilleure gestion de l'API
+    const url = `${this.authUrl}/signin`;
+
+    // Envoi de la requête POST avec les informations d'identification
+    return this.http.post<any>(url, credentials);
   }
 
-  login(credentials: any): Observable<any> {
-    return this.http.post(this.authUrl + '/signin', credentials).pipe(
-      tap((response: any) => {
-        this.saveToken(response.token);
-        this.currentUser = response.user as User; // Stocker l'utilisateur
-        localStorage.setItem(this.userKey, JSON.stringify(this.currentUser)); // Sauvegarder dans localStorage
-        this.startRefreshTokenInterval();
-      })
-    );
-  }
 
+  // Méthode pour l'inscription
   signup(username: string, email: string, password: string, roles: string[] = ['USER']) {
     return this.http.post(`${this.authUrl}/signup`, {
       username,
@@ -59,74 +33,19 @@ export class AuthService {
     });
   }
 
-  logout(): void {
-    this.clearAuthData();
-    this.currentUser = null; // Réinitialiser l'utilisateur
-    this.router.navigate(['/login']);
-  }
-
-  refreshToken(): Observable<any> {
-    if (this.refreshTokenSubject.value) {
-      return of(null);
-    }
-
-    this.refreshTokenSubject.next(true);
-    return this.http.post(this.authUrl + '/refresh-token', {}).pipe(
-      tap((response: any) => {
-        this.saveToken(response.token);
-        this.refreshTokenSubject.next(false);
-      }),
-      catchError((error) => {
-        this.refreshTokenSubject.next(false);
-        this.clearAuthData();
-        this.currentUser = null; // Réinitialiser l'utilisateur
-        this.router.navigate(['/login']);
-        throw error;
-      })
-    );
+  saveToken(token: string): void {
+    localStorage.setItem('auth_token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem('auth_token');
   }
 
-  saveToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+  clearToken(): void {
+    localStorage.removeItem('auth_token');
   }
 
-  private clearAuthData(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey); // Supprimer les données de l'utilisateur
-    this.stopRefreshTokenInterval();
-  }
 
-  private startRefreshTokenInterval(): void {
-    this.stopRefreshTokenInterval();
-    this.refreshTokenInterval = setInterval(() => {
-      this.refreshToken().subscribe();
-    }, 4 * 60 * 1000); // Refresh every 4 minutes
-  }
-
-  private stopRefreshTokenInterval(): void {
-    if (this.refreshTokenInterval) {
-      clearInterval(this.refreshTokenInterval);
-      this.refreshTokenInterval = null;
-    }
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getToken();
-  }
-
-  // Ajouter la méthode isLoggedIn
-  isLoggedIn(): boolean {
-    return this.isAuthenticated();
-  }
-
-  // Ajouter la méthode getCurrentUser
-  getCurrentUser(): User | null {
-    return this.currentUser;
-  }
 
   activateAccount(token: string): Observable<string> {
     return this.http.get(`${this.authUrl}/activate-account`, {
@@ -150,11 +69,9 @@ export class AuthService {
   }
 
   resetPassword(token: string, newPassword: string): Observable<string> {
-    return this.http.post(`${this.authUrl}/reset-password`, {
-      token,
-      newPassword
-    }, {
-      responseType: 'text'
-    });
+    return this.http.post(`${this.authUrl}/reset-password`,
+      { token, newPassword },
+      { responseType: 'text' }
+    );
   }
 }

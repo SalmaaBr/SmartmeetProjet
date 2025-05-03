@@ -2,22 +2,17 @@ package tn.esprit.examen.Smartmeet.entities.Users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Claim;
-import tn.esprit.examen.Smartmeet.entities.GhanemRidene.FoundItem;
-import tn.esprit.examen.Smartmeet.entities.GhanemRidene.Sponsor;
+
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.InteractivePublication;
-import tn.esprit.examen.Smartmeet.entities.MaryemAbid.PublicationComment;
-import tn.esprit.examen.Smartmeet.entities.MaryemAbid.PublicationLike;
-import tn.esprit.examen.Smartmeet.entities.MaryemAbid.ResourceReservation;
 import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.Document;
-import tn.esprit.examen.Smartmeet.entities.MaryemJeljli.DocumentLike;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.MentalHealth;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.MonitoringRecruitment;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.TypeTheme;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +39,18 @@ public class Users implements Serializable {
     private String phoneNumber;
     private String address;
     private boolean enabled;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @Lob
+    @Column(name = "profile_image", columnDefinition = "LONGBLOB")
+    private byte[] profileImage;
+
+    @ElementCollection(targetClass = TypeTheme.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<TypeTheme> interests = new HashSet<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BlacklistedToken> blacklistedTokens = new HashSet<>();
@@ -63,43 +70,26 @@ public class Users implements Serializable {
         this.email = email;
         this.password = password;
     }
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
     private Set<InteractivePublication> InteractivePublications;
 
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
     private Set<MentalHealth> MentalHealths;
-
+    @JsonIgnore
     @ManyToMany(mappedBy="users", cascade = CascadeType.ALL)
     private Set<Event> events;
 
+
+    @JsonIgnore
     @ManyToMany(mappedBy="users", cascade = CascadeType.ALL)
     private Set<MonitoringRecruitment> monitoringrecruitments;
 
-    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy="users")
     private Set<Document> Documents;
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DocumentLike> documentLikes = new HashSet<>();
 
-    @OneToMany(mappedBy = "foundByUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FoundItem> reportedItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "claimedByUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Claim> claims = new ArrayList<>();
-    @OneToMany(mappedBy = "admin")
-    private List<Sponsor> sponsorsGeres;
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PublicationComment> comments = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ResourceReservation> resourceReservations = new ArrayList<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PublicationLike> publicationLike = new ArrayList<>();
 
 }

@@ -50,19 +50,25 @@ export class LoginComponent {
       (response: any) => {
         this.authService.saveToken(response.accessToken);
         const roles = response.roles;
-        console.log("🚀 ~ LoginComponent ~ onSubmit ~ roles:", roles)
 
-        localStorage.setItem("roles", roles);
+        // Store roles as JSON string
+        localStorage.setItem("roles", JSON.stringify(roles));
         localStorage.setItem("username", response.username);
         localStorage.setItem("email", response.email);
+        
+        // Parse ID as number and store user info
+        const userId = parseInt(response.id, 10);
+        localStorage.setItem("user", JSON.stringify({
+          userID: userId,
+          username: response.username,
+          email: response.email,
+          roles: roles
+        }));
 
-        console.log("🚀 ~ LoginComponent ~ onSubmit ~ roles:", roles)
         if (roles.includes('ADMIN')) {
           this.router.navigate(['/admin']);
-          return;
         } else if (roles.includes('USER')) {
           this.router.navigate(['/front']);
-          return;
         } else {
           console.error('Rôle non reconnu');
         }

@@ -25,6 +25,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/FrontOffice/assets/vendor/bootstrap/css/bootstrap.min.css",
               "src/assets/FrontOffice/assets/css/main.css",
@@ -35,9 +36,8 @@
               "src/assets/BackOffice/assets/vendor/css/theme-default.css",
               "src/assets/BackOffice/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/boxicons/css/boxicons.min.css"
-
-
+              "node_modules/boxicons/css/boxicons.min.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [
               "src/assets/FrontOffice/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
@@ -105,6 +105,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []

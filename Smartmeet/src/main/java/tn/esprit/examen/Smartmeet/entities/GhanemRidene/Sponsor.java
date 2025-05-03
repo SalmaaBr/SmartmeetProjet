@@ -1,43 +1,53 @@
 package tn.esprit.examen.Smartmeet.entities.GhanemRidene;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
-@Entity
-
-public class Sponsor implements Serializable {
+@AllArgsConstructor
+public class Sponsor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idSponsor;
 
-    private String name;
-    private String logo;
+    private String nom;
     private String description;
+    private String image;
+
     @Enumerated(EnumType.STRING)
-    private SponsorLevel level;
-    private BigDecimal contribution;
-    private LocalDate startDate; // Start date of the partnership
-    private LocalDate endDate; // End date of the partnership
+    private NiveauSponsor niveau;
 
+    private Boolean statut;
+    private String siteWeb;
 
-    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EventSponsor> eventSponsors = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users admin;
-}
+    private Users user;
 
+    @ManyToOne
+    @JoinColumn(name = "responsible_user_id")
+    private Users responsibleUser;
+
+    @ManyToMany
+    @JoinTable(
+        name = "sponsor_event",
+        joinColumns = @JoinColumn(name = "sponsor_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private Set<Event> events;
+
+    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
+    private Set<Contract> contracts;
+
+
+}

@@ -1,0 +1,53 @@
+<div class="event-contracts">
+  <h2>Contrats pour l'Événement #{{ eventId }}</h2>
+
+  <!-- Liste des contrats existante -->
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Sponsor</th>
+      <th>Montant</th>
+      <th>Statut</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let contract of contracts">
+      <td>{{ contract.id }}</td>
+      <td>{{ contract.sponsorName }}</td>
+      <td>{{ contract.amount | currency:'EUR' }}</td>
+      <td>{{ contract.status }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Section des statistiques -->
+  <div class="stats-section" *ngIf="stats">
+    <h3>Statistiques des Contrats</h3>
+
+    <div class="row">
+      <!-- Graphique 1: Montants par sponsor -->
+      <div class="col-md-4">
+        <canvas id="amountsChart"></canvas>
+      </div>
+
+      <!-- Graphique 2: Engagement -->
+      <div class="col-md-4">
+        <canvas id="engagementChart"></canvas>
+      </div>
+
+      <!-- Graphique 3: Statut des contrats -->
+      <div class="col-md-4">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chiffre clé: Délai moyen de signature -->
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5>Délai Moyen de Signature</h5>
+        <p>{{ stats.averageSignatureTime }} jours</p>
+      </div>
+    </div>
+  </div>
+</div>

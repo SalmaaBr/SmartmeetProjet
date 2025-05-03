@@ -1,0 +1,273 @@
+  <div class="container-fluid">
+  <div class="card main-card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="mb-0">Sponsor Management</h4>
+        <p class="text-muted mb-0">Manage your sponsors and partnerships</p>
+      </div>
+      <button class="btn btn-primary d-flex align-items-center gap-2" routerLink="/admin/sponsors/add">
+        <i class="bx bx-plus"></i> Add New Sponsor
+      </button>
+    </div>
+    <div class="card-body">
+      <!-- Search and Filter Section -->
+      <div class="row mb-4 g-3">
+        <div class="col-md-6">
+          <div class="search-box">
+            <div class="input-group">
+              <span class="input-group-text border-end-0">
+                <i class="bx bx-search"></i>
+              </span>
+              <input type="text" class="form-control border-start-0 ps-0"
+                     placeholder="Search sponsors by name or description..."
+                     [value]="searchTerm"
+                     (input)="onSearchChange($event)">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [value]="selectedNiveau" (change)="onLevelChange($event)">
+            <option value="ALL">All Levels</option>
+            <option value="PLATINE">Platinum</option>
+            <option value="OR">Gold</option>
+            <option value="ARGENT">Silver</option>
+            <option value="BRONZE">Bronze</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <div class="d-flex align-items-center">
+            <span class="me-3">Total: {{filteredSponsors.length}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sponsors Table -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 80px">Logo</th>
+              <th>Name & Description</th>
+              <th style="width: 120px">Level</th>
+              <th style="width: 100px">Status</th>
+              <th style="width: 120px">Website</th>
+              <th style="width: 100px" class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sponsor of filteredSponsors" class="sponsor-row">
+              <td class="text-center">
+                <div class="logo-wrapper">
+                  <img [src]="sponsor.image"
+                       [alt]="sponsor.nom + ' logo'"
+                       class="sponsor-logo"
+                       (error)="handleImageError($event)">
+                </div>
+              </td>
+              <td>
+                <div class="sponsor-info">
+                  <div class="sponsor-name">{{sponsor.nom}}</div>
+                  <div class="sponsor-description">{{sponsor.description}}</div>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'badge-platinum': sponsor.niveau === 'PLATINE',
+                  'badge-gold': sponsor.niveau === 'OR',
+                  'badge-silver': sponsor.niveau === 'ARGENT',
+                  'badge-bronze': sponsor.niveau === 'BRONZE'
+                }">
+                  {{sponsor.niveau}}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="sponsor.statut ? 'badge-active' : 'badge-inactive'">
+                  {{sponsor.statut ? 'Active' : 'Inactive'}}
+                </span>
+              </td>
+              <td>
+                <a [href]="sponsor.siteWeb"
+                   target="_blank"
+                   class="btn btn-link website-link p-0">
+                  <i class="bx bx-link-external me-1"></i>Visit Site
+                </a>
+              </td>
+              <td>
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-icon btn-light"
+                          [routerLink]="['/admin/sponsors/edit', sponsor.idSponsor]"
+                          title="Edit Sponsor">
+                    <i class="bx bx-edit-alt"></i>
+                  </button>
+                  <button class="btn btn-icon btn-light"
+                          (click)="deleteSponsor(sponsor.idSponsor)"
+                          title="Delete Sponsor">
+                    <i class="bx bx-trash text-danger"></i>
+                  </button>
+                  <button class="btn btn-primary btn-sm"
+                          (click)="openAssignmentModal(sponsor)"
+                          title="Assign to Event">
+                    <i class="bx bx-user-plus"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Empty State -->
+            <tr *ngIf="filteredSponsors.length === 0">
+              <td colspan="6" class="text-center py-5">
+                <div class="empty-state">
+                  <i class="bx bx-search-alt-2 mb-3"></i>
+                  <h5>No sponsors found</h5>
+                  <p class="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Assignment Modal -->
+<div class="modal" [class.show]="showAssignmentModal" [style.display]="showAssignmentModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="bx bx-link-alt me-2"></i>
+          Assign Sponsor to Event
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeAssignmentModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitAssignment()" class="needs-validation">
+          <!-- Event Selection -->
+          <div class="mb-4">
+            <label for="eventId" class="form-label">
+              <i class="bx bx-calendar-event text-primary me-2"></i>
+              Select Event
+            </label>
+            <select class="form-select"
+                    id="eventId"
+                    [(ngModel)]="assignmentForm.eventId"
+                    name="eventId"
+                    required>
+              <option value="">Choose an event...</option>
+              <option *ngFor="let event of events" [value]="event.id">
+                {{event.title}}
+              </option>
+            </select>
+            <div class="form-text">Select the event you want to assign the sponsor to</div>
+          </div>
+
+          <!-- Terms -->
+          <div class="mb-4">
+            <label for="terms" class="form-label">
+              <i class="bx bx-file text-primary me-2"></i>
+              Contract Terms
+            </label>
+            <textarea class="form-control"
+                      id="terms"
+                      [(ngModel)]="assignmentForm.terms"
+                      name="terms"
+                      rows="4"
+                      placeholder="Enter the terms and conditions of the sponsorship..."
+                      required></textarea>
+            <div class="form-text">Specify the terms and conditions of the sponsorship</div>
+          </div>
+
+          <!-- Amount -->
+          <div class="mb-4">
+            <label for="amount" class="form-label">
+              <i class="bx bx-money text-primary me-2"></i>
+              Sponsorship Amount
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number"
+                     class="form-control"
+                     id="amount"
+                     [(ngModel)]="assignmentForm.amount"
+                     name="amount"
+                     placeholder="Enter amount"
+                     required>
+            </div>
+            <div class="form-text">Enter the sponsorship amount in dollars</div>
+          </div>
+
+          <!-- Expiry Date -->
+          <div class="mb-4">
+            <label for="expiryDate" class="form-label">
+              <i class="bx bx-calendar text-primary me-2"></i>
+              Contract Expiry Date
+            </label>
+            <input type="datetime-local"
+                   class="form-control"
+                   id="expiryDate"
+                   [(ngModel)]="assignmentForm.expiryDate"
+                   name="expiryDate"
+                   required>
+            <div class="form-text">Select when the contract will expire</div>
+          </div>
+
+          <!-- Contract File -->
+          <div class="mb-4">
+            <label for="contractFile" class="form-label">
+              <i class="bx bx-file-pdf text-primary me-2"></i>
+              Contract PDF
+            </label>
+            <div class="d-flex gap-2 mb-2">
+              <button type="button"
+                      class="btn btn-outline-primary"
+                      (click)="generateContractPDF()"
+                      [disabled]="!assignmentForm.eventId || !assignmentForm.terms || !assignmentForm.amount || !assignmentForm.expiryDate">
+                <i class="bx bx-file-blank me-1"></i>
+                Generate Contract PDF
+              </button>
+            </div>
+            <div class="input-group">
+              <input type="file"
+                     class="form-control"
+                     id="contractFile"
+                     accept=".pdf"
+                     (change)="onFileSelected($event)"
+                     required>
+              <label class="input-group-text" for="contractFile">
+                <i class="bx bx-upload"></i>
+              </label>
+            </div>
+            <div class="form-text">Upload the contract document in PDF format</div>
+            <div *ngIf="selectedFileName" class="mt-2">
+              <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="bx bx-file me-2"></i>
+                <div>
+                  Selected file: <strong>{{selectedFileName}}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer border-top-0">
+            <button type="button"
+                    class="btn btn-light"
+                    (click)="closeAssignmentModal()">
+              <i class="bx bx-x me-1"></i>
+              Cancel
+            </button>
+            <button type="submit"
+                    class="btn btn-primary"
+                    [disabled]="isCheckingAssignment">
+              <i class="bx bx-check me-1"></i>
+              {{isCheckingAssignment ? 'Checking...' : 'Assign Sponsor'}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" [class.show]="showAssignmentModal" [style.display]="showAssignmentModal ? 'block' : 'none'"></div>

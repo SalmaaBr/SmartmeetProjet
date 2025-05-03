@@ -13,7 +13,6 @@ import { LoginComponent } from './User/login/login.component';
 import { PasswordComponent } from './User/password/password.component';
 import { ResourceManagementComponent} from "./BackOffice/resource-management/resource-management.component";
 import { ResourceReservationManagementComponent} from "./BackOffice/resource-reservation-management/resource-reservation-management.component";
-import { ResourceMaintenanceComponent } from './BackOffice/resource-maintenance/resource-maintenance.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ActivateAccountComponent } from './User/activate-account/activate-account.component';
 import { ResetPasswordRequestComponent } from './User/reset-password-request/reset-password-request.component';
@@ -25,13 +24,13 @@ import { GeteventComponent } from './models/event/getevent/getevent/getevent.com
 import { EditEventComponent } from './models/event/edit-event/edit-event.component';
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import {EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
-import {AddFeedbackComponent} from "./BackOffice/add-feedback/add-feedback.component";
-import { MentalHealthComponent } from './BackOffice/mental-health/mental-health.component';
-import { ResourceReservationStatisticsComponent } from './BackOffice/resource-reservation-statistics/resource-reservation-statistics.component';
-import { NotificationComponent } from './components/notification/notification.component';
-import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
-import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
-
+import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+import { CalendarComponent } from './models/calendar/calendar.component';
+import { NotificationsComponent } from './models/notifications/notifications.component';
+import { SponsorListComponent } from './BackOffice/sponsor-management/sponsor-list/sponsor-list.component';
+import { SponsorFormComponent } from './BackOffice/sponsor-management/sponsor-form/sponsor-form.component';
+import { ResponsibleContractsComponent } from './BackOffice/sponsor-management/responsible-contracts/responsible-contracts.component';
+import { EventContractsComponent } from './components/event-contracts/event-contracts.component';
 const routes: Routes = [
   {
     path: 'front',
@@ -43,10 +42,13 @@ const routes: Routes = [
       {path: 'portfolio', component:PortfolioComponent},
       {path: 'contact', component:ContactComponent},
       { path: 'profile', component: ProfileComponent  },
+      { path: 'profile/me', component: ViewProfileComponent },
+      { path: 'responsible-contracts', component: ResponsibleContractsComponent },
+      { path: 'event-contracts', component: EventContractsComponent },
       {
-        path: 'notifications',
-        component: NotificationComponent,
-      },
+        path: 'lost-and-found',
+        loadChildren: () => import('./BackOffice/lost-and-found/lost-and-found.module').then(m => m.LostAndFoundModule)
+      }
     ]
   },
   {
@@ -54,28 +56,37 @@ const routes: Routes = [
     component: AllTemplateBackComponent,
     canActivate: [AuthGuard],  // Protecting the main route
     canActivateChild: [AuthGuard], // Protecting child routes
-    data: { roles: ['ADMIN'] },
     children: [
+      { path: 'users', component: UserComponent },
       { path: 'resources', component: ResourceManagementComponent },
       { path: 'resource-reservations', component: ResourceReservationManagementComponent },
-      { path: 'resource-maintenance', component: ResourceMaintenanceComponent },
-      { path: 'users', component: UserComponent },
-      { path: '', redirectTo: 'resources', pathMatch: 'full' },
+
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'events', component: GeteventComponent },
+      { path: 'cal', component: CalendarComponent },
       { path: 'create-event', component: CreateeventComponent },
       { path: 'edit-event/:id', component: EditEventComponent },
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
-      { path: 'feedback', component: AddFeedbackComponent },
-      { path: 'mental-health', component: MentalHealthComponent },
-      { path: 'resource-reservation-statistics', component: ResourceReservationStatisticsComponent },
-      { path: 'maintenance-notifications', component: MaintenanceNotificationAdminComponent },
+      { path: 'notif', component: NotificationsComponent },
+      { path: 'sponsors', component: SponsorListComponent },
+      { path: 'sponsors/add', component: SponsorFormComponent },
+      { path: 'sponsors/edit/:id', component: SponsorFormComponent },
       {
-        path: 'notifications',
-        component: NotificationComponent,
-      },
-      { path: 'documents', component: DocumentManagementComponent },
-
+        path: 'lost-and-found',
+        loadChildren: () => import('./BackOffice/lost-and-found/lost-and-found.module').then(m => m.LostAndFoundModule)
+      }
+    ]
+  },
+  {
+    path: 'back-office',
+    component: AllTemplateBackComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'lost-and-found',
+        loadChildren: () => import('./BackOffice/lost-and-found/lost-and-found.module').then(m => m.LostAndFoundModule)
+      }
     ]
   },
   {
@@ -98,11 +109,8 @@ const routes: Routes = [
     children: [
       { path: 'register', component: RegisterComponent }
     ]
-  },
-
+  }
 ];
-
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

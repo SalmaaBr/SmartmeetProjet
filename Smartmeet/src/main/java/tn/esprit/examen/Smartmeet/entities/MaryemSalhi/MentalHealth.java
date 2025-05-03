@@ -1,6 +1,5 @@
 package tn.esprit.examen.Smartmeet.entities.MaryemSalhi;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,28 +22,16 @@ public class MentalHealth implements Serializable {
     Long IdMentalHealth;
 
     @Enumerated(EnumType.STRING)
-    ResponseMoment responseMoment; // 1. Moment de réponse : Avant, Pendant, Après
-
-    int stressLevel; // 2. Évaluation du niveau de stress (1-5)
-
-    @Enumerated(EnumType.STRING)
-    TypeEmotionalState emotionalState; // 3. État émotionnel général
-
-    @Enumerated(EnumType.STRING)
-    SupportNeed supportNeed; // 5. Besoin de soutien : Oui/Non
-
-    LocalDateTime submissionDate; // Nouveau champ : Date de soumission du formulaire
-
-    @PrePersist
-    public void prePersist() {
-        if (submissionDate == null) {
-            submissionDate = LocalDateTime.now(); // Date automatique
-        }
-    }
+    TypeEmotionalState emotionalState;
+    int stressLevel;
+    String supportiveMessage;
+    int points;
+    LocalDateTime lastWellnessSession;
+    String gamificationReward;
+    String postEventMentalStateReport;
+    String mindfulnessExerciseRecommendation;
+    Boolean registrationStatus;
 
     @ManyToOne
-    @JsonIgnore // Éviter les boucles infinies lors de la sérialisation
     Users user;
-
-
 }

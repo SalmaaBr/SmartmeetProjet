@@ -27,9 +27,9 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(String username, String email, String password,
+	public UserDetailsImpl(String userID, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
-
+		this.userID = userID;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -44,6 +44,7 @@ public class UserDetailsImpl implements UserDetails {
 				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
+				user.getUserID().toString(),
 				user.getUsername(),
 				user.getEmail(),
 				user.getPassword(),

@@ -1,0 +1,72 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="header-title">
+      <h2 class="chat-title">
+        {{ data.lostFoundItem.type === 'LOST' ? 'Lost' : 'Found' }}: {{ data.lostFoundItem.title }}
+      </h2>
+    </div>
+    <button type="button" class="btn-close close-button" (click)="close()" aria-label="Close">X</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p>Loading chat...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="chat-content">
+    <div class="group-chat-info">
+      <p>Group chat for this lost and found item. All users can participate.</p>
+    </div>
+
+    <div class="chat-messages">
+      <div *ngIf="messages.length === 0" class="no-messages">
+        <p>No messages yet. Start the conversation!</p>
+      </div>
+
+      <div *ngFor="let message of messages"
+           [ngClass]="{'message-container': true, 'message-sent': isCurrentUserMessage(message), 'message-received': !isCurrentUserMessage(message)}">
+        <div class="message-bubble">
+          <div class="message-header">
+            <span class="message-sender">{{ isCurrentUserMessage(message) ? 'You' : message.senderUsername }}</span>
+            <span class="message-time">{{ message.timestamp | date:'short' }}</span>
+          </div>
+          <div class="message-content">{{ message.content }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="otherUserTyping" class="typing-indicator">
+      {{ otherUsername }} is typing...
+    </div>
+
+    <div class="message-input-container">
+      <form (submit)="onSubmit($event)" class="d-flex">
+        <div class="form-group flex-grow-1">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              [formControl]="newMessageControl"
+              placeholder="Type a message..."
+              autocomplete="off">
+            <div *ngIf="newMessageControl.invalid && newMessageControl.touched" class="invalid-feedback">
+              Please enter a message
+            </div>
+          </div>
+        </div>
+        <button
+          class="btn btn-primary send-button"
+          type="submit"
+          [disabled]="!newMessageControl.valid">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -46,7 +46,6 @@ export class UserComponent implements OnInit {
 
   saveUser(): void {
     if (this.isEditing) {
-      delete this.selectedUser.password;
       this.userService.updateUser(this.selectedUser.userID!, this.selectedUser)
         .subscribe(() => this.loadUsers());
     } else {

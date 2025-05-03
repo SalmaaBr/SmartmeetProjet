@@ -1,13 +1,10 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
-import { ToastrModule, provideToastr } from 'ngx-toastr';
-import { CodeInputModule } from 'angular-code-input';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,10 +26,12 @@ import { PortfolioComponent } from './FrontOffice/portfolio/portfolio.component'
 import { ContactComponent } from './FrontOffice/contact/contact.component';
 import { ResourceManagementComponent } from './BackOffice/resource-management/resource-management.component';
 import { ResourceReservationManagementComponent} from "./BackOffice/resource-reservation-management/resource-reservation-management.component";
-import { ResourceMaintenanceComponent } from './BackOffice/resource-maintenance/resource-maintenance.component';
 import { ReservationService } from './services/reservation.service';  // Importation du service
 import { ResourceService} from "./services/resource.service";
 import { AddInteractivePublicationComponent } from './FrontOffice/add-interactive-publication/add-interactive-publication.component';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { CodeInputModule } from 'angular-code-input';
 import { ActivateAccountComponent } from './User/activate-account/activate-account.component';
 import { ResetPasswordRequestComponent } from './User/reset-password-request/reset-password-request.component';
 import { ResetPasswordComponent } from './User/reset-password/reset-password.component';
@@ -44,16 +43,17 @@ import { EditEventComponent } from './models/event/edit-event/edit-event.compone
 import { CreateRecutementComponent } from './models/recutement/create-recutement/create-recutement.component';
 import { MonitoringRecruitmentListComponent } from './models/recutement/monitoring-recruitment-list/monitoring-recruitment-list.component';
 import { EditRecruitmentComponent } from './models/recutement/edit-recruitment/edit-recruitment.component';
-import { AddFeedbackComponent } from './BackOffice/add-feedback/add-feedback.component';
-import { MentalHealthComponent } from './BackOffice/mental-health/mental-health.component';
-import { DisableDatesDirective } from './directives/disable-dates.directive';
-import { ResourceReservationStatisticsComponent } from './BackOffice/resource-reservation-statistics/resource-reservation-statistics.component';
-import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
-import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
-import { NotificationComponent } from './components/notification/notification.component';
-import { DocumentManagementComponent } from 'src/app/BackOffice/document-management/document-management.component';
-import { DocumentService } from './services/document.service';
-import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ViewProfileComponent } from './BackOffice/view-profile/view-profile.component';
+import { CalendarComponent } from './models/calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { NotificationsComponent } from './models/notifications/notifications.component';
+import { LostAndFoundService } from './services/lost-and-found.service';
+import { ChatService } from './services/chat.service';
+import { ChatModule } from './BackOffice/lost-and-found/chat/chat.module';
+import { EventContractsComponent } from './components/event-contracts/event-contracts.component';
+
 
 @NgModule({
   declarations: [
@@ -79,57 +79,50 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
     ResetPasswordRequestComponent,
     ResetPasswordComponent,
     ResourceReservationManagementComponent,
-    ResourceMaintenanceComponent,
     AddInteractivePublicationComponent,
     UserComponent,
-    ProfileComponent,  // Déclaration des composants
+    ProfileComponent,
     CreateeventComponent,
     GeteventComponent,
     EditEventComponent,
     CreateRecutementComponent,
     MonitoringRecruitmentListComponent,
     EditRecruitmentComponent,
-    AddFeedbackComponent,
-    MentalHealthComponent,
-    DisableDatesDirective,
-    ResourceReservationStatisticsComponent,
-    NotificationComponent,
-    NotificationBadgeComponent,
-    MaintenanceNotificationAdminComponent,
-    DocumentManagementComponent,
-    DocumentFilterPipe,
-    
+    ViewProfileComponent,
+    CalendarComponent,
+    NotificationsComponent,
+    EventContractsComponent
   ],
   imports: [
     BrowserModule,
-    CommonModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule,
     CodeInputModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FullCalendarModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    })
+      closeButton: true,
+      progressBar: true
+    }),
+    LeafletModule,
+    MatSnackBarModule,
+    RouterModule,
+    ChatModule
   ],
   providers: [
     ReservationService,
     ResourceService,
-    DocumentService,
-    DatePipe,
+    LostAndFoundService,
+    ChatService,
     provideAnimations(),
     provideToastr(),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

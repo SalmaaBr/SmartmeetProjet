@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 class="modal-title">Assign Sponsor to Event</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="eventId">Event</label>
+      <select class="form-control" id="eventId" formControlName="eventId">
+        <option value="">Select an event</option>
+        <option *ngFor="let event of events" [value]="event.id">{{event.title}}</option>
+      </select>
+      <div *ngIf="assignmentForm.get('eventId')?.invalid && assignmentForm.get('eventId')?.touched" class="text-danger">
+        Please select an event
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="terms">Terms</label>
+      <textarea class="form-control" id="terms" formControlName="terms" rows="3"></textarea>
+      <div *ngIf="assignmentForm.get('terms')?.invalid && assignmentForm.get('terms')?.touched" class="text-danger">
+        Terms are required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <input type="number" class="form-control" id="amount" formControlName="amount">
+      <div *ngIf="assignmentForm.get('amount')?.invalid && assignmentForm.get('amount')?.touched" class="text-danger">
+        Please enter a valid amount
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="expiryDate">Expiry Date</label>
+      <input type="datetime-local" class="form-control" id="expiryDate" formControlName="expiryDate">
+      <div *ngIf="assignmentForm.get('expiryDate')?.invalid && assignmentForm.get('expiryDate')?.touched" class="text-danger">
+        Please select an expiry date
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cancel click')">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!assignmentForm.valid">Assign</button>
+    </div>
+  </form>
+</div> 

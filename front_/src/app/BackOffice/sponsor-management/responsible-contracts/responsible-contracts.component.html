@@ -1,0 +1,122 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">My Responsible Contracts</h4>
+    </div>
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && contracts.length === 0" class="alert alert-info">
+        No contracts found for your responsible sponsors.
+      </div>
+
+      <div *ngIf="!isLoading && contracts.length > 0" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Sponsor</th>
+            <th>Event</th>
+            <th>Amount</th>
+            <th>Signing Date</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let contract of contracts">
+            <td>{{ contract.sponsor?.nom || 'N/A' }}</td>
+            <td>{{ contract.event?.title || 'N/A' }}</td>
+            <td>${{ contract.amount }}</td>
+            <td>{{ contract.signingDate | date:'medium' }}</td>
+            <td>{{ contract.expiryDate | date:'medium' }}</td>
+            <td>
+                <span [class]="getStatusClass(contract.status)">
+                  {{ contract.status }}
+                </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-info me-1" (click)="viewContract(contract)">
+                <i class="bi bi-eye"></i> View
+              </button>
+              <button class="btn btn-sm btn-primary me-1" (click)="downloadContract(contract)">
+                <i class="bi bi-download"></i> Download
+              </button>
+              <button class="btn btn-sm btn-success" (click)="startSigning(contract)" [disabled]="contract.status !== 'PENDING' || contract.signature">
+                <i class="bi bi-pen"></i> Sign
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="preview-section" *ngIf="selectedContract">
+        <div class="preview-card" #printableContent style="background-color: white; padding: 20px; border: 1px solid #ddd;">
+          <div class="header">
+            <div class="header-info">
+              <h5>Contract: #{{ selectedContract.id }}</h5>
+              <h5>Date: {{ selectedContract.signingDate | date:'dd/MM/yyyy' }}</h5>
+              <h5>Issued by: Sponsor {{ selectedContract.sponsor?.nom || 'N/A' }}</h5>
+            </div>
+          </div>
+          <div class="content">
+            <h4>{{ selectedContract.event?.title || 'Event Contract' }}</h4>
+            <div>
+              <p><strong>Amount:</strong> ${{ selectedContract.amount }}</p>
+              <p><strong>Terms:</strong> {{ selectedContract.terms || 'N/A' }}</p>
+              <p><strong>Expiry Date:</strong> {{ selectedContract.expiryDate | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Status:</strong> {{ selectedContract.status }}</p>
+            </div>
+            <div class="signature-section">
+              <p><strong>Sponsor Signature:</strong></p>
+              <ng-container *ngIf="signatureDataUrl; else noSignature">
+                <img [src]="signatureDataUrl" alt="Signature" class="signature-img" style="max-width: 200px; max-height: 100px;">
+              </ng-container>
+              <ng-template #noSignature>
+                <p>Not signed</p>
+              </ng-template>
+            </div>
+          </div>
+          <div class="footer">
+            <p>Event Management - {{ currentDate | date:'yyyy' }} - All rights reserved</p>
+          </div>
+        </div>
+        <div class="preview-actions mt-3">
+          <a href="javascript:window.print()" class="btn btn-info">Print</a>
+          <button class="btn btn-info" (click)="downloadPDF()">Download PDF</button>
+          <button class="btn btn-primary" (click)="startSigning(selectedContract)" [disabled]="selectedContract.status !== 'PENDING' || selectedContract.signature">Add Signature</button>
+          <button class="btn btn-secondary" (click)="closePreview()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="signatureModal" class="modal" *ngIf="isSigning" style="display: block;">
+  <div class="modal-content">
+    <h4>Sign Contract</h4>
+    <canvas #signatureCanvas width="400" height="200" style="border: 1px solid black;"></canvas>
+    <div class="mt-2">
+      <button class="btn btn-secondary me-2" (click)="clearSignature()">Clear</button>
+      <button class="btn btn-primary" (click)="validateSignature()">Validate Signature</button>
+      <button class="btn btn-danger" (click)="isSigning = false">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="webcamModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h4>Capture Photo</h4>
+    <video #videoElement width="320" height="240" autoplay></video>
+    <canvas #photoCanvas width="320" height="240" style="display: none;"></canvas>
+    <div class="mt-2">
+      <button class="btn btn-primary" (click)="capturePhoto()">Capture</button>
+      <button class="btn btn-danger" (click)="closeWebcamModal()">Cancel</button>
+    </div>
+  </div>
+</div>

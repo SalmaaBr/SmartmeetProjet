@@ -1,12 +1,10 @@
 import { Resource } from "./resource.model";
-import { User } from "./user.model";
 
 export interface Reservation {
-  reservationId?: number; // Optional for creation
+  reservationId?: number; // Optionnel pour l'ajout
   resourceId: number;
-  userId?: number;
-  user?: User;
+  user: string;
   startTime: string;
   endTime: string;
-  resource?: Resource;
+  resources?:Resource[]
 }

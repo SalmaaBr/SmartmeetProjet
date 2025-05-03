@@ -9,12 +9,25 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.authService.getToken() && localStorage.getItem("roles")?.includes('ADMIN')) {
-      return true;
-    } else {
+    const token = this.authService.getToken();
+    const rolesStr = localStorage.getItem("roles");
+    
+    if (!token || !rolesStr) {
       this.router.navigate(['/login']);
       return false;
     }
+
+    try {
+      const roles = JSON.parse(rolesStr);
+      if (Array.isArray(roles) && roles.includes('ADMIN')) {
+        return true;
+      }
+    } catch (e) {
+      console.error('Error parsing roles:', e);
+    }
+
+    this.router.navigate(['/login']);
+    return false;
   }
 
   canActivateChild(): boolean {

@@ -7,8 +7,7 @@ export interface User {
   address?: string;
   enabled?: boolean;
   userRole: TypeUserRole[];
-  firstName?: string;
-  lastName?: string;
+  interests?: string[];
 }
 
 export type TypeUserRole = 'USER' | 'ADMIN' | 'PARTICIPANT' | 'SPEAKER' | 'TRAINER' | 'SPONSOR' | 'COMPANY';

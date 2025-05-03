@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class LoggingAspect {
-    @Pointcut("execution (* tn.esprit.examen.Smartmeet.Services.*.*(..))")
+    @Pointcut("execution (* tn.esprit.examen.nomPrenomClasseExamen.services.*.*(..))")
     public void methodCall() {}
 
     @Before("methodCall()")

@@ -10,79 +10,136 @@
     <nav id="navmenu" class="navmenu">
       <ul>
         <li><a routerLink="/front" class="active">Home<br></a></li>
-        <li><a routerLink="/front/about" class="btn-get-started">About</a>
-        </li>
+        <li><a routerLink="/front/about" class="btn-get-started">About</a></li>
         <li><a routerLink="/front/service">Services</a></li>
-        <li><a routerLink="/front/portfolio">Portfolio</a></li>
+        <li><a routerLink="/front/lost-and-found">Lost and Found</a></li>
         <li><a href="#team">Team</a></li>
-
         <li><a [routerLink]="'/front/contact'">Contact</a></li>
       </ul>
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
 
     <a *ngIf="!isAuth" [routerLink]="'/register'" class="btn-getstarted">Get Started</a>
-         <!-- User -->
-          <div  class="ps-3" *ngIf="isAuth" >
-            <ul class="navbar-nav flex-row align-items-center ms-auto">
-              <!-- User dropdown with notification badge -->
-              <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <a class="nav-link dropdown-toggle hide-arrow position-relative" href="javascript:void(0);" data-bs-toggle="dropdown">
-                  <!-- Notification badge on avatar -->
-                  <app-notification-badge class="position-absolute" style="top: -5px; right: -5px; z-index: 1;" [standaloneMode]="false"></app-notification-badge>
-                  <div class="avatar avatar-online">
-                    <img src="/assets/BackOffice/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+    <!-- User -->
+    <div class="ps-3" *ngIf="isAuth">
+      <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+        <!-- Notification Bell -->
+        <li class="nav-item me-3" *ngIf="isAuth">
+          <div class="notification-container">
+            <div class="notification-bell" (click)="toggleNotifications()">
+              <i class="bi bi-bell-fill text-primary" [ngClass]="{'text-danger': unreadCount > 0}"></i>
+              <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+            </div>
+            <div class="notification-dropdown" [class.show]="isNotificationOpen">
+              <div class="notification-header">
+                <h6>Notifications</h6>
+              </div>
+              <div class="notification-list" *ngIf="!loading && !error">
+                <div *ngIf="notifications.length === 0" class="notification-empty">
+                  No notifications yet
+                </div>
+                <div *ngFor="let notification of notifications"
+                     class="notification-item"
+                     [class.unread]="!notification.read"
+                     (click)="handleNotificationClick(notification)">
+                  <div class="notification-icon">
+                    <i class="bi bi-info-circle"></i>
                   </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex">
-                        <div class="flex-shrink-0 me-3">
-                          <div class="avatar avatar-online">
-                            <img src="/assets/BackOffice/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                          </div>
-                        </div>
-                        <div class="flex-grow-1">
-                          <span class="fw-semibold d-block">{{username}}</span>
-                          <small class="text-muted">{{roles}}</small>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" [routerLink]="['/front/profile']">
-                      <i class="bx bx-user me-2"></i>
-                      <span class="align-middle">My Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" routerLink="/front/notifications">
-                      <i class="bx bx-bell me-2"></i>
-                      <span class="align-middle">Notifications</span>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="/login">
-                      <i class="bx bx-power-off me-2"></i>
-                      <span class="align-middle" (click)="logout()">Log Out</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+                  <div class="notification-content">
+                    <div class="notification-title">{{ notification.title }}</div>
+                    <div class="notification-message">{{ notification.message }}</div>
+                    <div class="notification-time">{{ getTimeAgo(notification.timestamp) }}</div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="loading" class="notification-empty">
+                Loading notifications...
+              </div>
+              <div *ngIf="error" class="notification-error">
+                {{ error }}
+              </div>
+            </div>
           </div>
-  <!--/ User -->
+        </li>
+        <!-- End Notification Bell -->
 
-
-
-
-
+        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+          <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+            <div class="avatar avatar-online">
+              <img [src]="profileImageUrl || '/assets/BackOffice/assets/img/avatars/1.png'"
+                   alt="Profile"
+                   class="w-px-40 h-auto rounded-circle" />
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="#">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="avatar avatar-online">
+                      <img [src]="profileImageUrl || '/assets/BackOffice/assets/img/avatars/1.png'"
+                           alt="Profile"
+                           class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <span class="fw-semibold d-block">{{username}}</span>
+                    <small class="text-muted">{{roles}}</small>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/front/profile/me']">
+                <i class="bx bx-user me-2"></i>
+                <span class="align-middle">My Profile</span>
+              </a>
+            </li>
+            <li *ngIf="canViewContracts()">
+              <a class="dropdown-item" [routerLink]="['/front/responsible-contracts']">
+                <i class="bx bx-file me-2"></i>
+                <span class="align-middle">Consulter contrats</span>
+              </a>
+            </li>
+            <li *ngIf="canViewContracts()">
+              <a class="dropdown-item" [routerLink]="['/front/event-contracts']">
+                <i class="bx bx-file me-2"></i>
+                <span class="align-middle">Consulter statistiques</span>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/login">
+                <i class="bx bx-power-off me-2"></i>
+                <span class="align-middle" (click)="logout()">Log Out</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!--/ User -->
   </div>
 </header>
+
+<!-- Toast Notification Container -->
+<div class="toast-container" *ngIf="toasts.length > 0">
+  <div *ngFor="let toast of toasts; let i = index" class="toast" [class.toast-exit]="toast.exiting">
+    <div class="toast-icon">
+      <i class="bi" [ngClass]="{'bi-bell-fill': toast.type === 'notification', 'bi-info-circle-fill': toast.type === 'info'}"></i>
+    </div>
+    <div class="toast-content">
+      <div class="toast-title">{{ toast.title }}</div>
+      <div class="toast-message">{{ toast.message }}</div>
+    </div>
+    <div class="toast-close" (click)="removeToast(i)">
+      <i class="bi bi-x"></i>
+    </div>
+  </div>
+</div>

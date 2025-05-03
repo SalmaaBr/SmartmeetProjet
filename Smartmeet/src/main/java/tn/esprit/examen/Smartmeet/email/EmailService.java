@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -67,29 +67,29 @@ public class EmailService {
             LOGGER.error("Error sending email to {}: {}", to, e.getMessage());
         }
     }
-
-    /**
-     * Send a simple email message
-     *
-     * @param to recipient email address
-     * @param subject email subject
-     * @param text email body text
-     */
-    public void sendSimpleMessage(String to, String subject, String text) {
+    @Async
+    public void sendEventUpdateEmail(String to, String username, String eventTitle) {
         try {
-            log.info("Sending email to: {}, subject: {}", to, subject);
+            Context context = new Context();
+            context.setVariable("username", username);
+            context.setVariable("subject", eventTitle);
 
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(text);
+            String htmlContent = templateEngine.process("event_updated", context);
 
-            mailSender.send(message);
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-            log.info("Email sent successfully to: {}", to);
+            helper.setTo(to);
+            helper.setFrom("sps2022noreply@gmail.com");
+            helper.setSubject("🔔 Event Update : " + eventTitle);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(mimeMessage);
+            LOGGER.info("✅ Email envoyé pour mise à jour d'événement à {}", to);
         } catch (Exception e) {
-            log.error("Failed to send email to {}: {}", to, e.getMessage(), e);
-            // Don't rethrow, just log the error to avoid breaking the caller's flow
+            LOGGER.error("❌ Erreur en envoyant le mail de mise à jour : {}", to, e);
         }
     }
+
+
 }

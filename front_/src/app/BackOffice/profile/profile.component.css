@@ -1,14 +1,221 @@
-.password-section {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+/* Card Styles */
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+/* Profile Image Styles */
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-image {
+  transition: all 0.3s ease;
+  border: 5px solid #fff;
+}
+
+.image-upload-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.profile-image-container:hover .image-upload-overlay {
+  opacity: 1;
+}
+
+.profile-image-container:hover .profile-image {
+  filter: brightness(80%);
+}
+
+/* Form Controls */
+.form-floating {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  border-color: #0d6efd;
+}
+
+/* Interest Tags */
 .form-check {
-  margin-bottom: 1.5rem;
+  background-color: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 0.25rem;
+  transition: all 0.2s ease;
 }
 
-.alert {
+.form-check:hover {
+  background-color: #e9ecef;
+}
+
+.form-check-input:checked + .form-check-label {
+  color: #0d6efd;
+  font-weight: 500;
+}
+
+/* Password Section Styles */
+.password-header {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.password-header i {
+  font-size: 1.25rem;
+}
+
+.change-password-btn {
+  color: #6366f1;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.change-password-btn:hover {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+.password-section {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   margin-top: 1rem;
+}
+
+.password-fields .input-group {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.password-fields .input-group-text {
+  border-color: #e9ecef;
+  padding: 0.75rem 1rem;
+}
+
+.password-fields .input-group-text i {
+  font-size: 1.1rem;
+}
+
+.password-fields .form-control {
+  border-color: #e9ecef;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+}
+
+.password-fields .form-control:focus {
+  box-shadow: none;
+  border-color: #6366f1;
+}
+
+.password-fields .input-group:focus-within {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.password-fields .input-group:focus-within .input-group-text {
+  border-color: #6366f1;
+}
+
+.password-mismatch-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #fef2f2;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Submit Button */
+.btn-primary {
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+}
+
+/* Alerts */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* Loading Spinner Overlay */
+.position-absolute {
+  z-index: 1000;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .col-md-4 {
+    margin-bottom: 2rem;
+  }
+  
+  .password-section .row {
+    gap: 1rem;
+  }
+}
+
+/* Form Switch Custom Style */
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.form-switch .form-check-input {
+  width: 2.5em;
+  margin-left: -2.5em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  background-position: left center;
+  border-radius: 2em;
+  transition: all .3s ease-in-out;
+}
+
+.form-switch .form-check-input:focus {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2386b7fe'/%3e%3c/svg%3e");
+}
+
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
 }

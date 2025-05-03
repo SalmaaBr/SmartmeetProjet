@@ -1,0 +1,66 @@
+<div class="events-container">
+  <h2 class="page-heading">Select an Event for Lost & Found</h2>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5">
+    <div class="spinner-border text-primary me-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <span>Loading events...</span>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && (!events || events.length === 0)" class="empty-state">
+    <i class="fas fa-calendar-times"></i>
+    <h3>No Events Found</h3>
+    <p>There are currently no events available. Please check back later or contact the administrator.</p>
+  </div>
+
+  <!-- Events list -->
+  <div *ngIf="!loading && !error && events && events.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let event of events">
+      <div class="card event-card h-100">
+        <!-- Event image -->
+        <div class="card-img-wrapper">
+          <img [src]="'http://localhost:8082/event/images/' + event.filePath || 'assets/img/default-event.jpg'" alt="{{ event.name }}" class="card-img-top">
+          <span class="event-badge"
+                [ngClass]="{
+                  'badge-upcoming': isUpcoming(event),
+                  'badge-ongoing': isOngoing(event),
+                  'badge-past': isPast(event)
+                }">
+            {{ getEventStatus(event) }}
+          </span>
+        </div>
+
+        <!-- Event content -->
+        <div class="card-body">
+          <h5 class="card-title">{{ event.name }}</h5>
+          <p class="card-text">{{ event.description | slice:0:120 }}{{ event.description.length > 120 ? '...' : '' }}</p>
+
+          <div class="event-meta">
+            <div class="event-meta-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ event.location || 'Location not available' }}</span>
+            </div>
+            <div class="event-meta-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span>{{ event.startDate | date:'mediumDate' }}</span>
+            </div>
+          </div>
+
+          <a [routerLink]="['/front/lost-and-found/event', event.id]" class="btn btn-primary w-100">
+            <i class="fas fa-search me-2"></i> View Lost & Found
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
