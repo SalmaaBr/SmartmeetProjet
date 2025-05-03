@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MentalHealthService } from '../../services/mental-health.service';
-import { MentalHealth } from '../../models/mental-health';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {MentalHealth} from "../../models/mental-health";
+import {MentalHealthService} from "../../services/mental-health.service";
+import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-mental-health',
-  templateUrl: './mental-health.component.html',
-  styleUrls: ['./mental-health.component.css']
+  selector: 'app-mental-health-front',
+  templateUrl: './mental-health-front.component.html',
+  styleUrls: ['./mental-health-front.component.css']
 })
-export class MentalHealthComponent implements OnInit {
+export class MentalHealthFrontComponent {
   mentalHealthForm: FormGroup;
   editMentalHealth: MentalHealth | null = null;
   submissionMessage: string = '';
@@ -113,7 +113,7 @@ export class MentalHealthComponent implements OnInit {
 
           // Redirection vers la liste après un délai de 2 secondes
           setTimeout(() => {
-            this.router.navigate(['/admin/mental-health-list']);
+            this.router.navigate(['/front/mental-health-list']);
           }, 2000);
         },
         error: (error) => {
@@ -134,8 +134,7 @@ export class MentalHealthComponent implements OnInit {
     });
     this.editMentalHealth = null;
   }
-
-  navigateToList(): void {
-    this.router.navigate(['/admin/mental-health-history']);
+  navigateToList() {
+    this.router.navigate(['front/mental-health-history']);
   }
 }

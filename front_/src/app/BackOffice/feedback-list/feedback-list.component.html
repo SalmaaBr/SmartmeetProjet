@@ -45,10 +45,18 @@
 
       <!-- Tableau -->
       <table mat-table [dataSource]="feedbacks" class="mat-elevation-z8 w-100">
+
         <ng-container matColumnDef="idFeedback">
           <th mat-header-cell *matHeaderCellDef>ID</th>
           <td mat-cell *matCellDef="let feedback">{{ feedback.idFeedback || 'N/A' }}</td>
         </ng-container>
+
+        <!-- New Username Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Username</th>
+          <td mat-cell *matCellDef="let feedback">{{ feedback.user?.username || 'N/A' }}</td>
+        </ng-container>
+
         <ng-container matColumnDef="eventTitle">
           <th mat-header-cell *matHeaderCellDef>Event</th>
           <td mat-cell *matCellDef="let feedback">{{ feedback.eventTitle || 'Not specified' }}</td>
@@ -81,12 +89,6 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let feedback">
-            <button
-              class="btn btn-sm btn-outline-primary rounded-pill px-3 me-2"
-              (click)="editFeedback(feedback)"
-            >
-              <i class="bi bi-pencil me-2"></i>Edit
-            </button>
             <button
               *ngIf="feedback.idFeedback"
               class="btn btn-sm btn-outline-danger rounded-pill px-3"

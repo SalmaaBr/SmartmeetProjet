@@ -63,7 +63,7 @@ export class FeedbackListComponent implements OnInit {
     }
   };
 
-  displayedColumns: string[] = ['idFeedback', 'eventTitle', 'feeling', 'sentiment', 'message', 'date', 'actions'];
+  displayedColumns: string[] = ['idFeedback','username', 'eventTitle', 'feeling', 'sentiment', 'message', 'date', 'actions'];
 
   constructor(
     private feedbackService: FeedbackService,

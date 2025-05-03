@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { MentalHealthService } from '../../services/mental-health.service';
+import { Component } from '@angular/core';
 import { MentalHealth } from '../../models/mental-health';
+import { MentalHealthService } from '../../services/mental-health.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-mental-health-list',
-  templateUrl: './mental-health-list.component.html',
-  styleUrls: ['./mental-health-list.component.css']
+  selector: 'app-mental-health-history',
+  templateUrl: './mental-health-history.component.html',
+  styleUrls: ['./mental-health-history.component.css']
 })
-export class MentalHealthListComponent implements OnInit {
+export class MentalHealthHistoryComponent {
   mentalHealths: MentalHealth[] = [];
 
   constructor(private mentalHealthService: MentalHealthService, private router: Router) {}
@@ -18,13 +18,12 @@ export class MentalHealthListComponent implements OnInit {
   }
 
   loadMentalHealths(): void {
-    this.mentalHealthService.getAllMentalHealths().subscribe({
+    this.mentalHealthService.getMentalHealthsByCurrentUser().subscribe({
       next: (data) => {
-        console.log('Données reçues:', data);
         this.mentalHealths = data;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des MentalHealths:', error);
+        console.error('Erreur lors du chargement des MentalHealths pour l\'utilisateur courant:', error);
       }
     });
   }

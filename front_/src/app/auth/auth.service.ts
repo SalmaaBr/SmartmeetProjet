@@ -110,7 +110,7 @@ getUsername(): string | null {
     this.stopRefreshTokenInterval();
     this.refreshTokenInterval = setInterval(() => {
       this.refreshToken().subscribe();
-    }, 4 * 60 * 1000); // Refresh every 4 minutes
+    }, 120 * 60 * 1000); // Refresh every 4 minutes
   }
 
   private stopRefreshTokenInterval(): void {
@@ -129,8 +129,22 @@ getUsername(): string | null {
     return this.isAuthenticated();
   }
 
-  // Ajouter la méthode getCurrentUser
   getCurrentUser(): User | null {
+    // Try to get the latest user from localStorage first
+    const userData = localStorage.getItem(this.userKey);
+    if (userData && typeof userData === 'string') {
+      try {
+        this.currentUser = JSON.parse(userData);
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+        this.currentUser = null;
+        localStorage.removeItem(this.userKey);
+      }
+    }
+
+    // Log the user for debugging
+    console.log('getCurrentUser() returning:', this.currentUser);
+
     return this.currentUser;
   }
 

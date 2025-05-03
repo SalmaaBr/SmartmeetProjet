@@ -13,6 +13,8 @@ export interface Feedback {
   date: string;
   sentiment?: string;
   eventTitle?: string; // ← AJOUTER CETTE LIGNE
+ event?: { idEvent: number }; // Add event field to store event information
+  user?: { userID: number , username: String}; // Add user field to store user information
 }
 
 export interface FeedbackStats {

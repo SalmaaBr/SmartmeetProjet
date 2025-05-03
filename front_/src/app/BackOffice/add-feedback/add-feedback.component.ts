@@ -1,8 +1,6 @@
-// src/app/back-office/add-feedback/add-feedback.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FeedbackService } from '../../services/feedback.service';
 import { EventService } from '../../services/event.service';
-import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Feedback, TypeFeeling } from '../../models/feedback.model';
@@ -17,10 +15,10 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
   newFeedback: Feedback = {
     message: '',
     feeling: '' as TypeFeeling,
-
-    date: new Date().toISOString().split('T')[0] // Format ISO pour LocalDate
+    date: new Date().toISOString().split('T')[0]
   };
   selectedEventId: number | null = null;
+  userId: number | null = null;
   events: any[] = [];
   feelings: string[] = ['EXCELLENT', 'GOOD', 'AVERAGE', 'BAD', 'TERRIBLE'];
   isEditing: boolean = false;
@@ -36,16 +34,24 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadEvents().subscribe(() => {
-      this.route.paramMap.subscribe(params => {
-        const feedbackId = params.get('id');
-        if (feedbackId) {
-          this.isEditing = true;
-          this.currentFeedbackId = +feedbackId;
-          this.loadFeedback(this.currentFeedbackId);
-        }
-      });
+    // Retrieve query params for eventId, userId, and eventTitle
+    this.route.queryParams.subscribe(params => {
+      this.selectedEventId = params['eventId'] ? +params['eventId'] : null;
+      this.userId = params['userId'] ? +params['userId'] : null;
     });
+
+    // Retrieve feedbackId from route params for editing
+    this.route.paramMap.subscribe(params => {
+      const feedbackId = params.get('id');
+      if (feedbackId) {
+        this.isEditing = true;
+        this.currentFeedbackId = +feedbackId;
+        this.loadFeedback(this.currentFeedbackId);
+      }
+    });
+
+    // Load events
+    this.loadEvents().subscribe();
     this.intervalId = setInterval(() => this.loadEvents(), 10000);
   }
 
@@ -76,11 +82,11 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
         this.newFeedback = {
           message: feedback.message,
           feeling: feedback.feeling,
-          date: new Date(feedback.date).toISOString().split('T')[0] // Format ISO
+          date: new Date(feedback.date).toISOString().split('T')[0]
         };
         const event = this.events.find(e => e.title === feedback.eventTitle);
-        this.selectedEventId = event ? event.id : null;
-        if (!event) {
+        this.selectedEventId = event ? event.id : this.selectedEventId;
+        if (!event && !this.selectedEventId) {
           console.warn(`Événement "${feedback.eventTitle}" non trouvé`);
         }
       },
@@ -96,6 +102,10 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
       this.toastr.warning('Veuillez sélectionner un événement !', 'Attention');
       return;
     }
+    if (!this.userId) {
+      this.toastr.error('Utilisateur non identifié', 'Erreur');
+      return;
+    }
 
     if (this.isEditing && this.currentFeedbackId) {
       this.updateFeedback();
@@ -105,11 +115,6 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
   }
 
   addFeedback() {
-    if (!this.selectedEventId || isNaN(this.selectedEventId)) {
-      this.toastr.error('Veuillez sélectionner un événement valide', 'Erreur');
-      return;
-    }
-
     const feedbackToSend: Feedback = {
       message: this.newFeedback.message,
       feeling: this.newFeedback.feeling,
@@ -118,14 +123,15 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
 
     console.log('🚀 Données envoyées au serveur :', JSON.stringify(feedbackToSend, null, 2));
     console.log('🚀 Event ID :', this.selectedEventId);
+    console.log('🚀 User ID :', this.userId);
 
-    this.feedbackService.addFeedbackAndAffectToEvent(feedbackToSend, this.selectedEventId).subscribe({
+    this.feedbackService.addFeedbackAndAffectToEvent(feedbackToSend, this.selectedEventId!, this.userId!).subscribe({
       next: (response) => {
         this.toastr.success('Feedback ajouté avec succès', 'Succès');
         console.log('✅ Feedback ajouté (réponse brute) :', response);
         console.log('✅ Titre de l\'événement dans la réponse :', response.eventTitle);
         this.resetForm();
-        this.router.navigate(['/admin/feedback-list'], { queryParams: { refresh: true } });
+        this.router.navigate(['/front/view-feedback'], { queryParams: { eventTitle: this.events.find(e => e.id === this.selectedEventId)?.title } });
       },
       error: (error) => {
         this.toastr.error('Erreur lors de l’ajout du feedback', 'Erreur');
@@ -141,19 +147,26 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
   }
 
   updateFeedback() {
-    if (!this.currentFeedbackId || !this.selectedEventId) {
-      this.toastr.error('ID du feedback ou événement manquant', 'Erreur');
+    if (!this.currentFeedbackId) {
+      this.toastr.error('ID de feedback manquant', 'Erreur');
       return;
     }
-    this.feedbackService.updateFeedback(this.currentFeedbackId, this.newFeedback, this.selectedEventId).subscribe({
+
+    const updatedFeedback: Feedback = {
+      ...this.newFeedback,
+      idFeedback: this.currentFeedbackId
+    };
+
+    this.feedbackService.updateFeedback(updatedFeedback, this.selectedEventId!, this.userId!).subscribe({
       next: (response) => {
         this.toastr.success('Feedback mis à jour avec succès', 'Succès');
+        console.log('✅ Feedback mis à jour (réponse brute) :', response);
         this.resetForm();
-        this.router.navigate(['/admin/feedback-list'], { queryParams: { refresh: true } });
+        this.router.navigate(['/front/view-feedback'], { queryParams: { eventTitle: this.events.find(e => e.id === this.selectedEventId)?.title } });
       },
       error: (error) => {
-        this.toastr.error('Erreur lors de la mise à jour', 'Erreur');
-        console.error('Erreur:', error);
+        this.toastr.error('Erreur lors de la mise à jour du feedback', 'Erreur');
+        console.error('❌ Détails de l\'erreur :', error);
       }
     });
   }
@@ -165,6 +178,7 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
       date: new Date().toISOString().split('T')[0]
     };
     this.selectedEventId = null;
+    this.userId = null;
     this.isEditing = false;
     this.currentFeedbackId = null;
   }
@@ -174,13 +188,13 @@ export class AddFeedbackComponent implements OnInit, OnDestroy {
   }
 
   goToFeedbackList() {
-    this.router.navigate(['/admin/feedback-list']);
+    this.router.navigate(['/front/view-feedback']);
   }
 
   cancelEdit() {
     this.isEditing = false;
     this.currentFeedbackId = null;
     this.resetForm();
-    this.router.navigate(['/admin/feedback-list']);
+    this.router.navigate(['/front/view-feedback']);
   }
 }

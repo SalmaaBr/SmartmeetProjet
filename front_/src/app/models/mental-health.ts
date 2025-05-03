@@ -6,5 +6,5 @@ export interface MentalHealth {
   emotionalState: 'HAPPY' | 'SAD' | 'STRESSED' | 'RELAXED' | 'NEUTRAL'; // Correspond à TypeEmotionalState
   supportNeed: 'Oui' | 'Non'; // Correspond à SupportNeed
   submissionDate?: string; // ISO string (ex. "2025-03-29T12:00:00")
-  user?: { id: number }; // Relation ManyToOne simplifiée
+  user?: { userID: number, username: string }; // Relation ManyToOne simplifiée
 }

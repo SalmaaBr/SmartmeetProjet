@@ -11,14 +11,16 @@
         <li><a routerLink="/front/about" class="btn-get-started">About</a></li>
         <li><a routerLink="/front/service">Services</a></li>
         <li><a routerLink="/front/portfolio">Portfolio</a></li>
+        <li><a routerLink="/front/mental-health">Mental health</a></li>
+
         <li><a href="#team">Team</a></li>
         <li><a [routerLink]="'/front/contact'">Contact</a></li>
         <!-- Direct Messages Dropdown -->
         <li class="position-relative">
-          <a class="direct-messages d-flex align-items-center bg-secondary rounded-pill px-3 py-2 text-white" 
-          href="javascript:void(0);" 
-          data-bs-toggle="dropdown" 
-          aria-expanded="false" 
+          <a class="direct-messages d-flex align-items-center bg-secondary rounded-pill px-3 py-2 text-white"
+          href="javascript:void(0);"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
           aria-haspopup="true">            <i class="bi bi-chat-left-text me-2"></i>
             Direct Messages
             <span *ngIf="unreadCount > 0" class="badge bg-danger rounded-circle position-absolute top-0 end-0" style="transform: translate(50%, -50%);">

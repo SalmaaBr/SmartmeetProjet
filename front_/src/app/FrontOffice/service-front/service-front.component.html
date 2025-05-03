@@ -305,9 +305,21 @@
       <p>🕒 <strong>Start:</strong> {{ event.startTime }}</p>
       <p>⏳ <strong>End:</strong> {{ event.endTime }}</p>
       <p>👥 <strong>Max Participants:</strong> {{ event.maxParticipants }}</p>
-      <!-- Participate Button -->
-      <button class="participate-button">Participate</button>
-    </div>
+      <div class="button-container">
+        <button class="participate-button">Participate</button>
+        <button class="participate-button" [routerLink]="['/front/view-feedback']"
+                [queryParams]="{ eventTitle: event.title, eventId: event.id, userId: currentUserId }"
+        >
+          See feedbacks
+        </button>
+        <button
+          class="participate-button"
+          [routerLink]="['/front/add-feedback']"
+          [queryParams]="{ eventTitle: event.title, eventId: event.id, userId: currentUserId }"
+        >
+          Add Feedback
+        </button>
+      </div>
   </div>
 </div>
 
@@ -331,4 +343,5 @@
       <button class="participate-button">Apply</button>
     </div>
   </div>
+</div>
 </div>

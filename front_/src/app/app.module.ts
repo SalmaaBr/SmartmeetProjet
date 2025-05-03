@@ -28,10 +28,10 @@ import { PasswordComponent } from './User/password/password.component';
 import { PortfolioComponent } from './FrontOffice/portfolio/portfolio.component';
 import { ContactComponent } from './FrontOffice/contact/contact.component';
 import { ResourceManagementComponent } from './BackOffice/resource-management/resource-management.component';
-import { ResourceReservationManagementComponent } from './BackOffice/resource-reservation-management/resource-reservation-management.component';
+import { ResourceReservationManagementComponent} from "./BackOffice/resource-reservation-management/resource-reservation-management.component";
 import { ResourceMaintenanceComponent } from './BackOffice/resource-maintenance/resource-maintenance.component';
-import { ReservationService } from './services/reservation.service';
-import { ResourceService } from './services/resource.service';
+import { ReservationService } from './services/reservation.service';  // Importation du service
+import { ResourceService} from "./services/resource.service";
 import { AddInteractivePublicationComponent } from './FrontOffice/add-interactive-publication/add-interactive-publication.component';
 import { ActivateAccountComponent } from './User/activate-account/activate-account.component';
 import { ResetPasswordRequestComponent } from './User/reset-password-request/reset-password-request.component';
@@ -51,17 +51,23 @@ import { ResourceReservationStatisticsComponent } from './BackOffice/resource-re
 import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
 import { NotificationComponent } from './components/notification/notification.component';
-import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
+import { DocumentManagementComponent } from 'src/app/BackOffice/document-management/document-management.component';
 import { DocumentService } from './services/document.service';
-import { DocumentFilterPipe } from './filters/document-filter.pipe';
+import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
 import { RecommendationService } from './services/RecommendationService.service';
 import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
 import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
 import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
-import { FeedbackListComponent } from './BackOffice/feedback-list/feedback-list.component';
-import { MentalHealthListComponent } from './BackOffice/mental-health-list/mental-health-list.component';
-import { NgChartsModule } from 'ng2-charts';
-import { MatTableModule } from '@angular/material/table';
+import {FeedbackListViewComponent} from "./FrontOffice/feedback-list-view/feedback-list-view.component";
+import {FeedbackListComponent} from "./BackOffice/feedback-list/feedback-list.component";
+import {NgChartsModule} from "ng2-charts";
+import {MatTableModule} from "@angular/material/table";
+import { AddFeedbackFrontComponent } from './FrontOffice/add-feedback-front/add-feedback-front.component';
+import { EditFeedbackFrontComponent } from './FrontOffice/edit-feedback-front/edit-feedback-front.component';
+import {MentalHealthListComponent} from "./BackOffice/mental-health-list/mental-health-list.component";
+import { MentalHealthFrontComponent } from './FrontOffice/mental-health-front/mental-health-front.component';
+import { MentalHealthHistoryComponent } from './FrontOffice/mental-health-history/mental-health-history.component';
+import { MentalHealthHistoryBackComponent } from './BackOffice/mental-health-history-back/mental-health-history-back.component';
 
 @NgModule({
   declarations: [
@@ -75,12 +81,15 @@ import { MatTableModule } from '@angular/material/table';
     FooterBackComponent,
     HomeFrontComponent,
     AboutFrontComponent,
+    MentalHealthListComponent,
     ServiceFrontComponent,
+    FeedbackListComponent,
     RegisterComponent,
     AllTemplateUserComponent,
     LoginComponent,
     PasswordComponent,
     PortfolioComponent,
+    FeedbackListViewComponent,
     ContactComponent,
     ResourceManagementComponent,
     ActivateAccountComponent,
@@ -90,8 +99,8 @@ import { MatTableModule } from '@angular/material/table';
     ResourceMaintenanceComponent,
     AddInteractivePublicationComponent,
     UserComponent,
-    ProfileComponent,
-    CreateeventComponent, // Kept here, but verify it’s not declared elsewhere
+    ProfileComponent,  // Déclaration des composants
+    CreateeventComponent,
     GeteventComponent,
     EditEventComponent,
     CreateRecutementComponent,
@@ -109,8 +118,13 @@ import { MatTableModule } from '@angular/material/table';
     MessageComposeComponent,
     MessageInboxComponent,
     MessageSentComponent,
-    FeedbackListComponent,
-    MentalHealthListComponent,
+    FeedbackListViewComponent,
+    AddFeedbackFrontComponent,
+    EditFeedbackFrontComponent,
+    MentalHealthFrontComponent,
+    MentalHealthHistoryComponent,
+    MentalHealthHistoryBackComponent
+
   ],
   imports: [
     BrowserModule,
@@ -128,7 +142,7 @@ import { MatTableModule } from '@angular/material/table';
       preventDuplicates: true,
     }),
     NgChartsModule,
-    MatTableModule,
+    MatTableModule
   ],
   providers: [
     ReservationService,
@@ -141,10 +155,10 @@ import { MatTableModule } from '@angular/material/table';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
+      multi: true
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

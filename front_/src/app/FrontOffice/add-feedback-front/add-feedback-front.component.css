@@ -1,0 +1,81 @@
+/* src/app/add-feedback-front/add-feedback-front.component.css */
+.emoji-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+
+.emoji {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1rem;
+  user-select: none;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.emoji:hover {
+  background-color: #e9ecef;
+}
+
+.emoji.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Ensure form controls are styled consistently */
+.form-control-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Fix for invalid feedback */
+.invalid-feedback {
+  display: none;
+}
+
+.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+/* Ensure card body has enough padding */
+.card-body {
+  padding: 2rem;
+}
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+}
+
+.btn-feeling {
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-feeling:hover {
+  transform: translateY(-2px);
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-control:read-only {
+  background-color: #f8f9fa;
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+}
