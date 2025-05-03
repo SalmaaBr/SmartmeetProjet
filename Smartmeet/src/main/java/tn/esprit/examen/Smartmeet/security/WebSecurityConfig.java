@@ -73,8 +73,10 @@ public class WebSecurityConfig {
                     .requestMatchers("/register").permitAll()
                     .requestMatchers("/api/mentalhealth/submit-for-current-user").authenticated()
                     .requestMatchers("/api/users/**").authenticated()
+                    .requestMatchers("/messages/**").authenticated()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
-                    .anyRequest().authenticated());
+                    .anyRequest().authenticated())
+                    .csrf(csrf -> csrf.disable());
     http.authenticationProvider(authenticationProvider());
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();

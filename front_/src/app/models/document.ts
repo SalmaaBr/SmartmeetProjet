@@ -12,6 +12,7 @@ import {
     documentVisibility: TypeDocumentVisibility;  // Changé de typeDocumentVisibility
     documentAccessLevel: TypeAccessLevelDocument;  // Changé de typeAccessLevelDocument
     documentTheme: TypeDocumentTheme; 
+    filePath: string;
     users: { userID: number };
   documentLikes: DocumentLike[];
   }

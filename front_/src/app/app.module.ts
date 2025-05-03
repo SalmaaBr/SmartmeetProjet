@@ -54,6 +54,20 @@ import { NotificationComponent } from './components/notification/notification.co
 import { DocumentManagementComponent } from 'src/app/BackOffice/document-management/document-management.component';
 import { DocumentService } from './services/document.service';
 import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
+import { RecommendationService } from './services/RecommendationService.service';
+import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
+import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
+import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
+import {FeedbackListViewComponent} from "./FrontOffice/feedback-list-view/feedback-list-view.component";
+import {FeedbackListComponent} from "./BackOffice/feedback-list/feedback-list.component";
+import {NgChartsModule} from "ng2-charts";
+import {MatTableModule} from "@angular/material/table";
+import { AddFeedbackFrontComponent } from './FrontOffice/add-feedback-front/add-feedback-front.component';
+import { EditFeedbackFrontComponent } from './FrontOffice/edit-feedback-front/edit-feedback-front.component';
+import {MentalHealthListComponent} from "./BackOffice/mental-health-list/mental-health-list.component";
+import { MentalHealthFrontComponent } from './FrontOffice/mental-health-front/mental-health-front.component';
+import { MentalHealthHistoryComponent } from './FrontOffice/mental-health-history/mental-health-history.component';
+import { MentalHealthHistoryBackComponent } from './BackOffice/mental-health-history-back/mental-health-history-back.component';
 
 @NgModule({
   declarations: [
@@ -67,12 +81,15 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
     FooterBackComponent,
     HomeFrontComponent,
     AboutFrontComponent,
+    MentalHealthListComponent,
     ServiceFrontComponent,
+    FeedbackListComponent,
     RegisterComponent,
     AllTemplateUserComponent,
     LoginComponent,
     PasswordComponent,
     PortfolioComponent,
+    FeedbackListViewComponent,
     ContactComponent,
     ResourceManagementComponent,
     ActivateAccountComponent,
@@ -98,7 +115,16 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
     MaintenanceNotificationAdminComponent,
     DocumentManagementComponent,
     DocumentFilterPipe,
-    
+    MessageComposeComponent,
+    MessageInboxComponent,
+    MessageSentComponent,
+    FeedbackListViewComponent,
+    AddFeedbackFrontComponent,
+    EditFeedbackFrontComponent,
+    MentalHealthFrontComponent,
+    MentalHealthHistoryComponent,
+    MentalHealthHistoryBackComponent
+
   ],
   imports: [
     BrowserModule,
@@ -114,12 +140,15 @@ import { DocumentFilterPipe } from 'src/app/filters/document-filter.pipe';
       timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    })
+    }),
+    NgChartsModule,
+    MatTableModule
   ],
   providers: [
     ReservationService,
     ResourceService,
     DocumentService,
+    RecommendationService,
     DatePipe,
     provideAnimations(),
     provideToastr(),

@@ -1,87 +1,140 @@
-
 <div class="container pb-3 mt-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="mb-0">My Profile</h3>
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-bottom-0">
+          <h3 class="mb-0 fw-bold">My Profile</h3>
         </div>
 
-        <div class="card-body">
+        <!-- Improved Prediction Section -->
+        <div *ngIf="showPrediction" class="prediction-section mt-0 p-4 bg-light rounded-3 mx-3 mb-4 border-start border-5 border-primary">
+          <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-clipboard2-pulse fs-4 text-primary me-2"></i>
+            <h5 class="text-primary mb-0 fw-semibold">Mental Health Analysis</h5>
+          </div>
+
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <span class="badge bg-white text-dark me-2">Status:</span>
+                <span class="fw-medium"
+                      [class.text-danger]="predictionData?.crisis_detected"
+                      [class.text-success]="!predictionData?.crisis_detected">
+                  {{ predictionStatus }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <span class="badge bg-white text-dark me-2">Probability:</span>
+                <span class="fw-medium">{{ predictionProbability }}</span>
+              </div>
+            </div>
+
+            <div class="col-12 mt-2">
+              <div class="d-flex">
+                <span class="badge bg-white text-dark me-2">Recommendation:</span>
+                <span class="fw-medium">{{ predictionData?.message }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body pt-0">
           <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
             <!-- Loading Spinner -->
-            <div *ngIf="isLoading" class="text-center">
+            <div *ngIf="isLoading" class="text-center py-4">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
+              <p class="mt-2 text-muted">Updating profile...</p>
             </div>
 
             <!-- Error/Success Messages -->
-            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-            <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+            <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>{{ errorMessage }}</div>
+            </div>
+            <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <div>{{ successMessage }}</div>
+            </div>
 
             <!-- Profile Fields -->
             <div class="mb-3">
-              <label class="form-label">Username</label>
-              <input type="text" class="form-control" formControlName="username">
+              <label class="form-label fw-semibold">Username</label>
+              <input type="text" class="form-control rounded-2" formControlName="username">
               <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched"
-                   class="text-danger">
-                Username is required and must be at least 3 characters
+                   class="text-danger small mt-1">
+                <i class="bi bi-info-circle me-1"></i> Username is required and must be at least 3 characters
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" formControlName="email">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" class="form-control rounded-2" formControlName="email">
               <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
-                   class="text-danger">
-                Valid email is required
+                   class="text-danger small mt-1">
+                <i class="bi bi-info-circle me-1"></i> Valid email is required
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" formControlName="phoneNumber">
+              <label class="form-label fw-semibold">Phone Number</label>
+              <input type="tel" class="form-control rounded-2" formControlName="phoneNumber">
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Address</label>
-              <textarea class="form-control" formControlName="address" rows="3"></textarea>
+              <label class="form-label fw-semibold">Address</label>
+              <textarea class="form-control rounded-2" formControlName="address" rows="3"></textarea>
             </div>
 
             <!-- Password Update Section -->
-            <div class="mb-3 form-check">
+            <div class="mb-3 form-check form-switch">
               <input type="checkbox" class="form-check-input" id="changePassword"
                      (change)="togglePasswordFields()">
-              <label class="form-check-label" for="changePassword">Change Password</label>
+              <label class="form-check-label fw-semibold" for="changePassword">Change Password</label>
             </div>
 
-            <div *ngIf="showPasswordFields" class="password-section">
+            <div *ngIf="showPasswordFields" class="password-section rounded-3 p-4 mb-4">
+              <h6 class="fw-semibold mb-3 text-muted">Password Update</h6>
+
               <div class="mb-3">
                 <label class="form-label">Current Password</label>
-                <input type="password" class="form-control" formControlName="currentPassword">
+                <div class="input-group">
+                  <input type="password" class="form-control rounded-2" formControlName="currentPassword">
+                  <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
+                </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">New Password</label>
-                <input type="password" class="form-control" formControlName="newPassword">
+                <div class="input-group">
+                  <input type="password" class="form-control rounded-2" formControlName="newPassword">
+                  <span class="input-group-text bg-white"><i class="bi bi-key"></i></span>
+                </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" formControlName="confirmPassword">
+                <div class="input-group">
+                  <input type="password" class="form-control rounded-2" formControlName="confirmPassword">
+                  <span class="input-group-text bg-white"><i class="bi bi-key-fill"></i></span>
+                </div>
                 <div *ngIf="profileForm.errors?.['mismatch']&&
                            (profileForm.get('confirmPassword')?.touched ||
                             profileForm.get('newPassword')?.touched)"
-                     class="text-danger">
-                  Passwords do not match
+                     class="text-danger small mt-1">
+                  <i class="bi bi-info-circle me-1"></i> Passwords do not match
                 </div>
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary"
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold rounded-3"
                     [disabled]="profileForm.invalid || isLoading">
-              Update Profile
+              <span *ngIf="!isLoading">Update Profile</span>
+              <span *ngIf="isLoading">Updating...</span>
             </button>
           </form>
         </div>

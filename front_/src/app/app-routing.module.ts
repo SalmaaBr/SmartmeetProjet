@@ -31,29 +31,53 @@ import { ResourceReservationStatisticsComponent } from './BackOffice/resource-re
 import { NotificationComponent } from './components/notification/notification.component';
 import { MaintenanceNotificationAdminComponent } from './components/maintenance-notification-admin/maintenance-notification-admin.component';
 import { DocumentManagementComponent } from './BackOffice/document-management/document-management.component';
+import { MessageComposeComponent } from './FrontOffice/message-compose/message-compose.component';
+import { MessageInboxComponent } from './FrontOffice/message-inbox/message-inbox.component';
+import { MessageSentComponent } from './FrontOffice/message-sent/message-sent.component';
+import {FeedbackListViewComponent} from "./FrontOffice/feedback-list-view/feedback-list-view.component";
+import {FeedbackListComponent} from "./BackOffice/feedback-list/feedback-list.component";
+import {EditFeedbackFrontComponent} from "./FrontOffice/edit-feedback-front/edit-feedback-front.component";
+import {AddFeedbackFrontComponent} from "./FrontOffice/add-feedback-front/add-feedback-front.component";
+import {MentalHealthListComponent} from "./BackOffice/mental-health-list/mental-health-list.component";
+import {MentalHealthFrontComponent} from "./FrontOffice/mental-health-front/mental-health-front.component";
+import {MentalHealthHistoryComponent} from "./FrontOffice/mental-health-history/mental-health-history.component";
+import {
+  MentalHealthHistoryBackComponent
+} from "./BackOffice/mental-health-history-back/mental-health-history-back.component";
 
 const routes: Routes = [
   {
     path: 'front',
     component: AllTemplateFrontComponent,
     children: [
-      { path: '', component: HomeFrontComponent },   // Home visible par défaut
-      { path: 'about', component: AboutFrontComponent }, // About visible quand on va sur /about
-      {path: 'service', component:ServiceFrontComponent},
-      {path: 'portfolio', component:PortfolioComponent},
-      {path: 'contact', component:ContactComponent},
-      { path: 'profile', component: ProfileComponent  },
-      {
-        path: 'notifications',
-        component: NotificationComponent,
-      },
+      { path: '', component: HomeFrontComponent },
+      { path: 'about', component: AboutFrontComponent },
+      { path: 'service', component: ServiceFrontComponent },
+      { path: 'view-feedback', component: FeedbackListViewComponent },
+      { path: 'add-feedback', component: AddFeedbackFrontComponent },
+      { path: 'edit-feedback/:id', component: EditFeedbackFrontComponent },
+      { path: 'portfolio', component: PortfolioComponent },
+      {path: 'mental-health', component: MentalHealthFrontComponent},
+      { path: 'contact', component: ContactComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'notifications', component: NotificationComponent },
+      { path: 'mental-health-history', component: MentalHealthHistoryComponent }, // Fixed path
+
+    ]
+  },
+  {
+    path: 'messages',
+    children: [
+      { path: 'compose', component: MessageComposeComponent },
+      { path: 'inbox', component: MessageInboxComponent },
+      { path: 'sent', component: MessageSentComponent },
     ]
   },
   {
     path: 'admin',
     component: AllTemplateBackComponent,
-    canActivate: [AuthGuard],  // Protecting the main route
-    canActivateChild: [AuthGuard], // Protecting child routes
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     data: { roles: ['ADMIN'] },
     children: [
       { path: 'resources', component: ResourceManagementComponent },
@@ -67,25 +91,26 @@ const routes: Routes = [
       { path: 'create-recuitement', component: CreateRecutementComponent },
       { path: 'edit-recruitment/:id', component: EditRecruitmentComponent },
       { path: 'feedback', component: AddFeedbackComponent },
+      { path: 'feedback-list', component: FeedbackListComponent },
       { path: 'mental-health', component: MentalHealthComponent },
       { path: 'resource-reservation-statistics', component: ResourceReservationStatisticsComponent },
       { path: 'maintenance-notifications', component: MaintenanceNotificationAdminComponent },
-      {
-        path: 'notifications',
-        component: NotificationComponent,
-      },
+      { path: 'mental-health-list', component: MentalHealthListComponent }, // Fixed path
+      { path: 'notifications', component: NotificationComponent },
       { path: 'documents', component: DocumentManagementComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'mental-health-history', component: MentalHealthHistoryBackComponent }, // Fixed path
 
     ]
   },
   {
     path: 'register',
-    component: RegisterComponent // Route indépendante pour RegisterComponent
+    component: RegisterComponent
   },
   {
     path: '',
-    redirectTo: '/login',  // Redirige vers la page de connexion par défaut
-    pathMatch: 'full'      // Assure que l'URL vide redirige bien vers /login
+    redirectTo: '/login',
+    pathMatch: 'full'
   },
   { path: 'login', component: LoginComponent },
   { path: 'password', component: PasswordComponent },
@@ -99,10 +124,7 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent }
     ]
   },
-
 ];
-
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

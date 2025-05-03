@@ -9,7 +9,6 @@ import { AppRoutingModule } from '../app-routing.module';
 import { AppComponent } from '../app.component';
 import { AllTemplateBackComponent } from '../BackOffice/all-template-back/all-template-back.component';
 import { AllTemplateFrontComponent } from '../FrontOffice/all-template-front/all-template-front.component';
-import { HeaderFrontComponent } from '../FrontOffice/header-front/header-front.component';
 import { FooterFrontComponent } from '../FrontOffice/footer-front/footer-front.component';
 import { SidebarBackComponent } from '../BackOffice/sidebar-back/sidebar-back.component';
 import { NavbarBackComponent } from '../BackOffice/navbar-back/navbar-back.component';
@@ -44,14 +43,11 @@ import { EditRecruitmentComponent } from '../models/recutement/edit-recruitment/
     AppComponent,
     AllTemplateBackComponent,
     AllTemplateFrontComponent,
-    HeaderFrontComponent,
     FooterFrontComponent,
     SidebarBackComponent,
-    NavbarBackComponent,
     FooterBackComponent,
     HomeFrontComponent,
     AboutFrontComponent,
-    ServiceFrontComponent,
     RegisterComponent,
     AllTemplateUserComponent,
     LoginComponent,

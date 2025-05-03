@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <div class="card p-3 shadow-sm">
+    <h4 class="mb-3">{{ editMentalHealth ? 'Modifier l\'enregistrement' : 'Mental Health Check-In' }}</h4>
+    <!-- Ajoutez ceci près de votre bouton de soumission -->
+    <div *ngIf="submissionMessage" class="mt-3">
+      <p [class.text-success]="!submissionMessage.includes('Error')"
+         [class.text-danger]="submissionMessage.includes('Error')">
+        {{ submissionMessage }}
+        <span *ngIf="submissionCount > 0" class="text-muted small">
+        </span>
+      </p>
+    </div>
+    <!-- Formulaire pour ajouter ou modifier -->
+    <form [formGroup]="mentalHealthForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="responseMoment" class="form-label">Test time</label>
+        <select id="responseMoment" class="form-select" formControlName="responseMoment">
+          <option value="Avant">Before</option>
+          <option value="Pendant">During</option>
+          <option value="Apres">After</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="stressLevel" class="form-label">Stress level</label>
+        <input id="stressLevel" type="number" class="form-control" formControlName="stressLevel" min="1" max="5">
+        <div *ngIf="mentalHealthForm.get('stressLevel')?.invalid && mentalHealthForm.get('stressLevel')?.touched" class="text-danger">
+          Niveau de stress requis.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="emotionalState" class="form-label">Emotional state</label>
+        <select id="emotionalState" class="form-select" formControlName="emotionalState">
+          <option value="HAPPY">HAPPY</option>
+          <option value="SAD">SAD</option>
+          <option value="STRESSED">STRESSED</option>
+          <option value="RELAXED">RELAXED</option>
+          <option value="NEUTRAL">NEUTRAL</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="supportNeed" class="form-label">Need support</label>
+        <select id="supportNeed" class="form-select" formControlName="supportNeed">
+          <option value="Oui">Yes</option>
+          <option value="Non">No</option>
+        </select>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="submit" [disabled]="mentalHealthForm.invalid">
+          {{ editMentalHealth ? 'Update' : 'Add' }}
+        </button>
+        <button *ngIf="editMentalHealth" class="btn btn-secondary" type="button" (click)="resetForm()">
+          Cancel
+        </button>
+        <button class="btn btn-info" type="button" (click)="navigateToList()">
+          See the history
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

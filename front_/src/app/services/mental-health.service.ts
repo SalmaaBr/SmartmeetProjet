@@ -69,7 +69,16 @@ export class MentalHealthService {
       })
     );
   }
-
+  getMentalHealthsByCurrentUser(): Observable<MentalHealth[]> {
+    console.log("🚀 Fetching mental health records for current user");
+    return this.http.get<MentalHealth[]>(`${this.apiUrl}/get-mentalhealths-by-current-user`, { headers: this.getHeaders() }).pipe(
+      tap(response => console.log("✅ Current user's MentalHealths fetched successfully:", response)),
+      catchError(error => {
+        console.error("❌ Error while fetching current user's mental health records:", error);
+        return throwError(error);
+      })
+    );
+  }
   // Récupérer tous les MentalHealths
   getAllMentalHealths(): Observable<MentalHealth[]> {
     console.log("🚀 Fetching all mental health records");

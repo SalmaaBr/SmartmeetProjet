@@ -1,0 +1,30 @@
+.card {
+  transition: all 0.3s ease;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+}
+
+.feedback-message-container {
+  max-height: 100px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.feedback-message-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.feedback-message-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.table {
+  --bs-table-bg: transparent;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(58, 123, 213, 0.05);
+}

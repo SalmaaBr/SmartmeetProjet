@@ -15,8 +15,10 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:4200")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
+                .allowedHeaders("Authorization", "Content-Type", "Accept")
                 .exposedHeaders("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With")
                 .allowCredentials(true)
+
                 .maxAge(3600); // Cache preflight requests for 1 hour
     }
     @Bean

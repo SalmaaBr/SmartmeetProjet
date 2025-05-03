@@ -28,6 +28,7 @@ public class Document {
     private LocalDate createdAt;
     //private String pdfPath;
     //private String imagePath;
+    private String filePath;
 
     @Enumerated(EnumType.STRING)
     private TypeAccessLevelDocument documentAccessLevel;

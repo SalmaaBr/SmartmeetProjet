@@ -14,7 +14,7 @@ export class CreateeventComponent {
   typeevent = Object.values(TypeEvent);
   typetheme = Object.values(TypeTheme);
   typeweather = Object.values(TypeWeather);
-  
+
 
   constructor(private fb: FormBuilder, private router: Router, private eventService: EventService) {
     this.form = this.fb.group({

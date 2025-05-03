@@ -1,0 +1,140 @@
+<div class="container my-4">
+  <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+    <div class="card-header bg-gradient-primary text-white py-3 px-4">
+      <h2 class="h5 mb-0 fw-light">
+        <i class="bi bi-chat-square-text-fill me-2"></i>
+        Add Feedback - {{ eventTitle || 'Event' }}
+      </h2>
+    </div>
+
+    <div class="card-body p-4">
+      <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm" class="needs-validation" novalidate>
+        <!-- Event Title -->
+        <div class="mb-4">
+          <label for="eventTitle" class="form-label fw-medium text-muted">
+            Event Title <span class="text-danger">*</span>
+          </label>
+          <input
+            id="eventTitle"
+            type="text"
+            [(ngModel)]="eventTitle"
+            name="eventTitle"
+            class="form-control form-control-lg border-2 py-2"
+            readonly
+            required
+            #eventTitleModel="ngModel"
+            [class.is-invalid]="!eventTitle && eventTitleModel.touched"
+          >
+          <div *ngIf="!eventTitle && eventTitleModel.touched" class="invalid-feedback">
+            Please select an event
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="mb-4">
+          <label for="message" class="form-label fw-medium text-muted">
+            Your Feedback <span class="text-danger">*</span>
+          </label>
+          <textarea
+            id="message"
+            [(ngModel)]="newFeedback.message"
+            name="message"
+            required
+            #message="ngModel"
+            class="form-control border-2 py-2"
+            rows="4"
+            placeholder="Share your thoughts about the event..."
+            [class.is-invalid]="message.invalid && message.touched"
+          ></textarea>
+          <div *ngIf="message.invalid && message.touched" class="invalid-feedback">
+            Please enter your feedback message
+          </div>
+        </div>
+
+        <!-- Feeling -->
+        <div class="mb-4">
+          <label class="form-label fw-medium text-muted d-block mb-3">
+            How did you feel? <span class="text-danger">*</span>
+          </label>
+          <div class="d-flex justify-content-between flex-wrap gap-2">
+            <button
+              type="button"
+              (click)="selectFeeling('EXCELLENT')"
+              class="btn btn-feeling rounded-pill px-4 py-2"
+              [class.btn-primary]="newFeedback.feeling === 'EXCELLENT'"
+              [class.btn-outline-primary]="newFeedback.feeling !== 'EXCELLENT'"
+            >
+              <span class="fs-5">😍</span> Excellent
+            </button>
+            <button
+              type="button"
+              (click)="selectFeeling('GOOD')"
+              class="btn btn-feeling rounded-pill px-4 py-2"
+              [class.btn-primary]="newFeedback.feeling === 'GOOD'"
+              [class.btn-outline-primary]="newFeedback.feeling !== 'GOOD'"
+            >
+              <span class="fs-5">😃</span> Good
+            </button>
+            <button
+              type="button"
+              (click)="selectFeeling('AVERAGE')"
+              class="btn btn-feeling rounded-pill px-4 py-2"
+              [class.btn-primary]="newFeedback.feeling === 'AVERAGE'"
+              [class.btn-outline-primary]="newFeedback.feeling !== 'AVERAGE'"
+            >
+              <span class="fs-5">😐</span> Average
+            </button>
+            <button
+              type="button"
+              (click)="selectFeeling('BAD')"
+              class="btn btn-feeling rounded-pill px-4 py-2"
+              [class.btn-primary]="newFeedback.feeling === 'BAD'"
+              [class.btn-outline-primary]="newFeedback.feeling !== 'BAD'"
+            >
+              <span class="fs-5">😕</span> Bad
+            </button>
+            <button
+              type="button"
+              (click)="selectFeeling('TERRIBLE')"
+              class="btn btn-feeling rounded-pill px-4 py-2"
+              [class.btn-primary]="newFeedback.feeling === 'TERRIBLE'"
+              [class.btn-outline-primary]="newFeedback.feeling !== 'TERRIBLE'"
+            >
+              <span class="fs-5">😡</span> Terrible
+            </button>
+          </div>
+          <input
+            type="hidden"
+            [(ngModel)]="newFeedback.feeling"
+            name="feeling"
+            required
+            #feeling="ngModel"
+          >
+          <div *ngIf="feeling.invalid && feeling.touched" class="invalid-feedback d-block">
+            Please select how you felt about the event
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="border-top pt-4 mt-3">
+          <div class="d-flex justify-content-between">
+            <button
+              type="button"
+              class="btn btn-outline-secondary rounded-pill px-4"
+              (click)="goBack()"
+            >
+              <i class="bi bi-arrow-left me-2"></i> Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="feedbackForm.invalid"
+              class="btn btn-primary rounded-pill px-4"
+            >
+              <i class="bi bi-send-fill me-2"></i> Submit Feedback
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

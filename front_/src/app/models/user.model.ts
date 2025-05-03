@@ -6,6 +6,7 @@ export interface User {
   phoneNumber?: string;
   address?: string;
   enabled?: boolean;
+
   userRole: TypeUserRole[];
   firstName?: string;
   lastName?: string;

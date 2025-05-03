@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import tn.esprit.examen.Smartmeet.entities.MaryemAbid.ResourceReservation;
 import tn.esprit.examen.Smartmeet.entities.SalmaBenRomdhan.Event;
+import tn.esprit.examen.Smartmeet.entities.Users.Users;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -28,6 +29,9 @@ public class Feedback implements Serializable {
 
     @Column(nullable = false)
     LocalDate date = LocalDate.now(); // Date automatique
+
+    String sentiment;
+
     @Enumerated(EnumType.STRING)
     TypeFeeling feeling;
     String eventTitle; // Nouveau champ pour stocker le titre de l'événement
@@ -36,4 +40,8 @@ public class Feedback implements Serializable {
     @ManyToOne
     Event events;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Foreign key column in Feedback table
+    Users user; // Reference to the Users entity
 }

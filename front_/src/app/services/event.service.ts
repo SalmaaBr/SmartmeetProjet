@@ -42,7 +42,7 @@ export class EventService {
 
   // Méthode pour récupérer un événement par son ID
   getEventById(id: number): Observable<Event> {
-      return this.http.get<Event>(`${this.apiUrl}/getevent/${id}`);
+    return this.http.get<Event>(`${this.apiUrl}/getevent/${id}`);
   }
 
 

@@ -1,8 +1,8 @@
-// src/app/components/mental-health/mental-health.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MentalHealthService } from '../../services/mental-health.service';
 import { MentalHealth } from '../../models/mental-health';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mental-health',
@@ -10,14 +10,18 @@ import { MentalHealth } from '../../models/mental-health';
   styleUrls: ['./mental-health.component.css']
 })
 export class MentalHealthComponent implements OnInit {
-  mentalHealths: MentalHealth[] = [];
   mentalHealthForm: FormGroup;
   editMentalHealth: MentalHealth | null = null;
+  submissionMessage: string = '';
+  submissionCount: number = 0;
 
-  constructor(private fb: FormBuilder, private mentalHealthService: MentalHealthService) {
-    // Initialisation du formulaire avec des validations, incluant idMentalHealth
+  constructor(
+    private fb: FormBuilder,
+    private mentalHealthService: MentalHealthService,
+    private router: Router
+  ) {
     this.mentalHealthForm = this.fb.group({
-      idMentalHealth: [null], // Champ pour l'ID, non affiché mais utilisé pour les mises à jour
+      idMentalHealth: [null],
       responseMoment: ['', Validators.required],
       stressLevel: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
       emotionalState: ['', Validators.required],
@@ -26,67 +30,100 @@ export class MentalHealthComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMentalHealths();
-  }
-
-  // Charger tous les enregistrements de santé mentale
-  loadMentalHealths(): void {
-    this.mentalHealthService.getAllMentalHealths().subscribe({
-      next: (data) => {
-        this.mentalHealths = data;
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement des MentalHealths:', error);
+    const state = history.state;
+    if (state.mentalHealth) {
+      this.editMentalHealth = { ...state.mentalHealth };
+      if (this.editMentalHealth) {
+        this.mentalHealthForm.patchValue(this.editMentalHealth);
       }
-    });
+    }
+    // Initialiser le compteur depuis le localStorage
+    const count = localStorage.getItem('submissionCount');
+    this.submissionCount = count ? parseInt(count) : 0;
   }
 
-  // Démarrer l'édition d'un enregistrement
-  startEdit(mentalHealth: MentalHealth): void {
-    this.editMentalHealth = { ...mentalHealth }; // Créer une copie pour éviter les modifications directes
-    this.mentalHealthForm.patchValue(this.editMentalHealth); // Remplir le formulaire, y compris l'ID
+  // Méthode unifiée pour la soumission du formulaire
+  onSubmit(): void {
+    if (this.mentalHealthForm.valid) {
+      if (this.editMentalHealth) {
+        this.updateMentalHealth();
+      } else {
+        this.addMentalHealth();
+      }
+    }
   }
 
-  // Ajouter un nouvel enregistrement de santé mentale
   addMentalHealth(): void {
     if (this.mentalHealthForm.valid) {
+      this.submissionMessage = 'Submitting...';
+
       this.mentalHealthService.addMentalHealth(this.mentalHealthForm.value).subscribe({
-        next: (data) => {
-          this.mentalHealths.push(data);
+        next: (response: any) => {
+          this.submissionCount++;
+          localStorage.setItem('submissionCount', this.submissionCount.toString());
+
+          if (this.submissionCount % 3 === 0 && response.prediction) {
+            // Afficher uniquement tous les 3 envois (3ème, 6ème, 9ème, etc.)
+            localStorage.setItem('mentalHealthPrediction', JSON.stringify(response.prediction));
+            this.submissionMessage = 'Mental health prediction available in your profile!';
+
+            // Redirection vers le profil après un délai de 2 secondes
+            setTimeout(() => {
+              this.router.navigate(['/profile']);
+            }, 2000);
+          } else {
+            // Message normal pour les autres soumissions
+            const currentInCycle = this.submissionCount % 3 || 3;
+            this.submissionMessage = `Form submitted successfully! (${currentInCycle}/3)`;
+
+            // Redirection vers la liste après un délai de 2 secondes
+            setTimeout(() => {
+              this.navigateToList();
+            }, 2000);
+          }
+
           this.resetForm();
         },
         error: (error) => {
-          console.error('Erreur lors de l’ajout:', error);
+          console.error('Error during submission:', error);
+          this.submissionMessage = 'Error during submission. Please try again.';
         }
       });
     }
   }
 
-  // Mettre à jour un enregistrement existant
+  // Méthode pour réinitialiser le compteur
+  private resetSubmissionCount(): void {
+    this.submissionCount = 0;
+    localStorage.removeItem('submissionCount');
+    this.submissionMessage = ''; // Effacer le message
+  }
+
   updateMentalHealth(): void {
     if (this.editMentalHealth && this.mentalHealthForm.valid) {
       const updatedMentalHealth: MentalHealth = {
-        ...this.editMentalHealth, // Conserver les données existantes (comme user, submissionDate)
-        ...this.mentalHealthForm.value, // Mettre à jour avec les nouvelles valeurs du formulaire
-        idMentalHealth: this.editMentalHealth.idMentalHealth // Assurer que l'ID est inclus
+        ...this.editMentalHealth,
+        ...this.mentalHealthForm.value,
+        idMentalHealth: this.editMentalHealth.idMentalHealth
       };
       this.mentalHealthService.updateMentalHealth(updatedMentalHealth).subscribe({
-        next: (data) => {
-          const index = this.mentalHealths.findIndex(m => m.idMentalHealth === data.idMentalHealth);
-          if (index !== -1) {
-            this.mentalHealths[index] = data;
-          }
-          this.editMentalHealth = null;
+        next: () => {
+          this.submissionMessage = 'Mental health check-in updated successfully';
           this.resetForm();
+
+          // Redirection vers la liste après un délai de 2 secondes
+          setTimeout(() => {
+            this.router.navigate(['/admin/mental-health-list']);
+          }, 2000);
         },
         error: (error) => {
           console.error('Erreur lors de la mise à jour:', error);
+          this.submissionMessage = 'Error updating record. Please try again.';
         }
       });
     }
   }
 
-  // Réinitialiser le formulaire
   resetForm(): void {
     this.mentalHealthForm.reset({
       idMentalHealth: null,
@@ -98,15 +135,7 @@ export class MentalHealthComponent implements OnInit {
     this.editMentalHealth = null;
   }
 
-  // Supprimer un enregistrement de santé mentale
-  deleteMentalHealth(id: number): void {
-    this.mentalHealthService.deleteMentalHealth(id).subscribe({
-      next: () => {
-        this.mentalHealths = this.mentalHealths.filter(m => m.idMentalHealth !== id);
-      },
-      error: (error) => {
-        console.error('Erreur lors de la suppression:', error);
-      }
-    });
+  navigateToList(): void {
+    this.router.navigate(['/admin/mental-health-history']);
   }
 }

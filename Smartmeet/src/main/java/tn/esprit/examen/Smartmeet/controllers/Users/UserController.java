@@ -66,6 +66,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-
+    @GetMapping("/available")
+    public ResponseEntity<List<Users>> getAvailableUsers() {
+        List<Users> users = userService.getAvailableUsers();
+        return ResponseEntity.ok(users);
+    }
 
 }

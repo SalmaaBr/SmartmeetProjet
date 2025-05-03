@@ -4,7 +4,7 @@
     padding: 20px;
     text-align: center;
   }
-  
+
   h2 {
     color: #333;
     font-size: 28px;
@@ -12,20 +12,20 @@
     text-transform: uppercase;
     font-weight: bold;
   }
-  
+
   .no-events {
     color: red;
     font-size: 18px;
     font-weight: bold;
   }
-  
+
   /* Affichage des événements en grille */
   .event-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 événements par ligne */
     gap: 20px; /* Espacement entre les cartes */
   }
-  
+
   .event-card {
     background: #ffffff;
     border-radius: 10px;
@@ -33,23 +33,23 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
   }
-  
+
   .event-card:hover {
     transform: scale(1.02);
   }
-  
+
   .event-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .event-header h3 {
     font-size: 20px;
     color: #007bff;
     margin: 0;
   }
-  
+
   .event-type {
     background: #4187d2;
     color: white;
@@ -58,29 +58,29 @@
     font-size: 14px;
     text-transform: uppercase;
   }
-  
+
   p {
     margin: 5px 0;
     font-size: 16px;
   }
-  
+
   .event-theme {
     font-style: italic;
     color: #6c757d;
   }
-  
+
   .event-description {
     font-weight: bold;
     color: #555;
   }
-  
+
   /* Responsive : 2 événements par ligne sur tablette */
   @media (max-width: 992px) {
     .event-list {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  
+
   /* Responsive : 1 événement par ligne sur mobile */
   @media (max-width: 600px) {
     .event-list {
@@ -93,17 +93,17 @@
     margin: 20px;
     text-align: center;
   }
-  
+
   h2 {
     font-size: 2rem;
     margin-bottom: 20px;
   }
-  
+
   .no-recruitments {
     font-size: 1.2rem;
     color: #999;
   }
-  
+
   .recruitment-list {
     display: flex;
     flex-wrap: wrap;
@@ -111,7 +111,7 @@
     gap: 20px;
     margin-top: 20px;
   }
-  
+
   .recruitment-card {
     width: calc(33.33% - 20px);  /* Chaque carte occupe 1/3 de la largeur */
     background-color: #f9f9f9;
@@ -122,35 +122,35 @@
     text-align: center;
     transition: transform 0.3s ease;
   }
-  
+
   .recruitment-card:hover {
     transform: scale(1.05);  /* Effet d'agrandissement au survol */
   }
-  
+
   .recruitment-header h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
     font-weight: bold;
     color: #333;
   }
-  
+
   .recruitment-body p {
     font-size: 1rem;
     margin: 10px 0;
   }
-  
+
   @media (max-width: 1024px) {
     .recruitment-card {
       width: calc(50% - 20px); /* Sur les écrans moyens, chaque carte occupe la moitié de la largeur */
     }
   }
-  
+
   @media (max-width: 768px) {
     .recruitment-card {
       width: 100%;  /* Sur les petits écrans, chaque carte prend toute la largeur */
     }
   }
-  
+
 
 /* Style pour le bouton "Postuler" */
 .participate-button {
@@ -163,12 +163,12 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
-  
+
   .participate-button:hover {
     background-color: #0056b3; /* Bleu foncé au survol */
     transform: scale(1.05);
   }
-  
+
   .participate-button:active {
     transform: scale(0.95);
   }
@@ -180,7 +180,7 @@
     text-transform: uppercase;
     margin-bottom: 10px;
   }
-  
+
 
   /* Ajout d'une légère ombre pour différencier les sections */
 .event-container, .recruitment-container {
@@ -189,16 +189,16 @@
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
   }
-  
+
   /* Légère différence d'ombre entre événements et recrutements */
   .event-container {
     box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement bleutée */
   }
-  
+
   .recruitment-container {
     box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.15); /* Ombre légèrement jaunâtre */
   }
-  
+
   /* Style des boutons */
   .participate-button {
     background-color: #007bff; /* Bleu */
@@ -210,14 +210,19 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
-  
+
   .participate-button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
   }
-  
+
   .participate-button:active {
     transform: scale(0.95);
   }
-  
-  
+
+.button-container {
+  display: flex;
+  gap: 10px; /* Maintains spacing between buttons */
+  justify-content: center; /* Centers the buttons horizontally */
+  align-items: center; /* Optional: Centers buttons vertically if needed */
+}

@@ -1,6 +1,8 @@
 package tn.esprit.examen.Smartmeet.Services;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -112,4 +115,14 @@ public class UserServiceImpl implements UserService {
     public Optional<Users> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-}
+
+    @Override
+    public List<Users> getAvailableUsers() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentUsername = userDetails.getUsername();
+
+        // Fetch all users except the current user
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUsername().equals(currentUsername))
+                .collect(Collectors.toList());
+    }    }
