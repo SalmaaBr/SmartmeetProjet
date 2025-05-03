@@ -19,4 +19,7 @@ public interface IFeedbackServices {
     List<Feedback> getFeedbacksByEventTitle(String eventTitle); // Nouvelle méthode
     FeedbackStats getSentimentStatistics(String eventTitle); // Nouvelle méthode
     //FeedbackStats getFeedbackStats(String eventTitle); // Nouvelle méthode
+    List<Feedback> getFeedbackByUserId(Long userId); // New method
+
+    Feedback updateFeedbackWithEventAndUser(Feedback feedback, Long eventId, Long userId);
 }

@@ -40,5 +40,8 @@ public class Feedback implements Serializable {
     @ManyToOne
     Event events;
 
-
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Foreign key column in Feedback table
+    Users user; // Reference to the Users entity
 }

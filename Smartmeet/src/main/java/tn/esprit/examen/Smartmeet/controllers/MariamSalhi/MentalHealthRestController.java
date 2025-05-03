@@ -7,14 +7,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.examen.Smartmeet.Services.MaryemSalhi.MentalHealthServicesImpl;
 import tn.esprit.examen.Smartmeet.entities.MaryemSalhi.MentalHealth;
 import tn.esprit.examen.Smartmeet.entities.Users.Users;
-import tn.esprit.examen.Smartmeet.repositories.Users.UserRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +31,7 @@ public class MentalHealthRestController {
 
     private final MentalHealthServicesImpl servicesMentalhealth;
     private final RestTemplate restTemplate = new RestTemplate();
-
-
+    private final MentalHealthServicesImpl mentalHealthServicesImpl;
 
     @PostMapping("/add-mentalhealth")
     public ResponseEntity<?> addMentalhealth(@RequestBody MentalHealth mentalhealth) {
@@ -52,7 +51,6 @@ public class MentalHealthRestController {
                     Map<String, Object> result = new HashMap<>();
                     result.put("mentalHealth", savedMentalHealth);
                     result.put("prediction", predictionResponse.getBody());
-
                     return new ResponseEntity<>(result, HttpStatus.CREATED);
                 }
             }
@@ -87,8 +85,49 @@ public class MentalHealthRestController {
     }
 
     @GetMapping("/get-all-mentalhealths")
-    public List<MentalHealth> getAllMentalhealths() {
-        return servicesMentalhealth.getAllMentalhealths();
+    public ResponseEntity<List<Map<String, Object>>> getAllMentalHealths() {
+        log.info("Fetching all mental health records");
+        try {
+            // Log security context for debugging
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            log.info("Current authentication: {}", authentication != null ? authentication.getName() : "null");
+
+            List<MentalHealth> mentalHealths = mentalHealthServicesImpl.getAllMentalhealthsUsers();
+            if (mentalHealths == null) {
+                log.error("MentalHealth list is null");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+
+            // Transform the response to match the desired format
+            List<Map<String, Object>> response = mentalHealths.stream().map(mh -> {
+                // Use HashMap to allow modifications
+                Map<String, Object> mentalHealthMap = new HashMap<>();
+                mentalHealthMap.put("idMentalHealth", mh.getIdMentalHealth());
+                mentalHealthMap.put("responseMoment", mh.getResponseMoment() != null ? mh.getResponseMoment().toString() : null);
+                mentalHealthMap.put("stressLevel", mh.getStressLevel());
+                mentalHealthMap.put("emotionalState", mh.getEmotionalState() != null ? mh.getEmotionalState().toString() : null);
+                mentalHealthMap.put("supportNeed", mh.getSupportNeed() != null ? mh.getSupportNeed().toString() : null);
+                mentalHealthMap.put("submissionDate", mh.getSubmissionDate() != null ? mh.getSubmissionDate().toString() : null);
+
+                if (mh.getUser() != null) {
+                    mentalHealthMap.put("user", Map.of(
+                            "userID", mh.getUser().getUserID(),
+                            "username", mh.getUser().getUsername() != null ? mh.getUser().getUsername() : ""
+                    ));
+                }
+                return mentalHealthMap;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching mental health records: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/get-mentalhealths-by-current-user")
+    public List<MentalHealth> getMentalHealthsByCurrentUser() {
+        return servicesMentalhealth.getMentalHealthsByCurrentUser();
     }
 
     @PostMapping("/submit-for-current-user")
@@ -120,13 +159,10 @@ public class MentalHealthRestController {
     @PostMapping("/predict-mentalhealth/{userId}")
     public ResponseEntity<Map<String, Object>> predictMentalHealth(@PathVariable Long userId) {
         try {
-            // Récupérer les trois derniers formulaires
             List<MentalHealth> submissions = servicesMentalhealth.getLastThreeSubmissionsByUser(userId);
             if (submissions.size() < 3) {
                 throw new IllegalStateException("L'utilisateur doit avoir soumis au moins trois formulaires.");
             }
-
-            // Mapper les données pour l'API Python
             List<Map<String, Object>> entries = submissions.stream().map(mh -> {
                 Map<String, Object> entry = new HashMap<>();
                 entry.put("response_moment", mh.getResponseMoment().toString());
@@ -135,17 +171,11 @@ public class MentalHealthRestController {
                 entry.put("support_need", mh.getSupportNeed().toString());
                 return entry;
             }).collect(Collectors.toList());
-
-            // Appeler l'API Flask
             String flaskUrl = "http://localhost:5001/predict";
             ResponseEntity<Map> response = restTemplate.postForEntity(flaskUrl, entries, Map.class);
-
-            // Vérifier la réponse
             if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
                 throw new RuntimeException("Erreur lors de l'appel à l'API de prédiction.");
             }
-
-            // Retourner la réponse
             Map<String, Object> result = new HashMap<>();
             result.put("crisis_detected", response.getBody().get("crisis_detected"));
             result.put("crisis_probability", response.getBody().get("crisis_probability"));
